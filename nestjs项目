@@ -1,0 +1,185 @@
+1.创建项目步骤
+$ npm i -g @nestjs/cli  //创建脚手架
+$ nest new project-name  //创建项目
+
+2.创建子项目 nest g app admin
+在子项目里面创建模块 nest g mo -p admin users（-p admin users 在 admin 里面创建模块 users）
+然后创建控制器 nest g co -p admin users
+然后是 service nest g s -p admin users
+
+3.创建公共库 libs
+nest g lib db  (创建公共库db)
+
+
+4.在子项目的app.module.ts里面  import  公共库db
+
+5.安装数据库模块
+yarn add nestjs-typegoose-next
+yarn add @typegoose/typegoose
+yarn add mongoose
+
+
+
+6.在公共库db的module.ts里面配置
+里面是数据表
+
+@Global() //全局配置
+const models = TypegooseModule.forFeature([User, Car, Park, Article, Order]);
+@Module({
+  imports: [
+    TypegooseModule.forRootAsync({
+      useFactory() {
+        return {
+          uri: 'mongodb://localhost/blogs',
+        };
+      },
+    }),
+    models,
+  ],
+记得要exports出去
+
+7.在公共库src  db里面创建数据表模型 xxx.model.ts
+@modelOptions({
+  schemaOptions: {
+    timestamps: true,
+  },
+}) //swagger创建时展示创建时间和更新时间
+export class User {
+  @ApiProperty({ description: '用户名', example: '212' })
+  @prop()
+  username: string;
+  @ApiProperty({ description: '密码', example: 'pass1' })
+
+  //散列方法hashSync(散列的值，指数默认10，越大越慢)
+  @prop({
+    select: false, //常规的数据库请求中不把password显示出来，除非手动选中
+    get(val) {
+      return val;
+    },
+    set(val) {
+      //往数据库里保存前，被hashSync处理散列，最后在return 传入数据库
+      //val不为空，执行hashSync,未空，返回val
+      return val ? hashSync(val) : val;
+    },
+  })
+  password: string;
+}
+
+
+8.安装swagger
+npm install --save @nestjs/swagger swagger-ui-express
+
+
+
+9.在server 子项目里面创建模块users
+nest g mo -p admin users
+nest g co -p admin users
+nest g s -p admin users
+
+10.安装crud模块
+安装 curd 模块 yarn add nestjs-mongoose-crud
+
+11.在user模块里面的controller.ts里面注入依赖
+把User注入进去
+@Crud({  
+  model: User,
+})
+@Controller('users')
+@ApiTags('用户')
+export class UsersController {
+  constructor(
+    @InjectModel(User) private readonly model: ReturnModelType<typeof User>,
+  ) {}
+}
+
+12.swagger 接口文档  在子项目的main.ts里面配置
+const options = new DocumentBuilder()
+    .setTitle('后台管理API')
+    .setDescription('API文档')
+    .setVersion('1.0')
+    .addBearerAuth() //启 用token，给swagger用的
+    .addTag('cats')
+    .build();
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup('api-docs', app, document);
+
+13.为模型表的属性设定值  @ApiProperty({ description: '文字提醒', example: '预设值'})
+import { ApiProperty } from '@nestjs/swagger';
+import { modelOptions, prop } from '@typegoose/typegoose';
+
+@modelOptions({
+  schemaOptions: {
+    timestamps: true,
+  },
+}) //swagger创建时展示创建时间和更新时间
+export class User {
+  @ApiProperty({ description: '用户名', example: 'user' })
+  @prop()
+  username: string;
+
+  @ApiProperty({ description: '密码', example: 'pass' })
+  @prop()
+  password: string;
+}
+
+三条命令：
+    "push": "cd .. && git add -A && git commit -am 'build:build'&&git push",
+    "admin": "rm -rf ./admin/ && cd ../admin && npm run build && cd ../server",
+    "server": "rm -rf prod && cp -rf dist prod"
+
+
+"dependencies": {
+    "@nestjs/common": "^8.0.0",
+    "@nestjs/config": "^1.2.0",
+    "@nestjs/core": "^8.0.0",
+    "@nestjs/jwt": "^8.0.0",
+    "@nestjs/passport": "^8.2.1",
+    "@nestjs/platform-express": "^8.0.0",
+    "@nestjs/swagger": "^5.2.0",
+    "@typegoose/typegoose": "^9.7.0",
+    "@types/ali-oss": "^6.16.3",
+    "@types/mongoose": "^5.11.97",
+    "@types/multer": "^1.4.7",
+    "@types/passport": "^1.0.7",
+    "@types/passport-jwt": "^3.0.6",
+    "@types/passport-local": "^1.0.34",
+    "ali-oss": "^6.17.1",
+    "axios": "^0.26.0",
+    "bcryptjs": "^2.4.3",
+    "mongoose": "^6.2.3",
+    "multer-ali-oss": "^0.0.3",
+    "multer-aliyun-oss": "1.1.1",
+    "nestjs-mongoose-crud": "^2.1.2",
+    "nestjs-typegoose-next": "^0.1.4",
+    "passport": "^0.5.2",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "reflect-metadata": "^0.1.13",
+    "rimraf": "^3.0.2",
+    "rxjs": "^7.2.0",
+    "swagger-ui-express": "^4.3.0"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^8.0.0",
+    "@nestjs/schematics": "^8.0.0",
+    "@nestjs/testing": "^8.0.0",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/express": "^4.17.13",
+    "@types/jest": "27.4.0",
+    "@types/node": "^16.0.0",
+    "@types/supertest": "^2.0.11",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.0.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^27.2.5",
+    "prettier": "^2.3.2",
+    "source-map-support": "^0.5.20",
+    "supertest": "^6.1.3",
+    "ts-jest": "^27.0.3",
+    "ts-loader": "^9.2.3",
+    "ts-node": "^10.0.0",
+    "tsconfig-paths": "^3.10.1",
+    "typescript": "^4.3.5"
+  },
