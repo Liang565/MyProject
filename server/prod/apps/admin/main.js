@@ -1357,6 +1357,7 @@ const admin_module_1 = __webpack_require__(/*! ./admin.module */ "./apps/admin/s
 async function bootstrap() {
     const app = await core_1.NestFactory.create(admin_module_1.AdminModule);
     app.enableCors();
+    app.setGlobalPrefix('/api');
     const options = new swagger_1.DocumentBuilder()
         .setTitle('电商API')
         .setDescription('供后端使用的API文档')
