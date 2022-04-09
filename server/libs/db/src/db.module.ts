@@ -1,9 +1,9 @@
 import { Global, Module } from '@nestjs/common';
 import { DbService } from './db.service';
 import { TypegooseModule } from 'nestjs-typegoose-next';
-import { User } from './models/user.model';
+import { models } from './model-list';
 
-const models = TypegooseModule.forFeature([User]);
+const model = TypegooseModule.forFeature(models);
 @Global() //全局配置
 @Module({
   imports: [
@@ -14,9 +14,9 @@ const models = TypegooseModule.forFeature([User]);
         };
       },
     }),
-    models,
+    model,
   ],
   providers: [DbService],
-  exports: [DbService, models],
+  exports: [DbService, model],
 })
 export class DbModule {}

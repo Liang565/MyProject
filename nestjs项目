@@ -92,7 +92,7 @@ export class UsersController {
   ) {}
 }
 
-12.swagger 接口文档  在子项目的main.ts里面配置
+12.swagger 接口文档  在子项目的main.ts里面配置      这里记得要配置一个 app.enableCors(); //配置跨域
 const options = new DocumentBuilder()
     .setTitle('后台管理API')
     .setDescription('API文档')
@@ -121,6 +121,77 @@ export class User {
   @prop()
   password: string;
 }
+
+
+《《《《《要使用模型model需要在controller里面进行依赖注入
+
+注册和登录：
+1.在server后端项目中的admin子项目中创建模块 auth 处理用户登录和注册
+nest g mo auth 选中要创建的目录下
+nest g co auth 选中要创建的目录下
+创建dto文件夹，加上登录和注册的dto
+2.编写接口，
+
+
+
+3.用户密码需要散列，不能明文保存，需要在公共库中user.model.ts中，
+  1）导入依赖 yarn add bcryptjs  yarn add -D @types/bcryptjs
+  2)在user.model.ts中  
+  @prop({
+    select: false, //常规的数据库请求中不把password显示出来，除非手动选中
+    get(val) {
+      return val;
+    },
+    set(val) {
+      //散列方法hashSync(散列的值，指数默认10，越大越慢)
+      //往数据库里保存前，被hashSync处理散列，最后在return 传入数据库
+      //val不为空，执行hashSync,未空，返回val
+      return val ? hashSync(val) : val;
+    },
+  })
+  password: string;
+4.安装passport依赖包
+yarn add @nestjs/passport passport passport-local passport-jwt
+yarn add -D @types/passport @types/passport-jwt @types/passport-local //ts代码提示
+5.本地在auth中创建 loacl.strategy.ts  local策略
+
+6.在auth.model中
+  imports: [PassportModule],
+  providers: [LocalStrategy],
+7.生成token 
+需要引入jwt的包yarn add @nestjs/jwt
+然后找一个全局的位置注册这个包，在libs下新建common,在其src的model下
+@Global()//注意标记为全局,注意要在admin.modeule文件里面导入
+@Module({
+  imports: [
+    //这块
+    JwtModule.registerAsync({
+      useFactory() {
+        return {
+          secret: 'sifhgioaehgbb',
+        };
+      },
+    }),
+  ],
+  providers: [CommonService],
+  exports: [CommonService, JwtModule],
+})
+export class CommonModule {}
+
+
+8.启用token
+ 1）main.ts的接口文档位置加入:.addBearerAuth(),启用token
+ 2）创建jwt策略
+ 3）在auth.module里面引用 providers: [LocalStrategy, JwtStrategy],
+ 
+ 4）在需要用的地方加上守卫， @UseGuards(AuthGuard('jwt')) //jwtStrategy的名字,守卫
+ 5）在需要使用token的接口加上   @ApiBearerAuth() //表示这个接口需要token才可以使用
+
+
+
+
+
+
 
 三条命令：
     "push": "cd .. && git add -A && git commit -am 'build:build'&&git push",

@@ -4,7 +4,7 @@ import { AdminModule } from './admin.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AdminModule);
-
+  app.enableCors(); //配置跨域
   const options = new DocumentBuilder()
     .setTitle('电商API')
     .setDescription('供后端使用的API文档')
