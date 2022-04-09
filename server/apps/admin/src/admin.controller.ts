@@ -5,8 +5,8 @@ import { AdminService } from './admin.service';
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
-  // @Get()
-  // getHello(): string {
-  //   return this.adminService.getHello();
-  // }
+  @Get()
+  getHello(): string {
+    return this.adminService.getHello();
+  }
 }
