@@ -36,7 +36,6 @@
               v-model:visible="registerVisibel"
               title="注册成为新用户"
               @ok="RegisterSub"
-              @cancel="RegisterCancel"
               okText="注册"
               cancelText="取消"
             >

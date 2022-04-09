@@ -1,5 +1,5 @@
 import axios, { type AxiosInstance } from "axios";
-
+import { message } from "ant-design-vue";
 export const http: AxiosInstance = axios.create({
   baseURL: "http://localhost:3001/",
 });
@@ -14,16 +14,7 @@ http.interceptors.response.use(
     return res.data;
   },
   (error) => {
-    // if (error.response?.data.statusCode == "401") {
-    //   message.error("请先登录");
-    //   router.push('/login')
-    // }
-    // if (error.response?.data.statusCode == "403") {
-    //   message.error("没有权限");
-    // } else {
-    //   message.error(error.response?.data.message || "请稍后再试");
-    // }
-
+    message.error(error.response?.data.message || "请稍后");
     return Promise.reject(error);
   }
 );

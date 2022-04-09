@@ -38,14 +38,14 @@ export class AuthController {
   async register(@Body() dto: RegisterDto) {
     //表示传入的Dto是一个RegisterDto类型
     const { username, password } = dto; //结构出dto里面的参数
-    if (username === '' || password === '') {
+    if (username == '' || password == '') {
       throw new BadRequestException('用户名或者密码为空');
     }
     const res = await this.userModel.findOne({ username }); //找同名的
     if (!res) {
       const user = await this.userModel.create({
-        username: username,
-        password: password,
+        username,
+        password,
       });
       return user;
     } else {
