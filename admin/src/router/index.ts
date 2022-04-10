@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/a.vue";
+
 import mainvue from "../views/main.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,7 +7,7 @@ const router = createRouter({
     {
       path: "/home",
       name: "home",
-      component: HomeView,
+      component: mainvue,
     },
     {
       path: "/about",
@@ -19,7 +19,7 @@ const router = createRouter({
     },
 
     {
-      path: "/login",
+      path: "/",
       name: "login",
       meta: { title: "登录页", isPublic: true },
       component: () => import("../views/login/login.vue"),
@@ -34,6 +34,6 @@ router.beforeEach((to, from, next) => {
   if (to.meta.isPublic || localStorage.token) {
     return next();
   } else {
-    router.push("/login");
+    router.push("/");
   }
 });

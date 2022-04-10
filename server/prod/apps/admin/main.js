@@ -1375,7 +1375,7 @@ async function bootstrap() {
         .addTag('cats')
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, options);
-    swagger_1.SwaggerModule.setup('docs', app, document);
+    swagger_1.SwaggerModule.setup('api-docs', app, document);
     await app.listen(3001);
     console.log('http://localhost:3001/api-docs/');
 }

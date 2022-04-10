@@ -1,7 +1,7 @@
 import axios, { type AxiosInstance } from "axios";
 import { message } from "ant-design-vue";
 export const http: AxiosInstance = axios.create({
-  baseURL: "http://localhost:3001/",
+  baseURL: "http://localhost:3001/admin/api/",
 });
 http.interceptors.request.use((config) => {
   config.headers = {
