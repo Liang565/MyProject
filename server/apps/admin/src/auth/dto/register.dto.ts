@@ -5,4 +5,8 @@ export class RegisterDto {
   username: string;
   @ApiProperty() //
   password: string;
+  @ApiProperty() //
+  role: string;
+  @ApiProperty() //
+  state: boolean;
 }

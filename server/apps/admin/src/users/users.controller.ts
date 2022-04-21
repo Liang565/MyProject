@@ -7,11 +7,12 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { roles, User } from 'libs/db/models/user.model';
 import { Crud } from 'nestjs-mongoose-crud';
 import { InjectModel } from 'nestjs-typegoose-next';
+import { RegisterDto } from '../auth/dto/register.dto';
 import { UsersService } from './users.service';
 
 @Crud({
@@ -41,4 +42,30 @@ export class UsersController {
   // }) query
   // await http.get(`zhuce/${id}`);
   // }
+
+  //注册的路径：习惯用register
+  @Post('add')
+  @ApiOperation({ summary: '注册' })
+  //@Body()  dto从客户端传上来的参数
+  async add(@Body() dto: RegisterDto) {
+    //表示传入的Dto是一个RegisterDto类型
+    const { username, password, role, state } = dto; //结构出dto里面的参数
+
+    if (username == '' || password == '' || !username || !password) {
+      throw new BadRequestException('用户名或者密码为空');
+    }
+    const res = await this.model.findOne({ username }); //找同名的
+    if (!res) {
+      const user = await this.model.create({
+        username,
+        password,
+        role, //admin是1管理员 都是2USER
+        state, //用户状态
+      });
+
+      return user;
+    } else {
+      throw new BadRequestException('用户名已注册');
+    }
+  }
 }

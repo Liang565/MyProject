@@ -1,3 +1,4 @@
+import adminStore from "@/stores/admin-store";
 import { message } from "ant-design-vue";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
@@ -7,16 +8,23 @@ export const RAndLogin = () => {
   const router = useRouter();
   //注册时使用
   let registerVisibel = ref(false);
-  let regModel = ref({ username: "", password: "" });
+  let regModel = ref({ username: "", password: "", pass: "" });
   //注册
   const RegisterUser = () => {
     console.log("执行register");
     //弹个表单出来：
     registerVisibel.value = true;
   };
-  //确认注册
+
+  //确认注册,注册时身份和状态都是默认的
   const RegisterSubOK = async () => {
-    await http.post("auth/register", regModel.value);
+    let regMoel1 = ref({
+      username: regModel.value.username,
+      password: regModel.value.password,
+      role: "2",
+      state: true,
+    });
+    await http.post("auth/register", regMoel1.value);
     message.success("注册成功");
     logModel.value.username = regModel.value.username;
     registerVisibel.value = false;
@@ -47,17 +55,17 @@ export const RAndLogin = () => {
     console.log("执行logOut");
     message.success("退出");
     localStorage.removeItem("token");
-    router.push("/");
+    router.push("/login");
   };
   //设置输入框为空时不可以点击登录
   const disabled = computed(() => {
     return !(logModel.value.username && logModel.value.password);
   });
   //获取用户名
-  let getUser_name = ref();
+
   const getUser = async () => {
     const data = await http.get("auth/user");
-    getUser_name.value = data.username;
+    adminStore.setAdmin(data); //设置全局的用户名
   };
 
   return {
@@ -70,6 +78,5 @@ export const RAndLogin = () => {
     RegisterSub,
     disabled,
     getUser,
-    getUser_name,
   };
 };

@@ -1,17 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { modelOptions, prop } from '@typegoose/typegoose';
+import { defaultClasses, modelOptions, prop } from '@typegoose/typegoose';
 import { hashSync } from 'bcryptjs';
+import { Deflate } from 'zlib';
 
 export enum roles {
   ADMIN = '1',
   USER = '2',
 }
 
-@modelOptions({
-  schemaOptions: {
-    timestamps: true,
-  },
-}) //swagger创建时展示创建时间和更新时间
 export class User {
   @ApiProperty({ description: '用户名', example: 'user' })
   @prop()
@@ -29,7 +25,22 @@ export class User {
   })
   password: string;
 
-  @ApiProperty({ description: '身份' })
+  @ApiProperty({ description: '身份', example: '2' })
   @prop({ enum: roles })
+  // role: roles;
   role: roles;
+  @ApiProperty({ description: '状态', example: true })
+  @prop()
+  state: boolean;
+  // @ts-ignore
+  // get ROLE(this: DocumentType<User>) {
+  //   if (this.role == '1') {
+  //     return 'ADMIN';
+  //   } else return 'USER';
+  // }
+  get STATE(this: DocumentType<User>) {
+    if (this.state == true) {
+      return '启用';
+    } else return '禁用';
+  }
 }

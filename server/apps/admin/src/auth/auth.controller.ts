@@ -46,6 +46,8 @@ export class AuthController {
       const user = await this.userModel.create({
         username,
         password,
+        role: '2', //除了admin是1 管理员其他都是2USER
+        state: true, //默认新注册的用户状态都是启用的
       });
       return user;
     } else {

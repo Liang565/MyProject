@@ -7,6 +7,8 @@ import { CommoditysModule } from './commoditys/commoditys.module';
 import { CommodityClassModule } from './commodity-class/commodity-class.module';
 import { AuthModule } from './auth/auth.module';
 import { CommonModule } from 'libs/common';
+import { ShopsModule } from './shops/shops.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { CommonModule } from 'libs/common';
     CommoditysModule,
     CommodityClassModule,
     AuthModule,
+    ShopsModule,
+    OrdersModule,
   ],
   controllers: [AdminController],
   providers: [AdminService],
