@@ -63,9 +63,9 @@ export class CommodityClassController {
     if (title == '' || !title) {
       throw new BadRequestException('分类名为空');
     }
-    const res = await this.model.findOne({ title }); //找同名的title
+    const res = await this.model.findOne({ title }); //新传进来的title找同名的title，情况1，传入原title找到原对象，情况2，找不到对象，情况3，找到对象但是不是原对象
     const Id = await this.model.findById(id); //原来的title
-    if (res._id == id) {
+    if (!res || res._id == id) {
       //同一个对象，如果不同，证明名字重复了
       // if (!res) {
       if (!parent || parent == '') {

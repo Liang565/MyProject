@@ -1,7 +1,7 @@
 <template>
-  <div class="bg-green-400">
+  <div>
     <a-layout>
-      <a-layout-sider class="bg-blue-400 h-100vh">
+      <a-layout-sider class="h-100vh" theme="light">
         <div>
           <a-menu mode="inline" @click="handleClick">
             <a-sub-menu v-for="list in Menw" :key="list.key">
@@ -23,21 +23,19 @@
         </div>
       </a-layout-sider>
       <a-layout>
-        <a-layout-header class="bg-slate-500 text-white">
-          <div class="bg-blue-500 w-60 float-right">
+        <a-layout-header class="text-white">
+          <div class="w-60 float-right text-white">
             当前用户：
             {{ adminStore.state?.admin?.username }}
-            <a-button @click="LogOut" class="bg-red-500 hover:bg-white"
-              >退出登录</a-button
-            >
+            <a-button @click="LogOut">退出登录</a-button>
           </div>
         </a-layout-header>
 
         <a-layout-content>
-          <div class="p-5"><router-view></router-view></div>
+          <div class="px-5"><router-view></router-view></div>
         </a-layout-content>
 
-        <a-layout-footer class="bg-white">Footer</a-layout-footer>
+        <a-layout-footer class="bg-black">Footer</a-layout-footer>
       </a-layout>
     </a-layout>
   </div>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>用户管理</div>
+    <div class="text-2xl">用户管理</div>
     <div>
       <div>
         <a-modal
@@ -54,7 +54,8 @@
                 </template>
               </a-input-password>
             </a-form-item>
-
+            {{ addModel.pass }}
+            {{ addModel.password }}
             <a-form-item
               label="再次输入密码"
               name="password"
@@ -90,10 +91,22 @@
         </a-modal>
       </div>
 
-      <div class="my-5">
-        <a-button @click="newUser">新增用户</a-button>
+      <div class="my-2">
+        <a-button @click="newUser" type="primary">新增用户</a-button>
       </div>
-
+      <div class="mb-5">
+        <a-form layout="inline">
+          <a-form-item label="id" class="w-52">
+            <a-input v-model:value="where._id"></a-input>
+          </a-form-item>
+          <a-form-item label="用户名" class="w-44">
+            <a-input v-model:value="where.username"></a-input>
+          </a-form-item>
+          <a-form-item>
+            <a-button type="primary" @click="search">搜索</a-button>
+          </a-form-item>
+        </a-form>
+      </div>
       <div>
         <a-table
           :dataSource="curdData"
@@ -241,6 +254,8 @@ const {
   cancelModel,
   remove,
   selectState,
+  where,
+  search,
 } = Curd("users");
 const test = async () => {
   const res = api.user.add();
@@ -269,7 +284,10 @@ const editUserOk = () => {
   delete editModel.pass;
   addEdit();
 };
-
+where.value = {
+  _id: "",
+  username: "",
+};
 onMounted(() => {
   fetch();
 });

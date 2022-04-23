@@ -1,10 +1,8 @@
 <template>
   <div>
-    <div>
-      分类管理
-      {{ newModel }}
-    </div>
-    <div>
+    <div class="text-2xl">分类管理</div>
+    <!-- 新增分类 -->
+    <div class="mt-2">
       <a-button type="primary" class="text-black" @click="addClass"
         >新增</a-button
       >
@@ -33,8 +31,13 @@
         </a-form>
       </a-modal>
     </div>
-    <div class="m-5">
-      <a-table :dataSource="data" rowKey="title">
+    <div class="mt-4">
+      <a-table
+        :dataSource="data"
+        rowKey="_id"
+        :scroll="{ y: 400 }"
+        class="h-400"
+      >
         <a-table-column
           title="类别"
           dataIndex="title"
@@ -47,13 +50,14 @@
             <div>
               <a-button type="link" @click="addSon(record)">新增子类</a-button>
               <a-button type="link" @click="editClass(record)">修改</a-button>
-              <a-button type="link" @click="remove(record)">删除</a-button>
+              <a-button type="link" @click="remove(record, record.title)"
+                >删除</a-button
+              >
             </div>
           </template>
         </a-table-column>
       </a-table>
     </div>
-    <div>{{ classData }}</div>
   </div>
   <!-- 修改信息 -->
   <div>
@@ -73,7 +77,12 @@
           <a-input v-model:value="newModel.title"></a-input>
         </a-form-item>
         <a-form-item label="新父级名" name="parent">
-          <a-input v-model:value="newModel.parent"></a-input>
+          <a-select
+            :options="options"
+            v-model:value="newModel.parent"
+            :allowClear="true"
+          >
+          </a-select>
         </a-form-item>
       </a-form>
     </a-modal>
@@ -111,9 +120,11 @@
 </template>
 <script lang="ts" setup>
 import { message } from "ant-design-vue";
+import { ListGridType } from "ant-design-vue/lib/list";
 import api from "ant-design-vue/lib/notification";
-import { onMounted, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { classApi } from "../../util/api/class-api";
+import { CrudTest } from "../../util/api/crud-api";
 import { http } from "../../util/http";
 
 let classData = ref();
@@ -135,7 +146,7 @@ let query = ref({
 });
 
 const fetch = async () => {
-  let res = await http.get("/commodity-class/", {
+  let res: any = await http.get("/commodity-class/", {
     params: {
       query: query.value,
     },
@@ -145,7 +156,12 @@ const fetch = async () => {
   pagination.value.pageSize = res.total;
   data.value = [{}];
   dataChange();
+  options.value = res.data.map((v) => ({
+    label: v.title,
+    value: v._id,
+  }));
 };
+let options = ref([]);
 
 //处理一下数据,筛选出一级分类
 const dataChange = () => {
@@ -221,12 +237,8 @@ const cancelModel = () => {
   resetModel();
   console.log("cancel");
 };
-const remove = async (temp) => {
-  isParent(temp);
-  await http.delete(`commodity-class/${temp._id}`);
-  fetch();
-  message.success("成功");
-};
+const { remove } = CrudTest("commodity-class");
+
 //如果删除的是父类，那需要把子类里面的parent 给delete掉,使用更新
 const isParent = async (temp) => {
   if (temp.children[0]) {
@@ -249,15 +261,11 @@ const editClass = async (temp) => {
   showTitle.value = temp.title;
   showId.value = temp._id;
   if (temp.parent)
-    findName(temp.parent).then((res) => {
+    findName(temp.parent).then((res: any) => {
       showParent.value = res.title;
     });
 };
 const editClassOk = async () => {
-  console.log(newModel.value);
-  if (newModel.value.parent && newModel.value.parent != "") {
-    newModel.value.parent = findId(newModel.value.parent);
-  }
   await http.post(`commodity-class/updata/${showId.value}`, newModel.value);
   viss.value.edit = false;
   resetModel();

@@ -6,20 +6,28 @@ import { http } from "./http";
 import { RAndLogin } from "./register-and-login";
 
 interface model {
-  username: string;
-  password: string;
-  pass: string; //提交时需要把这个删掉
-  role: string; //身份，默认是2 User
-  state: boolean; //默认是true
+  username?: string;
+  password?: string;
+  pass?: string; //提交时需要把这个删掉
+  role?: string; //身份，默认是2 User
+  state?: boolean; //默认是true
+}
+export interface CrudQuery {
+  limit?: number;
+  page?: number;
+  where: {
+    [key: string]: any;
+  };
+  [key: string]: any;
 }
 
 /**
  *
  * @param url 路由路径
  */
-export const Curd = (url: string) => {
+export const Curd = (url: string, initModel?: Object) => {
   //新增修改用的model
-  let model = reactive<model>({
+  let model = ref<model>({
     username: "",
     password: "",
     pass: "", //提交时需要把这个删掉
@@ -27,8 +35,14 @@ export const Curd = (url: string) => {
     state: true, //默认是true
   });
 
+  // let query = reactive<CrudQuery>({
+  //   limit: 10,
+  //   page: 1,
+  //   sort: { _id: -1 },
+  //   where: ref(where),
+  // });
   //新增
-  let addModel = reactive<model>({
+  let addModel = ref<any>({
     username: "",
     password: "",
     pass: "", //提交时需要把这个删掉
@@ -36,7 +50,7 @@ export const Curd = (url: string) => {
     state: true, //默认是true
   });
   //修改
-  let editModel = reactive<model>({
+  let editModel = ref<any>({
     username: "",
     password: "",
     pass: "", //提交时需要把这个删掉
@@ -47,10 +61,12 @@ export const Curd = (url: string) => {
   const resetModel = () => {
     console.log("reset");
     AorE.value = true;
-    for (let i in model) {
-      editModel[i] = model[i];
-      addModel[i] = model[i];
-    }
+    // for (let i in model) {
+    //   editModel[i] = model[i];
+    //   addModel[i] = model[i];
+    // }
+    addModel = model;
+    editModel = model;
   };
 
   //查询的id
@@ -107,14 +123,14 @@ export const Curd = (url: string) => {
   const addEdit = async (record?: { _id: any }) => {
     if (AorE.value) {
       console.log("add");
-      await http.post(`${url}/add`, addModel);
+      await http.post(`${url}/add`, addModel.value);
       resetModel();
       modalVisible.value.add = false;
       message.success("注册成功");
     } else {
       console.log("edit");
       AorE.value = true;
-      await http.put(`${url}/${findOneId.value}`, editModel);
+      await http.put(`${url}/${findOneId.value}`, editModel.value);
       resetModel();
       modalVisible.value.edit = false;
     }
@@ -129,7 +145,7 @@ export const Curd = (url: string) => {
     pageSize: 5, //数据量
   });
 
-  //展示条件
+  //查询条件
   let query = ref({
     limit: pagination.value.pageSize, //一页展示多少条,默认0时会全部展示，
     page: 1, //展示页码
@@ -174,9 +190,10 @@ export const Curd = (url: string) => {
       if (!value) {
         // return Promise.reject(new Error("请输入密码"));
         return Promise.reject("请输入密码");
-      } else if (value !== addModel.pass) {
+      } else if (value != addModel.value.pass) {
         // return Promise.reject(new Error("两次输入密码不一致!"));
-        return Promise.reject("两次输入密码不一致!");
+
+        return Promise.reject("两次输入密码不一致");
       } else {
         disabled.value = false;
         return Promise.resolve();
@@ -185,7 +202,7 @@ export const Curd = (url: string) => {
       if (!value) {
         // return Promise.reject(new Error("请输入密码"));
         return Promise.reject("请输入密码");
-      } else if (value !== editModel.password) {
+      } else if (value !== editModel.value.password) {
         // return Promise.reject(new Error("两次输入密码不一致!"));
         // console.log(editModel.password);
         // console.log(editModel.pass);
@@ -219,7 +236,15 @@ export const Curd = (url: string) => {
       },
     });
   };
-
+  //搜索
+  let where = ref({});
+  const search = () => {
+    for (let i in where.value) {
+      if (where.value[i] == "") delete where.value[i];
+    }
+    query.value.where = where.value;
+    fetch();
+  };
   return {
     query, // 展示条件
     fetch, //展示
@@ -238,5 +263,7 @@ export const Curd = (url: string) => {
     selectM, //选择框
     remove, //删除
     selectState,
+    where,
+    search,
   };
 };
