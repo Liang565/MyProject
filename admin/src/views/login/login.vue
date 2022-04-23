@@ -94,10 +94,6 @@
                   </template>
                 </a-input-password>
               </a-form-item>
-
-              <a-form-item>
-                {{ pass }}
-              </a-form-item>
             </a-form>
           </a-modal>
 

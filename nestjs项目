@@ -193,11 +193,18 @@ export class CommonModule {}
 
 
 
-三条命令：
+三条命令：放在后端的package.json上
     "push": "cd .. && git add -A && git commit -am 'build:build'&&git push",
     "admin": "rm -rf ./admin/ && cd ../admin && npm run build && cd ../server",
     "server": "rm -rf prod && cp -rf dist prod"
 
+前端的package.json上 
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 5050",
+    "typecheck": "vue-tsc --noEmit"
+  },
 项目放到服务器上：
 
 
