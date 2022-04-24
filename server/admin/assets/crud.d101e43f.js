@@ -1,1 +1,0 @@
-import{h as r}from"./http.baf7a931.js";const d=e=>({find(t){return r.get(e,{params:{query:t}})},delete(t){return r.delete(`${e}/${t}`)},findOne(t){return r.get(`${e}/${t}`)},create(t){return r.post(e,t)},findByUpdata(t,n){return r.put(`${e}/${t}`,n)}});export{d as C};
