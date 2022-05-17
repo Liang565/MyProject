@@ -1,14 +1,14 @@
 <template>
-  <div class="bg-cyan-300 w-100vw h-100vh">
-    <div class="w-30vw fixed mt-52 ml-35vw bg-gray-600">
+  <div class="w-100vw h-100vh flex justify-center items-center bg-slate-400">
+    <div class="w-400 h-auto">
       <!-- form里面的:model绑定的对象要和编辑的对象一样，并且name时model里面的参数 -->
-      <a-form :model="logModel" class="ml-9 pt-10 pb-5">
+      <a-form :model="logModel">
         <a-form-item
           label="username"
           name="username"
           :rules="[{ required: true, message: 'Please input your username!' }]"
         >
-          <a-input v-model:value="logModel.username" class="w-80">
+          <a-input v-model:value="logModel.username">
             <!-- 加一个图标 -->
             <template #prefix>
               <UserOutlined class="site-form-item-icon" />
@@ -20,7 +20,7 @@
           name="password"
           :rules="[{ required: true, message: 'Please input your password!' }]"
         >
-          <a-input-password v-model:value="logModel.password" class="w-80">
+          <a-input-password v-model:value="logModel.password">
             <!-- 加一个图标 -->
             <template #prefix>
               <LockOutlined class="site-form-item-icon" />

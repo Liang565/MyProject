@@ -1,33 +1,38 @@
 <template>
   <div>
     <div class="mb-2 text-2xl">商铺管理</div>
-    <div class="mb-2">
-      <a-button @click="addShop" type="primary"> 新增商铺 </a-button>
+
+    <div class="mb-2 flex justify-start">
+      <div>
+        <a-button @click="addShop" type="primary"> 新增商铺 </a-button>
+      </div>
+      <div class="w-full">
+        <a-form layout="inline">
+          <a-form-item label="店铺名：" class="w-52">
+            <a-input v-model:value="where.title"></a-input>
+          </a-form-item>
+          <a-form-item label="所属用户名" class="w-44">
+            <a-select
+              :options="options"
+              v-model:value="where.user"
+              :allowClear="allowClear"
+            >
+            </a-select>
+          </a-form-item>
+          <a-form-item>
+            <a-button type="primary" @click="search">搜索</a-button>
+          </a-form-item>
+        </a-form>
+      </div>
     </div>
-    <div class="w-full">
-      <a-form layout="inline">
-        <a-form-item label="店铺名：" class="w-52">
-          <a-input v-model:value="where.title"></a-input>
-        </a-form-item>
-        <a-form-item label="所属用户名" class="w-44">
-          <a-select
-            :options="options"
-            v-model:value="where.user"
-            :allowClear="true"
-          >
-          </a-select>
-        </a-form-item>
-        <a-form-item>
-          <a-button type="primary" @click="search">搜索</a-button>
-        </a-form-item>
-      </a-form>
-    </div>
+
     <div class="my-5">
       <a-table
         :dataSource="data"
         rowKey="title"
         :pagination="pagination"
         @change="pageChange"
+        :scroll="{ y: 400 }"
       >
         <a-table-column
           title="商铺名"
@@ -46,7 +51,11 @@
           dataIndex="description"
           key="description"
         />
-        <a-table-column title="商铺图片" dataIndex="images" key="images" />
+        <a-table-column title="商铺头像" dataIndex="images" key="images">
+          <template #="{ record }">
+            <a-image :width="70" :src="record.images"> </a-image>
+          </template>
+        </a-table-column>
         <a-table-column title="商铺地址" dataIndex="address" key="address" />
         <a-table-column title="商铺电话" dataIndex="phone" key="phone" />
 
@@ -82,8 +91,15 @@
         <a-form-item label="商铺简介">
           <a-input v-model:value="newModel.description"></a-input>
         </a-form-item>
-        <a-form-item label="商铺图片">
-          <a-input v-model:value="newModel.images"></a-input>
+        <a-form-item label="商铺头像">
+          <upload
+            :imageUrl="newModel.images"
+            @on-success="
+              (imageUrl) => {
+                newModel.images = imageUrl;
+              }
+            "
+          />
         </a-form-item>
         <a-form-item label="商铺地址">
           <a-input v-model:value="newModel.address"></a-input>
@@ -113,8 +129,15 @@
         <a-form-item label="商铺简介">
           <a-input v-model:value="newModel.description"></a-input>
         </a-form-item>
-        <a-form-item label="商铺图片">
-          <a-input v-model:value="newModel.images"></a-input>
+        <a-form-item label="商铺头像">
+          <upload
+            :imageUrl="newModel.images"
+            @on-success="
+              (imageUrl) => {
+                newModel.images = imageUrl;
+              }
+            "
+          />
         </a-form-item>
         <a-form-item label="商铺地址">
           <a-input v-model:value="newModel.address"></a-input>
@@ -133,6 +156,8 @@ import { ref } from "vue";
 import { api } from "../../util/api/api";
 import { http } from "../../util/http";
 import { CrudTest } from "../../util/api/crud-api";
+import upload from "../../components/upload.vue";
+
 const {
   remove,
   viss,
@@ -151,14 +176,21 @@ const {
 let addUrl = ref("addShop");
 
 //搜索
-where.value = {
-  title: "",
-  user: "",
-};
+if (localStorage.getItem("role") === "admin")
+  where.value = {
+    title: "",
+    user: "",
+  };
+else {
+  where.value = {
+    title: "",
+    user: localStorage.getItem("userid"),
+  };
+}
 
 let newModel = ref({
   title: "",
-  user: "",
+  user: localStorage.getItem("userid"),
   description: "",
   images: "",
   address: "",
@@ -167,7 +199,7 @@ let newModel = ref({
 const resetModel = () => {
   newModel.value = {
     title: "",
-    user: "",
+    user: newModel.value.user,
     description: "",
     images: "",
     address: "",
@@ -178,14 +210,28 @@ const resetModel = () => {
 const addShop = () => {
   viss.value.add = true;
 };
+
+//搜索选框
+let allowClear = ref(false);
 let options = ref<any>([]);
 const findUserOptions = async () => {
-  const res: any = await api.user.find({ limit: 999 });
   // map foreach for
-  options.value = res.data.map((v) => ({
-    label: v.username,
-    value: v._id,
-  }));
+  if (localStorage.getItem("role") === "admin") {
+    const res: any = await api.user.find({ limit: 999 });
+    options.value = res.data.map((v) => ({
+      label: v.username,
+      value: v._id,
+    }));
+    allowClear.value = true;
+  } else {
+    options.value = [
+      {
+        label: localStorage.getItem("username"),
+        value: localStorage.getItem("userid"),
+      },
+    ];
+    console.log("不是admin");
+  }
 };
 
 const cancelModel = () => {
@@ -196,12 +242,15 @@ const cancelModel = () => {
 //修改
 let editId = ref("");
 const edit = (temp) => {
+  console.log(temp);
+  for (let i in newModel.value) newModel.value[i] = temp[i];
+  newModel.value.user = temp.user._id;
   editId.value = temp._id;
   viss.value.edit = true;
 };
 
 onMounted(() => {
-  fetch();
+  search();
   findUserOptions();
 });
 </script>

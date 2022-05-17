@@ -11,6 +11,7 @@ interface model {
   pass?: string; //提交时需要把这个删掉
   role?: string; //身份，默认是2 User
   state?: boolean; //默认是true
+  promiss: [];
 }
 export interface CrudQuery {
   limit?: number;
@@ -33,6 +34,7 @@ export const Curd = (url: string, initModel?: Object) => {
     pass: "", //提交时需要把这个删掉
     role: "2", //身份，默认是2 User
     state: true, //默认是true
+    promiss: [],
   });
 
   // let query = reactive<CrudQuery>({
@@ -48,6 +50,7 @@ export const Curd = (url: string, initModel?: Object) => {
     pass: "", //提交时需要把这个删掉
     role: "2", //身份，默认是2 User
     state: true, //默认是true
+    promiss: [],
   });
   //修改
   let editModel = ref<any>({
@@ -56,6 +59,7 @@ export const Curd = (url: string, initModel?: Object) => {
     pass: "", //提交时需要把这个删掉
     role: "2", //身份，默认是2 User
     state: true, //默认是true
+    promiss: [],
   });
   //清空curdModel里面的值
   const resetModel = () => {

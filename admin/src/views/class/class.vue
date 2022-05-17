@@ -33,10 +33,12 @@
     </div>
     <div class="mt-4">
       <a-table
-        :dataSource="data"
+        :dataSource="classData"
         rowKey="_id"
         :scroll="{ y: 400 }"
         class="h-400"
+        :pagination="pagination"
+        @change="pageChange"
       >
         <a-table-column
           title="类别"
@@ -45,6 +47,8 @@
           class="w-60"
         />
         <a-table-column title="id" dataIndex="_id" key="_id" />
+        <a-table-column title="id" dataIndex="parent" key="parent" />
+
         <a-table-column title="操作" dataIndex="operation" key="operation">
           <template #="{ record }">
             <div>
@@ -134,13 +138,14 @@ let data = ref([{}]);
 let pagination = ref({
   total: 0, //数据总数
   current: 1, //当前页面
-  pageSize: 0, //数据量
+  pageSize: 5, //数据量
 });
 //展示条件
 let query = ref({
   limit: pagination.value.pageSize, //一页展示多少条,默认0时会全部展示，
   page: 1, //展示页码
-  where: ref({}),
+  // where: ref({}),
+  where: { parent: { $exists: false } },
   // where: ref(wheres) //展示筛选条件 where 别加s
   // populate: "user", //展示关联表的内容
 });
@@ -151,11 +156,13 @@ const fetch = async () => {
       query: query.value,
     },
   });
+  console.log(res.data);
+
   classData.value = res.data;
   pagination.value.total = res.total;
   pagination.value.pageSize = res.total;
   data.value = [{}];
-  dataChange();
+
   options.value = res.data.map((v) => ({
     label: v.title,
     value: v._id,
@@ -163,17 +170,6 @@ const fetch = async () => {
 };
 let options = ref([]);
 
-//处理一下数据,筛选出一级分类
-const dataChange = () => {
-  let j = 0;
-  for (let i in classData.value) {
-    if (!classData.value[i].parent) {
-      //没有parent
-      data.value[j] = classData.value[i];
-      j++;
-    }
-  }
-};
 //根据名字找id
 const findId = (nameTemp) => {
   for (let i in classData.value) {

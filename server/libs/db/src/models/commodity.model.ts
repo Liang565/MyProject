@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { modelOptions, prop, Ref } from '@typegoose/typegoose';
 import { CommodityClass } from './commodityClass.model';
+import { Shop } from './shop.model';
 
 @modelOptions({
   schemaOptions: {
@@ -36,4 +37,7 @@ export class Commodity {
   @ApiProperty({ description: '商品数量', example: 0 })
   commodityNum: number;
   //因为参数不同，同名的商品不同参数有不同库存，
+  @prop({ ref: 'Shop' })
+  @ApiProperty({ description: '所属店铺' })
+  shop: Ref<Shop>;
 }

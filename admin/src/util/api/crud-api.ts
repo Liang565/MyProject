@@ -1,11 +1,16 @@
 import { message, Modal } from "ant-design-vue";
-import { createVNode, ref } from "vue";
+import { createVNode, onMounted, ref } from "vue";
 import { ExclamationCircleOutlined } from "@ant-design/icons-vue";
 import { http } from "../http";
-export const CrudTest = (url: string) => {
+import { getTransitionProps } from "ant-design-vue/lib/_util/transition";
+export const CrudTest = (
+  url: string
+  // good?: { default: false; type: boolean },
+  // userid?: String
+) => {
   //分页器
   let pagination = ref({
-    total: 999, //数据总数
+    total: 0, //数据总数
     current: 1, //当前页面
     pageSize: 5, //数据量
   });
@@ -29,6 +34,7 @@ export const CrudTest = (url: string) => {
   let data = ref();
 
   const fetch = async () => {
+    console.log("fetch");
     let res = await http.get(`${url}`, {
       params: {
         query: query.value,
@@ -36,11 +42,30 @@ export const CrudTest = (url: string) => {
     });
     data.value = res.data;
     pagination.value.total = res.total;
+    if (data.value.length == 0) {
+      query.value.page = query.value.page - 1;
+      pagination.value.current = pagination.value.current - 1;
+      fetch();
+    }
   };
   let viss = ref({ add: false, edit: false, addSon: false });
-  const addOk = async (model, url1: string) => {
-    await http.post(`${url}/${url1}`, model);
+  const addOk = async (model, url1?: string) => {
+    if (url1) {
+      await http.post(`${url}/${url1}`, model);
+    } else {
+      await http.post(`${url}`, model);
+    }
     message.success("添加成功");
+
+    //当前页面满，且总数除以页码展示数余数不为0,跳转到新增的位置
+    if (
+      data.value.length == query.value.limit &&
+      (pagination.value.total + 1) % query.value.limit != 0
+    ) {
+      query.value.page =
+        Math.floor(pagination.value.total / query.value.limit) + 1;
+      pagination.value.current = query.value.page;
+    }
     fetch();
     viss.value.add = false;
   };
@@ -61,12 +86,13 @@ export const CrudTest = (url: string) => {
       async onOk() {
         await http.delete(`${url}/${temp._id}`);
         message.success("已删除");
+        fetch();
       },
       onCancel() {
         console.log("Cancel");
+        fetch();
       },
     });
-    fetch();
   };
   //修改
   /**
@@ -86,9 +112,11 @@ export const CrudTest = (url: string) => {
     for (let i in where.value) {
       if (where.value[i] == "") delete where.value[i];
     }
+    if (query.value.page < 1) query.value.page = 1; //防止page为0，导致数据查询报错
     query.value.where = where.value;
     fetch();
   };
+
   return {
     remove,
     viss,

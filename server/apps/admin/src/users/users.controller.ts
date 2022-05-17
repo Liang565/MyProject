@@ -62,7 +62,6 @@ export class UsersController {
         role, //admin是1管理员 都是2USER
         state, //用户状态
       });
-
       return user;
     } else {
       throw new BadRequestException('用户名已注册');

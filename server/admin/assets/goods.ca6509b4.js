@@ -1,1 +1,0 @@
-import{a as o}from"./api.550efd51.js";import{f as e,o as r,h as t}from"./vendor.7d6628ed.js";import"./http.ad2693f8.js";import"./crud.5c2610df.js";const f=e({setup(a){return o.user.find(),(n,p)=>(r(),t("div",null,"goods"))}});export{f as default};

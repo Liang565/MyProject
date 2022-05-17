@@ -3,6 +3,7 @@ import { message } from "ant-design-vue";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import { http } from "../util/http";
+import { check } from "./base";
 
 export const RAndLogin = () => {
   const router = useRouter();
@@ -55,17 +56,36 @@ export const RAndLogin = () => {
     console.log("执行logOut");
     message.success("退出");
     localStorage.removeItem("token");
+    localStorage.removeItem("userid");
+
     router.push("/login");
   };
   //设置输入框为空时不可以点击登录
   const disabled = computed(() => {
     return !(logModel.value.username && logModel.value.password);
   });
-  //获取用户名
+  //获取当前用户名
 
   const getUser = async () => {
     const data = await http.get("auth/user");
     adminStore.setAdmin(data); //设置全局的用户名
+    localStorage.setItem("userid", data._id);
+    localStorage.setItem("role", data.role);
+    localStorage.setItem("username", data.username);
+    // const promiss = data.promiss.map((v) => {
+    //   return [v.name];
+    // });
+    // localStorage.setItem("promiss", promiss);
+
+    // // 如果不是admin,就设置店铺
+    // if (data.role != 1) {
+    //   const shop = await http.get("shops", {
+    //     params: {
+    //       query: { where: { user: data._id } },
+    //     },
+    //   });
+    //   adminStore.setShop(shop);
+    // }
   };
 
   return {

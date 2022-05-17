@@ -1,9 +1,22 @@
 import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors(); //配置跨域
+  app.setGlobalPrefix('/server/api'); //接口上加上api
+
+  const options = new DocumentBuilder()
+    .setTitle('后台管理API')
+    .setDescription('API文档')
+    .setVersion('1.0')
+    .addBearerAuth() //启 用token，给swagger用的
+    .addTag('cats')
+    .build();
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup('api-docs', app, document);
   await app.listen(3002);
-  console.log('server:http://localhost:3002/');
+  console.log('server:http://localhost:3002/api-docs');
 }
 bootstrap();

@@ -71,7 +71,7 @@ yarn add -D @types/passport @types/passport-jwt @types/passport-local //ts代码
 7.生成token 
 需要引入jwt的包yarn add @nestjs/jwt
 然后找一个全局的位置注册这个包，在libs下新建common,在其src的model下
-@Global()//注意标记为全局,注意要在admin.modeule文件里面导入
+@Global()//注意标记为全局,注意要在admin.modeule文件里面导入     CommonModule,
 @Module({
   imports: [
     //这块

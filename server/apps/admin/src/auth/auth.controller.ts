@@ -46,7 +46,7 @@ export class AuthController {
       const user = await this.userModel.create({
         username,
         password,
-        role: '2', //除了admin是1 管理员其他都是2USER
+        role: 'user', //除了admin是1 管理员其他都是2USER
         state: true, //默认新注册的用户状态都是启用的
       });
       return user;
@@ -76,6 +76,10 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt')) //jwtStrategy的名字,守卫
   @ApiBearerAuth() //表示这个接口需要token才可以使用
   async user(@Req() req) {
-    return req.user;
+    // return req.user;
+    const user = await this.userModel
+      .findById(req.user._id)
+      .populate('promiss');
+    return user;
   }
 }

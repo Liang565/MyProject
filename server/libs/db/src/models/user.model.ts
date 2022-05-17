@@ -1,11 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { defaultClasses, modelOptions, prop } from '@typegoose/typegoose';
+import { defaultClasses, modelOptions, prop, Ref } from '@typegoose/typegoose';
 import { hashSync } from 'bcryptjs';
 import { Deflate } from 'zlib';
+import { Promiss } from './promiss.model';
 
 export enum roles {
-  ADMIN = '1',
-  USER = '2',
+  ADMIN = 'admin',
+  USER = 'user',
 }
 
 export class User {
@@ -25,13 +26,14 @@ export class User {
   })
   password: string;
 
-  @ApiProperty({ description: '身份', example: '2' })
+  @ApiProperty({ description: '身份', example: 'user' })
   @prop({ enum: roles })
   // role: roles;
   role: roles;
   @ApiProperty({ description: '状态', example: true })
   @prop()
   state: boolean;
+
   // @ts-ignore
   // get ROLE(this: DocumentType<User>) {
   //   if (this.role == '1') {
@@ -43,4 +45,11 @@ export class User {
       return '启用';
     } else return '禁用';
   }
+  @ApiProperty({ description: '用户头像' })
+  @prop()
+  image: string;
+
+  @ApiProperty({ description: '权限' })
+  @prop({ ref: 'Promiss' })
+  promiss: Ref<Promiss>[];
 }

@@ -9,9 +9,29 @@ import { AuthModule } from './auth/auth.module';
 import { CommonModule } from 'libs/common';
 import { ShopsModule } from './shops/shops.module';
 import { OrdersModule } from './orders/orders.module';
-
+import { MulterModule } from '@nestjs/platform-express';
+import { PromissModule } from './promiss/promiss.module';
+const MAO = require('multer-aliyun-oss');
 @Module({
   imports: [
+    MulterModule.registerAsync({
+      useFactory() {
+        return {
+          storage: MAO({
+            config: {
+              region: 'oss-cn-shenzhen', //地方
+              accessKeyId: 'LTAI5tR5y91t2TmRZSbS6WYp', //子账号id
+              accessKeySecret: 'NCnqYVA1jd0UhevvsgoxD5kGc9YpJY', //子账号secret
+              bucket: 'liangeronline', //存储空间名称
+              // region: 'oss-cn-beijing', //地方
+              // accessKeyId: 'LTAI5tR5y91t2TmRZSbS6WYp', //子账号id
+              // accessKeySecret: 'NCnqYVA1jd0UhevvsgoxD5kGc9YpJY', //子账号secret
+              // bucket: 'lianger1', //存储空间名称
+            },
+          }),
+        };
+      },
+    }),
     DbModule,
     CommonModule,
     UsersModule,
@@ -20,6 +40,7 @@ import { OrdersModule } from './orders/orders.module';
     AuthModule,
     ShopsModule,
     OrdersModule,
+    PromissModule,
   ],
   controllers: [AdminController],
   providers: [AdminService],

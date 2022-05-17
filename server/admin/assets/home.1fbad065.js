@@ -1,0 +1,1 @@
+import{a}from"./admin-store.d62c6d54.js";import{d as t,p as o,o as s,h as n,j as e,t as r,l,F as i}from"./vendor.fd5a6943.js";const m=e("div",null,"home",-1),f=t({setup(c){return o(),(p,d)=>(s(),n(i,null,[m,e("div",null,r(l(a).state.admin.role),1)],64))}});export{f as default};

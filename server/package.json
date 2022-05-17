@@ -33,6 +33,7 @@
     "@typegoose/typegoose": "^9.7.1",
     "bcryptjs": "^2.4.3",
     "mongoose": "^6.2.8",
+    "multer-aliyun-oss": "1.1.1",
     "nestjs-mongoose-crud": "^2.1.2",
     "nestjs-typegoose-next": "^0.1.4",
     "passport": "^0.5.2",
