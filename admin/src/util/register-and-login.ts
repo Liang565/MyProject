@@ -22,7 +22,7 @@ export const RAndLogin = () => {
     let regMoel1 = ref({
       username: regModel.value.username,
       password: regModel.value.password,
-      role: "2",
+      role: "user",
       state: true,
     });
     await http.post("auth/register", regMoel1.value);
