@@ -1507,7 +1507,7 @@ DbModule = __decorate([
             nestjs_typegoose_next_1.TypegooseModule.forRootAsync({
                 useFactory() {
                     return {
-                        uri: 'mongodb://localhost/blogs',
+                        uri: 'mongodb://localhost:27018/blogs',
                     };
                 },
             }),
