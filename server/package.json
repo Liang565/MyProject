@@ -19,7 +19,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./apps/server/test/jest-e2e.json",
-    "push": "cd .. && git add -A && git commit -am 'build:build'&&git push",
+    "push": "cd .. && git add -A && git commit -am '518'&&git push",
     "admin": "rm -rf ./admin/ && cd ../admin && npm run build && cd ../server",
     "server": "rm -rf prod && cp -rf dist prod"
   },
