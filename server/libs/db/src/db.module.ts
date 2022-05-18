@@ -18,7 +18,7 @@ const model = TypegooseModule.forFeature(models);
     TypegooseModule.forRootAsync({
       useFactory() {
         return {
-          uri: 'mongodb://localhost:27018/blogs',
+          uri: 'mongodb://localhost/blogs', //'mongodb://localhost:27018/blogs',
         };
       },
     }),
