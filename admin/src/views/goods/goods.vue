@@ -18,16 +18,20 @@
           </a-form-item>
         </a-form>
       </div>
+    </div>
+    <div>
       <div>
         <a-form layout="inline">
-          <a-form-item label="店铺名：" class="w-52">
-            <a-input v-model:value="where.title"></a-input>
+          <a-form-item label="商品名：" class="w-52">
+            <a-input v-model:value="where.commodityName"></a-input>
           </a-form-item>
-          <a-form-item label="所属用户名" class="w-44">
+          <a-form-item label="所属分类" class="w-44">
             <a-select
-              :options="options"
-              v-model:value="where.user"
+              :options="optionsClass"
+              v-model:value="where.title"
               :allowClear="true"
+              :showSearch="true"
+              :filter-Option="filterOption"
             >
             </a-select>
           </a-form-item>
@@ -37,7 +41,6 @@
         </a-form>
       </div>
     </div>
-
     <div class="mt-5">
       <a-table
         :dataSource="data"
@@ -220,12 +223,16 @@ const setOptionsShop = async () => {
     label: v.title,
     value: v.id,
   }));
-  // where.value.commodityName = "商品名1";
-  //随机设置一个店铺值，如果没有就设一乱码。
-  if (optionsShop.value[0].value) {
-    where.value.shop = optionsShop.value[0].value;
-    newModel.value.shop = where.value.shop;
-    search();
+  //如果没有商铺会提示无商铺
+  if (optionsShop.value.length === 0) {
+    message.info("该用户下无店铺");
+  } else {
+    //默认用商铺来查询商品信息
+    if (optionsShop.value[0].value) {
+      where.value.shop = optionsShop.value[0].value;
+      newModel.value.shop = where.value.shop;
+      search();
+    }
   }
 };
 //切换店铺方法：
@@ -266,7 +273,11 @@ const resetModel = () => {
 };
 
 const addShop = () => {
-  viss.value.add = true;
+  if (optionsShop.value.length === 0) {
+    message.error("该用户下无店铺,不能新增商品");
+  } else {
+    viss.value.add = true;
+  }
 };
 
 //分类选框

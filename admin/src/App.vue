@@ -10,7 +10,8 @@ const router = useRouter();
 router.beforeEach((to, from) => {
   if (
     to.meta.promiss !== "public" &&
-    to.meta.promiss !== localStorage.getItem("role")
+    to.meta.promiss !== localStorage.getItem("role") &&
+    localStorage.getItem("role") !== "admin"
   ) {
     message.warn("没有权限进入");
     if (from.path === "/") {

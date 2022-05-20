@@ -2,30 +2,27 @@
   <!-- <div>{{ newModel }}</div> -->
   <div>
     <div class="mb-2 text-2xl">权限管理</div>
-    <div class="mb-2 flex justify-start">
-      <div>
-        <a-button @click="addShop" type="primary"> 新增商品 </a-button>
-      </div>
-      <div>
-        <a-form layout="inline">
-          <a-form-item label="权限名：" class="w-52">
-            <a-input v-model:value="where.name"></a-input>
-          </a-form-item>
-          <a-form-item label="分类" class="w-44">
-            <a-select
-              :options="options"
-              v-model:value="where.category"
-              :allowClear="true"
-            >
-            </a-select>
-          </a-form-item>
-          <a-form-item>
-            <a-button type="primary" @click="search">搜索</a-button>
-          </a-form-item>
-        </a-form>
-      </div>
+    <div class="mb-2">
+      <a-button @click="addShop" type="primary"> 新增权限 </a-button>
     </div>
-
+    <div class="mb-2">
+      <a-form layout="inline">
+        <a-form-item label="权限名：" class="w-52">
+          <a-input v-model:value="where.name"></a-input>
+        </a-form-item>
+        <a-form-item label="分类" class="w-44">
+          <a-select
+            :options="options"
+            v-model:value="where.category"
+            :allowClear="true"
+          >
+          </a-select>
+        </a-form-item>
+        <a-form-item>
+          <a-button type="primary" @click="search">搜索</a-button>
+        </a-form-item>
+      </a-form>
+    </div>
     <div class="mt-5">
       <a-table
         :dataSource="data"

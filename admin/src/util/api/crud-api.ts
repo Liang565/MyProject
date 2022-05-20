@@ -40,9 +40,12 @@ export const CrudTest = (
         query: query.value,
       },
     });
+    if (res.total === 0) {
+      message.info("数据为空");
+    }
     data.value = res.data;
     pagination.value.total = res.total;
-    if (data.value.length == 0) {
+    if (data.value.length == 0 && res.total != 0) {
       query.value.page = query.value.page - 1;
       pagination.value.current = pagination.value.current - 1;
       fetch();
@@ -62,12 +65,14 @@ export const CrudTest = (
       data.value.length == query.value.limit &&
       (pagination.value.total + 1) % query.value.limit != 0
     ) {
+      console.log("空白得地方新增了一个数据");
       query.value.page =
         Math.floor(pagination.value.total / query.value.limit) + 1;
       pagination.value.current = query.value.page;
     }
-    fetch();
+
     viss.value.add = false;
+    fetch();
   };
   /**
    *
