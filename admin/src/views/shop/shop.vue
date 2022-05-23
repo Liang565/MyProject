@@ -6,7 +6,7 @@
       <div>
         <a-button @click="addShop" type="primary"> 新增商铺 </a-button>
       </div>
-      <div class="w-full">
+      <div class="w-full ml-8">
         <a-form layout="inline">
           <a-form-item label="店铺名：" class="w-52">
             <a-input v-model:value="where.title"></a-input>
@@ -224,13 +224,13 @@ const findUserOptions = async () => {
     }));
     allowClear.value = true;
   } else {
+    //不是admin时只展示当前用户的用户名和id
     options.value = [
       {
         label: localStorage.getItem("username"),
         value: localStorage.getItem("userid"),
       },
     ];
-    console.log("不是admin");
   }
 };
 

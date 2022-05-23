@@ -249,6 +249,7 @@ export const Curd = (url: string, initModel?: Object) => {
     query.value.where = where.value;
     fetch();
   };
+  const aaa = import.meta.env.TEST as String;
   return {
     query, // 展示条件
     fetch, //展示
@@ -269,5 +270,6 @@ export const Curd = (url: string, initModel?: Object) => {
     selectState,
     where,
     search,
+    aaa,
   };
 };

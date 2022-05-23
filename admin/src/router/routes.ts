@@ -48,6 +48,11 @@ export const routes = [
         component: () => import("../views/shop/shop.vue"),
       },
       {
+        path: "/build-shop",
+        meta: { title: "商铺搭建", isMenu: true, promiss: "public" },
+        component: () => import("../views/shop/build-shop.vue"),
+      },
+      {
         path: "/promiss",
         meta: { title: "权限管理", isMenu: true, promiss: "admin" },
         component: () => import("../views/promiss/promiss.vue"),
@@ -65,6 +70,6 @@ export const routes = [
     name: "test",
     meta: { title: "登录页", isPublic: true, promiss: "public" },
 
-    component: () => import("../views/test.vue"),
+    component: () => import("../components/myImg/myimg.vue"),
   },
 ];

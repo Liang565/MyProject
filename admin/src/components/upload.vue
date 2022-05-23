@@ -3,7 +3,7 @@
     name="file"
     list-type="picture-card"
     :show-upload-list="false"
-    action="http://localhost:3001/admin/api/upload"
+    :action="httpURL + '/upload'"
     @change="handleChange"
     :before-upload="beforeUpload"
   >
@@ -17,7 +17,8 @@
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
-
+import { RAndLogin } from "../util/register-and-login";
+const { httpURL } = RAndLogin();
 const emit = defineEmits(["on-success"]);
 const handleChange = (file, fileList, e) => {
   emit("on-success", file.file.response.url); //父组件的事件on-success

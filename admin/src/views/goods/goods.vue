@@ -86,9 +86,16 @@
           <template #="{ record }">
             <!-- <div>{{ record.image }}</div> -->
             <!-- <a-image :width="70" :src="record.image"></a-image> -->
-
-            <div class="flex overflow-x-visible">
-              <img class="w-6 h-6" :src="i.url" v-for="i in record.image" />
+            <div>
+              <!-- <myImg :URL="record.image" /> -->
+              <!-- {{ record.image }} -->
+              <!-- <a-image-preview-group>
+                <a-image
+                  :src="i.url"
+                  v-for="i in record.image"
+                  :preview="true"
+                  height="100%"
+              /></a-image-preview-group> -->
             </div>
           </template>
         </a-table-column>
@@ -115,7 +122,9 @@
       :afterClose="cancelModel"
     >
       <!-- 选框里面的  :filter-Option="filterOption"用于搜索选项 -->
-
+      <div>
+        {{ newModel }}
+      </div>
       <a-form :model="newModel">
         <a-form-item label="商品名">
           <a-input v-model:value="newModel.commodityName"></a-input>
@@ -156,36 +165,47 @@
   <div>
     <a-modal
       v-model:visible="viss.edit"
-      title="修改信息"
-      :afterClose="cancelModel"
+      title="修改商品信息"
       @ok="editOk(editId, newModel)"
+      :afterClose="cancelModel"
     >
+      <!-- 选框里面的  :filter-Option="filterOption"用于搜索选项 -->
+      <div>
+        {{ newModel }}
+      </div>
       <a-form :model="newModel">
-        <a-form-item label="商店名">
-          <a-input v-model:value="newModel.title"></a-input>
+        <a-form-item label="商品名">
+          <a-input v-model:value="newModel.commodityName"></a-input>
         </a-form-item>
-        <a-form-item label="所属用户名">
-          <a-select :options="options" v-model:value="newModel.user">
+        <a-form-item label="分类">
+          <a-select
+            :allowClear="true"
+            :showSearch="true"
+            :options="optionsClass"
+            v-model:value="newModel.title"
+            :filter-Option="filterOption"
+          >
           </a-select>
         </a-form-item>
-        <a-form-item label="商铺简介">
-          <a-input v-model:value="newModel.description"></a-input>
+        <a-form-item label="商品简介">
+          <a-input v-model:value="newModel.commodityIntroduce"></a-input>
         </a-form-item>
-        <a-form-item label="商铺头像">
-          <upload
-            :imageUrl="newModel.images"
+        <a-form-item label="商品图片">
+          <!-- 这里要搞一个图片列表 -->
+          <uploadList
+            :fileList1="newModel.image"
             @on-success="
-              (imageUrl) => {
-                newModel.images = imageUrl;
+              (aa) => {
+                newModel.image = aa;
               }
             "
-          />
+          ></uploadList>
         </a-form-item>
-        <a-form-item label="商铺地址">
-          <a-input v-model:value="newModel.address"></a-input>
+        <a-form-item label="参数">
+          <a-input v-model:value="newModel.parameter"></a-input>
         </a-form-item>
-        <a-form-item label="商铺电话">
-          <a-input v-model:value="newModel.phone"></a-input>
+        <a-form-item label="数量">
+          <a-input v-model:value="newModel.commodityNum"></a-input>
         </a-form-item>
       </a-form>
     </a-modal>
@@ -200,6 +220,7 @@ import { http } from "../../util/http";
 import { CrudTest } from "../../util/api/crud-api";
 import uploadList from "../../components/uploadList.vue";
 import adminStore from "../../stores/admin-store";
+import myImg from "../../components/myImg/myimg.vue";
 
 const {
   remove,
@@ -218,15 +239,17 @@ const {
 //切换店铺
 let optionsShop = ref<any>([]);
 const setOptionsShop = async () => {
-  const res = await http.post(`/commoditys/Goods/${localStorage.userid}`);
-  optionsShop.value = res.map((v) => ({
-    label: v.title,
-    value: v.id,
-  }));
+  const res: Array<any> = await http.post(
+    `/commoditys/Goods/${localStorage.userid}`
+  );
   //如果没有商铺会提示无商铺
-  if (optionsShop.value.length === 0) {
+  if (res.length === 0) {
     message.info("该用户下无店铺");
   } else {
+    optionsShop.value = res.map((v) => ({
+      label: v.title,
+      value: v.id,
+    }));
     //默认用商铺来查询商品信息
     if (optionsShop.value[0].value) {
       where.value.shop = optionsShop.value[0].value;
@@ -304,8 +327,16 @@ const cancelModel = () => {
 //修改
 let editId = ref("");
 const edit = (temp) => {
-  for (let i in newModel.value) newModel.value[i] = temp[i];
-  // newModel.value.user = temp.user._id;
+  console.log(temp);
+
+  newModel.value.image = temp.image;
+  newModel.value.commodityName = temp.commodityName;
+
+  newModel.value.commodityIntroduce = temp.commodityIntroduce; // "商品介绍",
+  newModel.value.title = temp.title._id; //分类
+  newModel.value.parameter = temp.parameter; //参数
+  newModel.value.commodityNum = temp.commodityNum; //数量
+  // newModel.value.shop: "", //所属店铺
   editId.value = temp._id;
   viss.value.edit = true;
 };
