@@ -92,10 +92,10 @@ AdminModule = __decorate([
                     return {
                         storage: MAO({
                             config: {
-                                region: 'oss-cn-shenzhen',
-                                accessKeyId: 'LTAI5tR5y91t2TmRZSbS6WYp',
-                                accessKeySecret: 'NCnqYVA1jd0UhevvsgoxD5kGc9YpJY',
-                                bucket: 'liangeronline',
+                                region: process.env.OSS_REGION,
+                                accessKeyId: process.env.OSS_ACCESSKEYID,
+                                accessKeySecret: process.env.OSS_ACCESSKEYSECRET,
+                                bucket: process.env.OSS_BUCKET,
                             },
                         }),
                     };
@@ -1393,16 +1393,18 @@ exports.CommonModule = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
 const common_service_1 = __webpack_require__(/*! ./common.service */ "./libs/common/src/common.service.ts");
 const jwt_1 = __webpack_require__(/*! @nestjs/jwt */ "@nestjs/jwt");
+const config_1 = __webpack_require__(/*! @nestjs/config */ "@nestjs/config");
 let CommonModule = class CommonModule {
 };
 CommonModule = __decorate([
     (0, common_1.Global)(),
     (0, common_1.Module)({
         imports: [
+            config_1.ConfigModule.forRoot(),
             jwt_1.JwtModule.registerAsync({
                 useFactory() {
                     return {
-                        secret: 'sifhgioaehgbb',
+                        secret: process.env.SECRET,
                     };
                 },
             }),
@@ -1982,6 +1984,16 @@ module.exports = require("@nestjs/common");
 
 /***/ }),
 
+/***/ "@nestjs/config":
+/*!*********************************!*\
+  !*** external "@nestjs/config" ***!
+  \*********************************/
+/***/ ((module) => {
+
+module.exports = require("@nestjs/config");
+
+/***/ }),
+
 /***/ "@nestjs/core":
 /*!*******************************!*\
   !*** external "@nestjs/core" ***!
@@ -2154,8 +2166,9 @@ async function bootstrap() {
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, options);
     swagger_1.SwaggerModule.setup('api-docs', app, document);
-    await app.listen(3001);
-    console.log('http://localhost:3001/api-docs/');
+    const PROT = process.env.ADMIN_PROT;
+    await app.listen(PROT);
+    console.log(`http://localhost:${PROT}/api-docs/`);
 }
 bootstrap();
 

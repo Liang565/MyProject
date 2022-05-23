@@ -19,10 +19,10 @@ const MAO = require('multer-aliyun-oss');
         return {
           storage: MAO({
             config: {
-              region: 'oss-cn-shenzhen', //地方
-              accessKeyId: 'LTAI5tR5y91t2TmRZSbS6WYp', //子账号id
-              accessKeySecret: 'NCnqYVA1jd0UhevvsgoxD5kGc9YpJY', //子账号secret
-              bucket: 'liangeronline', //存储空间名称
+              region: process.env.OSS_REGION, //地方
+              accessKeyId: process.env.OSS_ACCESSKEYID, //子账号id
+              accessKeySecret: process.env.OSS_ACCESSKEYSECRET, //子账号secret
+              bucket: process.env.OSS_BUCKET, //存储空间名称
               // region: 'oss-cn-beijing', //地方
               // accessKeyId: 'LTAI5tR5y91t2TmRZSbS6WYp', //子账号id
               // accessKeySecret: 'NCnqYVA1jd0UhevvsgoxD5kGc9YpJY', //子账号secret

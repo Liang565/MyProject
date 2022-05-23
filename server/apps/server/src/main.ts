@@ -16,7 +16,10 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api-docs', app, document);
-  await app.listen(3002);
-  console.log('server:http://localhost:3002/api-docs');
+
+  const PROT = process.env.APP_PROT;
+
+  await app.listen(PROT);
+  console.log(`http://localhost:3002/api-docs`);
 }
 bootstrap();

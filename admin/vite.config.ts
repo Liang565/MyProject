@@ -15,6 +15,6 @@ export default defineConfig({
   // 打包配置
   build: {
     target: "modules",
-    outDir: "../server/admin", //指定输出路径
+    outDir: "../server/public/admin", //指定输出路径
   },
 });
