@@ -1,10 +1,9 @@
 <template>
-  <div>{{ fileList }}</div>
   <div>
     <div>
       <a-upload
         v-model:file-list="fileList1"
-        action="http://localhost:3001/admin/api/upload"
+        :action="httpURL + '/upload'"
         list-type="picture-card"
         :remove="removeImg"
         @change="handleChange"
@@ -18,38 +17,35 @@
     <div>
       <a-button type="danger" @click="allDelete">
         <delete-outlined />
-        一键清空
+        清空图片
       </a-button>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
 import { UploadOutlined } from "@ant-design/icons-vue";
-import { defineComponent, ref } from "vue";
-import type { UploadProps } from "ant-design-vue";
-const fileList1 = ref([]);
+import { ref } from "vue";
+import { RAndLogin } from "../util/register-and-login";
+const { httpURL } = RAndLogin();
+
+let fileList1 = ref([]);
+let testList = ref([]);
+
 //传出调用的地方
 const emit = defineEmits(["on-success"]);
 const handleChange = (file, fileList, e) => {
-  // emit("on-success", file.file.response.url); //父组件的事件on-success
   emit(
     "on-success",
-    fileList1.value.map((v) => ({
+    // testList //这里是传出去的
+    (testList.value = fileList1.value.map((v) => ({
       url: v.response.url,
-    }))
+    })))
   );
 };
 
-// //调用的地方传回来的
-const props = defineProps({});
-
 const allDelete = () => {
+  testList.value = [];
   fileList1.value = [];
-  emit(
-    "on-success",
-    fileList1.value.map((v) => ({
-      url: v.response.url,
-    }))
-  );
+  emit("on-success", []);
 };
 </script>

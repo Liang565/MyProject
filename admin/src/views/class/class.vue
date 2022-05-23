@@ -156,7 +156,6 @@ const fetch = async () => {
       query: query.value,
     },
   });
-  console.log(res.data);
 
   classData.value = res.data;
   pagination.value.total = res.total;

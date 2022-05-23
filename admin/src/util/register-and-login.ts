@@ -57,6 +57,9 @@ export const RAndLogin = () => {
     message.success("退出");
     localStorage.removeItem("token");
     localStorage.removeItem("userid");
+    localStorage.removeItem("username");
+    localStorage.removeItem("role");
+    localStorage.removeItem("promiss");
 
     router.push("/login");
   };
@@ -87,7 +90,7 @@ export const RAndLogin = () => {
     //   adminStore.setShop(shop);
     // }
   };
-
+  const httpURL = import.meta.env.VITE_APPAPI as string;
   return {
     RegisterUser,
     regModel,
@@ -98,5 +101,6 @@ export const RAndLogin = () => {
     RegisterSub,
     disabled,
     getUser,
+    httpURL,
   };
 };

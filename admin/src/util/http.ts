@@ -1,9 +1,11 @@
 import axios, { type AxiosInstance } from "axios";
 import { message } from "ant-design-vue";
 export const http: AxiosInstance = axios.create({
-  baseURL: "http://www.lianger.fit/admin/api/",
-  // baseURL: "http://localhost:3001/admin/api",
+  // baseURL: "http://www.lianger.fit/admin/api/",
+  // baseURL: "http://localhost:3005/admin/api",
+  baseURL: import.meta.env.VITE_APPAPI as string,
 });
+
 http.interceptors.request.use((config) => {
   config.headers = {
     Authorization: "Bearer " + localStorage.token,
