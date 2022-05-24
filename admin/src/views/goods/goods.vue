@@ -41,6 +41,10 @@
         </a-form>
       </div>
     </div>
+
+    <a-modal v-model:visible="visible" title="Basic Modal" @ok="handleOk">
+      <img :src="imgUrl" />
+    </a-modal>
     <div class="mt-5">
       <a-table
         :dataSource="data"
@@ -84,18 +88,9 @@
 
         <a-table-column title="图片" dataIndex="image" key="image">
           <template #="{ record }">
-            <!-- <div>{{ record.image }}</div> -->
-            <!-- <a-image :width="70" :src="record.image"></a-image> -->
-            <div>
-              <!-- <myImg :URL="record.image" /> -->
-              <!-- {{ record.image }} -->
-              <!-- <a-image-preview-group>
-                <a-image
-                  :src="i.url"
-                  v-for="i in record.image"
-                  :preview="true"
-                  height="100%"
-              /></a-image-preview-group> -->
+            <div v-if="record.image.length == 0">空</div>
+            <div v-else>
+              <myimg :URL="record.image" />
             </div>
           </template>
         </a-table-column>
@@ -220,8 +215,7 @@ import { http } from "../../util/http";
 import { CrudTest } from "../../util/api/crud-api";
 import uploadList from "../../components/uploadList.vue";
 import adminStore from "../../stores/admin-store";
-import myImg from "../../components/myImg/myimg.vue";
-
+import myimg from "../../components/myImg/myimglist.vue";
 const {
   remove,
   viss,
@@ -235,6 +229,14 @@ const {
   pagination,
   pageChange,
 } = CrudTest("commoditys");
+
+let visible = ref(false);
+let imgUrl = ref("");
+
+const changeUrl = (url) => {
+  imgUrl.value = url;
+  visible.value = true;
+};
 
 //切换店铺
 let optionsShop = ref<any>([]);

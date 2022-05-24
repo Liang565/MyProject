@@ -517,7 +517,7 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
     constructor(userModel) {
         super({
             jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
-            secretOrKey: 'sifhgioaehgbb',
+            secretOrKey: process.env.SECRET,
         });
         this.userModel = userModel;
     }

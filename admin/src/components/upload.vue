@@ -8,6 +8,7 @@
     :before-upload="beforeUpload"
   >
     <img v-if="imageUrl" :src="imageUrl" alt="avatar" />
+
     <div v-else>
       <loading-outlined v-if="loading"></loading-outlined>
       <plus-outlined v-else></plus-outlined>
@@ -21,7 +22,7 @@ import { RAndLogin } from "../util/register-and-login";
 const { httpURL } = RAndLogin();
 const emit = defineEmits(["on-success"]);
 const handleChange = (file, fileList, e) => {
-  emit("on-success", file.file.response.url); //父组件的事件on-success
+  emit("on-success", file.file.response?.url); //父组件的事件on-success
 };
 const props = defineProps({
   imageUrl: String,

@@ -21,8 +21,6 @@ export class AdminController {
   @UseInterceptors(FileInterceptor('file'))
   // async uploadFile(@UploadedFile('file') file) {
   async upload(@UploadedFile('file') file) {
-    console.log(file);
-
     return file;
   }
 }

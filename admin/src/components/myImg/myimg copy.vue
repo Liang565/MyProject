@@ -9,49 +9,51 @@
         <span>浏览</span>
       </button>
     </div>
-    <!-- 点击展开图库 -->
-    <transition name="fade">
-      <div class="tuku" v-if="tuku">
-        <!-- 顶部操作条 -->
-        <div class="topSetting">
-          <!-- 关闭 -->
-          <div>
-            <button @click="unLook">
-              <svg
-                width="40"
-                height="40"
-                viewBox="0 0 48 48"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <rect width="48" height="48" fill="white" fill-opacity="0.01" />
-                <path
-                  d="M9.85786 18C6.23858 21 4 24 4 24C4 24 12.9543 36 24 36C25.3699 36 26.7076 35.8154 28 35.4921M20.0318 12.5C21.3144 12.1816 22.6414 12 24 12C35.0457 12 44 24 44 24C44 24 41.7614 27 38.1421 30"
-                  stroke="#333"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M20.3142 20.6213C19.4981 21.5112 19 22.6974 19 24C19 26.7614 21.2386 29 24 29C25.3627 29 26.5981 28.4548 27.5 27.5707"
-                  stroke="#333"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M42 42L6 6"
-                  stroke="#333"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </button>
-          </div>
+  </div>
 
-          <!-- 放大 -->
-          <!-- <div @click="bigLook">
+  <!-- 点击展开图库 -->
+  <transition name="fade">
+    <div class="tuku" v-if="tuku">
+      <!-- 顶部操作条 -->
+      <div class="topSetting">
+        <!-- 关闭 -->
+        <div>
+          <button @click="unLook">
+            <svg
+              width="40"
+              height="40"
+              viewBox="0 0 48 48"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect width="48" height="48" fill="white" fill-opacity="0.01" />
+              <path
+                d="M9.85786 18C6.23858 21 4 24 4 24C4 24 12.9543 36 24 36C25.3699 36 26.7076 35.8154 28 35.4921M20.0318 12.5C21.3144 12.1816 22.6414 12 24 12C35.0457 12 44 24 44 24C44 24 41.7614 27 38.1421 30"
+                stroke="#333"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M20.3142 20.6213C19.4981 21.5112 19 22.6974 19 24C19 26.7614 21.2386 29 24 29C25.3627 29 26.5981 28.4548 27.5 27.5707"
+                stroke="#333"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M42 42L6 6"
+                stroke="#333"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <!-- 放大 -->
+        <!-- <div @click="bigLook">
             <svg
               width="40"
               height="40"
@@ -90,8 +92,8 @@
               />
             </svg>
           </div> -->
-          <!-- 缩小 -->
-          <!-- <div @click="smLook">
+        <!-- 缩小 -->
+        <!-- <div @click="smLook">
             <svg
               width="40"
               height="40"
@@ -123,97 +125,94 @@
               />
             </svg>
           </div> -->
+      </div>
+
+      <!-- 图片主体 -->
+      <div class="main">
+        <!-- 上一张 -->
+        <div class="leftSet">
+          <button @click="letSet" :disabled="num == 0">
+            <svg
+              width="40"
+              height="40"
+              viewBox="0 0 48 48"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect width="48" height="48" fill="white" fill-opacity="0.01" />
+              <path
+                d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z"
+                fill="none"
+                stroke="#333"
+                stroke-width="2"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M32.4917 24.5H14.4917"
+                stroke="#333"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M23.4917 15.5L14.4917 24.5L23.4917 33.5"
+                stroke="#333"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          <div style="width: 50px">
+            <span v-if="num == 0" style="font-size: 20px">已经是第一张了</span>
+          </div>
         </div>
+        <!-- 图片 -->
 
-        <!-- 图片主体 -->
-        <div class="main">
-          <!-- 上一张 -->
-          <div class="leftSet">
-            <button @click="letSet" :disabled="num == 0">
-              <svg
-                width="40"
-                height="40"
-                viewBox="0 0 48 48"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <rect width="48" height="48" fill="white" fill-opacity="0.01" />
-                <path
-                  d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z"
-                  fill="none"
-                  stroke="#333"
-                  stroke-width="2"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M32.4917 24.5H14.4917"
-                  stroke="#333"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M23.4917 15.5L14.4917 24.5L23.4917 33.5"
-                  stroke="#333"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </button>
-            <div style="width: 50px">
-              <span v-if="num == 0" style="font-size: 20px"
-                >已经是第一张了</span
-              >
-            </div>
+        <img :src="prop.URL[num].url" alt="" class="imgMain" />
+
+        <!-- 下一张 -->
+        <div class="rightSet">
+          <div style="width: 50px">
+            <span v-if="num == prop.URL.length - 1" style="font-size: 20px">
+              已经是最后一张了
+            </span>
           </div>
-          <!-- 图片 -->
-
-          <img :src="prop.URL[num].url" alt="" class="imgMain" />
-
-          <!-- 下一张 -->
-          <div class="rightSet">
-            <div style="width: 50px">
-              <span v-if="num == prop.URL.length - 1" style="font-size: 20px">
-                已经是最后一张了
-              </span>
-            </div>
-            <button @click="rightSet" :disabled="num == prop.URL.length - 1">
-              <svg
-                width="40"
-                height="40"
-                viewBox="0 0 48 48"
+          <button @click="rightSet" :disabled="num == prop.URL.length - 1">
+            <svg
+              width="40"
+              height="40"
+              viewBox="0 0 48 48"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect width="48" height="48" fill="white" fill-opacity="0.01" />
+              <path
+                d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z"
                 fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <rect width="48" height="48" fill="white" fill-opacity="0.01" />
-                <path
-                  d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z"
-                  fill="none"
-                  stroke="#333"
-                  stroke-width="2"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M14.4917 24.5H32.4917"
-                  stroke="#333"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M23.4917 15.5L32.4917 24.5L23.4917 33.5"
-                  stroke="#333"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </button>
-          </div>
-        </div></div
-    ></transition>
-  </div>
+                stroke="#333"
+                stroke-width="2"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M14.4917 24.5H32.4917"
+                stroke="#333"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M23.4917 15.5L32.4917 24.5L23.4917 33.5"
+                stroke="#333"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+      </div></div
+  ></transition>
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
@@ -296,10 +295,10 @@ let tuku = ref(false);
   background-color: rgb(252 165 165);
   width: 96px;
   height: auto;
-  position: absolute;
+  /* position: absolute; */
 }
 .aaa {
-  position: absolute;
+  /* position: absolute; */
   width: 96px;
   height: 100%;
   top: 0px;
@@ -311,6 +310,8 @@ let tuku = ref(false);
 }
 .tuku {
   position: absolute;
+  /* position: static; */
+
   left: 0;
   top: 0;
   width: 100vw;

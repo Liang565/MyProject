@@ -1,1 +1,0 @@
-import{o as n,h as a}from"./vendor.fd5a6943.js";var _=(r,e)=>{const o=r.__vccOpts||r;for(const[t,c]of e)o[t]=c;return o};const s={};function f(r,e){return n(),a("div",null,"order")}var d=_(s,[["render",f]]);export{d as default};

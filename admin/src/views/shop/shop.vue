@@ -53,7 +53,8 @@
         />
         <a-table-column title="商铺头像" dataIndex="images" key="images">
           <template #="{ record }">
-            <a-image :width="70" :src="record.images"> </a-image>
+            <myimage :URL="record.images" />
+            <!-- {{ record.images }} -->
           </template>
         </a-table-column>
         <a-table-column title="商铺地址" dataIndex="address" key="address" />
@@ -157,7 +158,7 @@ import { api } from "../../util/api/api";
 import { http } from "../../util/http";
 import { CrudTest } from "../../util/api/crud-api";
 import upload from "../../components/upload.vue";
-
+import myimage from "../../components/myImg/myimage.vue";
 const {
   remove,
   viss,

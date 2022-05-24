@@ -65,11 +65,11 @@ export const routes = [
     meta: { title: "登录页", isPublic: true, promiss: "public" },
     component: () => import("../views/login/login.vue"),
   },
-  {
-    path: "/test",
-    name: "test",
-    meta: { title: "登录页", isPublic: true, promiss: "public" },
+  // {
+  //   path: "/test",
+  //   name: "test",
+  //   meta: { title: "登录页", isPublic: true, promiss: "public" },
 
-    component: () => import("../components/myImg/myimg.vue"),
-  },
+  //   component: () => import("../components/myImg/myimg.vue"),
+  // },
 ];
