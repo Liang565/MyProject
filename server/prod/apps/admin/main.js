@@ -32,7 +32,6 @@ let AdminController = class AdminController {
         this.adminService = adminService;
     }
     async upload(file) {
-        console.log(file);
         return file;
     }
 };
