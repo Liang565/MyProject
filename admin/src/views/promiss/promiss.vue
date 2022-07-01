@@ -31,10 +31,31 @@
         @change="pageChange"
         :scroll="{ y: 390 }"
       >
-        <a-table-column title="id" dataIndex="_id" key="_id" class="w-40" />
-        <a-table-column title="分类" dataIndex="category" key="name" />
-        <a-table-column title="权限" dataIndex="name" key="name" />
-        <a-table-column title="操作" dataIndex="operation" key="operation">
+        <a-table-column
+          title="id"
+          dataIndex="_id"
+          key="_id"
+          class="w-40"
+          align="center"
+        />
+        <a-table-column
+          title="分类"
+          dataIndex="category"
+          key="name"
+          align="center"
+        />
+        <a-table-column
+          title="权限"
+          dataIndex="name"
+          key="name"
+          align="center"
+        />
+        <a-table-column
+          title="操作"
+          dataIndex="operation"
+          key="operation"
+          align="center"
+        >
           <template #="{ record }">
             <div>
               <a-button type="link" @click="remove(record, record.name)"
@@ -53,6 +74,7 @@
       title="新增权限"
       @ok="addOk(newModel)"
       :afterClose="cancelModel"
+      :centered="true"
     >
       <!-- 选框里面的  :filter-Option="filterOption"用于搜索选项 -->
 
@@ -122,6 +144,9 @@ const options = ref([
 ]);
 const addShop = () => {
   viss.value.add = true;
+};
+const cancelModel = () => {
+  console.log("cancelModel");
 };
 onMounted(() => {
   fetch();

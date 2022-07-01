@@ -1,13 +1,8 @@
 <template>
-  <div class="flex-col h-full">
-    <div class="h-auto"><router-view></router-view></div>
-
-    <div class="absolute inset-x-0 bottom-0">
-      <van-tabbar v-model="active" @click="change">
-        <!-- <van-tabbar-item name="/home" icon="home-o">首页</van-tabbar-item>
-        <van-tabbar-item name="/recommend" icon="fire-o">推荐</van-tabbar-item>
-        <van-tabbar-item name="/cart" icon="cart-o">购物车</van-tabbar-item>
-        <van-tabbar-item name="/my" icon="setting-o">我的</van-tabbar-item> -->
+  <div>
+    <div><router-view /></div>
+    <div>
+      <van-tabbar v-model="active" @click="change" :placeholder="true">
         <van-tabbar-item
           v-for="list in routerMap"
           :name="list.path"
@@ -22,6 +17,7 @@
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import { Tabbar } from "vant";
 import userStore from "../stores/user-store";
 let router = useRouter();
 let route = useRoute(); //这个和Router()不一样

@@ -17,7 +17,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       //jwt登录 一：把token取出来，
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       //二解析token得到_id
-      secretOrKey: 'sifhgioaehgbb', //这个需要保持一致
+      // secretOrKey: 'sifhgioaehgbb', //这个需要保持一致
+      secretOrKey: process.env.SECRET,
     } as StrategyOptions); //接收的参数  as明确表示前面的{}是个什么类型
   }
   //表示如何去执行验证

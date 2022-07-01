@@ -46,21 +46,29 @@ export const RAndLogin = () => {
     console.log("执行loginUser");
 
     const data = await http.post("auth/login", logModel.value);
-    message.success("登陆成功");
-    localStorage.setItem("token", data.token);
-    router.push("/home");
+    if (data === "") {
+      message.warning("登陆失败");
+      message.warning("请重新尝试");
+    } else {
+      message.success("登陆成功");
+      localStorage.setItem("token", data.token);
+      setTimeout(() => {
+        router.push("/");
+      }, 500);
+      getUser();
+    }
   };
 
   //退出登录 删除token？
   const LogOut = () => {
     console.log("执行logOut");
+
     message.success("退出");
     localStorage.removeItem("token");
     localStorage.removeItem("userid");
     localStorage.removeItem("username");
     localStorage.removeItem("role");
     localStorage.removeItem("promiss");
-
     router.push("/login");
   };
   //设置输入框为空时不可以点击登录
@@ -70,11 +78,22 @@ export const RAndLogin = () => {
   //获取当前用户名
 
   const getUser = async () => {
-    const data = await http.get("auth/user");
-    adminStore.setAdmin(data); //设置全局的用户名
-    localStorage.setItem("userid", data._id);
-    localStorage.setItem("role", data.role);
-    localStorage.setItem("username", data.username);
+    //没有使用管理员一键登录时是没有adminId的
+    if (!localStorage.getItem("adminId")) {
+      const data = await http.get("auth/user");
+      adminStore.setAdmin(data); //设置全局的用户名
+      localStorage.setItem("userid", data._id);
+      localStorage.setItem("role", data.role);
+      localStorage.setItem("username", data.username);
+    } else {
+      console.log("一键登录");
+      const data = {
+        userid: localStorage.getItem("userid"),
+        role: localStorage.getItem("role"),
+        username: localStorage.getItem("username"),
+      };
+      adminStore.setAdmin(data);
+    }
     // const promiss = data.promiss.map((v) => {
     //   return [v.name];
     // });

@@ -16,7 +16,7 @@ export class User {
 
   @ApiProperty({ description: '密码', example: 'pass' })
   @prop({
-    select: false, //不展示出来
+    // select: false, //不展示出来
     get(val) {
       return val;
     },

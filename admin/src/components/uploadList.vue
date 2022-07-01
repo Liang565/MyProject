@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- <div>{{ fileList1[0] }}</div> -->
     <div>
       <a-upload
         v-model:file-list="fileList1"
@@ -24,6 +25,7 @@
 </template>
 <script lang="ts" setup>
 import { UploadOutlined } from "@ant-design/icons-vue";
+import type { UploadChangeParam } from "ant-design-vue";
 import { ref } from "vue";
 import { RAndLogin } from "../util/register-and-login";
 const { httpURL } = RAndLogin();
@@ -33,14 +35,17 @@ let testList = ref([]);
 
 //传出调用的地方
 const emit = defineEmits(["on-success"]);
-const handleChange = (file, fileList, e) => {
-  emit(
-    "on-success",
-    // testList //这里是传出去的
-    (testList.value = fileList1.value.map((v) => ({
-      url: v.response.url,
-    })))
-  );
+const handleChange = (info: UploadChangeParam) => {
+  if (info.file.status === "done") {
+    emit(
+      "on-success",
+      // testList //这里是传出去的
+      (testList.value = fileList1.value.map((v) => ({
+        url: v.response.url,
+      })))
+    );
+    // console.log(fileList1);
+  }
 };
 
 const allDelete = () => {

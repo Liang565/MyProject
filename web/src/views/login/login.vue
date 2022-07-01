@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-100vh bg-cyan-500">
+  <div class="w-full h-100vh bg-gray-200">
     <div class="text-center pt-48 pb-10 text-4xl">登录</div>
     <div>
       <van-form @submit="onSubmit">
@@ -32,8 +32,10 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { http } from "../../util/http";
-import router from "../../router";
+
 import { Toast } from "vant";
+import { useRouter } from "vue-router";
+const router = useRouter();
 const LoginUser = () => {
   console.log(logModel.value);
   LoginUser();
@@ -51,5 +53,15 @@ const onSubmit = async () => {
       router.push("/");
     }, 1000);
   }
+  getUser();
+};
+// 获取登录后的信息
+const getUser = async () => {
+  const data = <any>await http.get("auth/user");
+  localStorage.setItem("userid", data._id);
+  localStorage.setItem("username", data.username);
+  localStorage.setItem("image", data.image);
+  localStorage.setItem("role", data.role);
+  console.log(data);
 };
 </script>

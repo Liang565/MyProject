@@ -38,6 +38,7 @@
             cancelText="取消"
             okText="注册"
             :ok-button-props="{ disabled: disa }"
+            :centered="true"
           >
             <a-form :model="regModel">
               <a-form-item

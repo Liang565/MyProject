@@ -3,8 +3,10 @@ import { Toast } from "vant";
 
 export const http: AxiosInstance = axios.create({
   // baseURL: "http://www.lianger.fit/admin/api/",
-  baseURL: "http://localhost:3002/server/api",
+  // baseURL: "http://localhost:3002/server/api",
+  baseURL: import.meta.env.VITE_APPAPI as string,
 });
+export const httpURL = import.meta.env.VITE_APPAPI as string;
 http.interceptors.request.use((config) => {
   config.headers = {
     Authorization: "Bearer " + localStorage.token,

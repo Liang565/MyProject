@@ -62,7 +62,7 @@ let tuku = ref(false);
 }
 .imgimg {
   width: 96px;
-  height: auto;
+  height: 96px;
 }
 .aaa {
   position: absolute;

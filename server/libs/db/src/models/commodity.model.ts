@@ -36,7 +36,11 @@ export class Commodity {
   @prop()
   @ApiProperty({ description: '商品数量', example: 0 })
   commodityNum: number;
-  //因为参数不同，同名的商品不同参数有不同库存，
+  //价格，
+  @prop()
+  @ApiProperty({ description: '商品价格', example: 0 })
+  price: number;
+
   @prop({ ref: 'Shop' })
   @ApiProperty({ description: '所属店铺' })
   shop: Ref<Shop>;

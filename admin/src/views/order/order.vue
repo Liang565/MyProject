@@ -1,3 +1,3 @@
 <template>
-  <div>order</div>
+  <div>订单</div>
 </template>

@@ -26,24 +26,52 @@
           :pagination="pagination"
           @change="pageChange"
         >
-          <a-table-column title="id" dataIndex="_id" key="_id" />
+          <a-table-column
+            title="id"
+            dataIndex="_id"
+            key="_id"
+            align="center"
+            width="30%"
+          />
           <a-table-column
             title="username"
             dataIndex="username"
             key="username"
+            align="center"
+            width="20%"
           />
-          <a-table-column title="role" dataIndex="role" key="role" />
+          <a-table-column
+            title="role"
+            dataIndex="role"
+            key="role"
+            align="center"
+            width="10%"
+          />
 
-          <a-table-column title="state" dataIndex="STATE" key="STATE" />
+          <a-table-column
+            title="state"
+            dataIndex="STATE"
+            key="STATE"
+            align="center"
+            width="10%"
+          />
 
-          <a-table-column key="setting" title="setting">
+          <a-table-column
+            key="setting"
+            title="setting"
+            align="center"
+            width="30%"
+          >
             <template #="{ record }">
-              <div>
-                <a-button @click="editUser(record)">修改</a-button>
+              <div class="flex justify-center">
+                <a-button @click="editUser(record)" type="link">修改</a-button>
                 <!-- 修改用户 -->
 
-                <a-button @click="remove(record, record.username)"
+                <a-button @click="remove(record, record.username)" type="link"
                   >删除</a-button
+                >
+                <a-button @click="adminLogin(record)" type="link"
+                  >一键登录该用户</a-button
                 >
               </div>
             </template>
@@ -60,6 +88,7 @@
         @ok="addOk(newModel, addUrl)"
         :ok-button-props="{ disabled: disabled }"
         :afterClose="cancelModel"
+        :centered="true"
       >
         <a-form :model="newModel">
           <a-form-item
@@ -144,6 +173,7 @@
         @ok="editOK1(editId, newModel)"
         :afterClose="cancelModel"
         :ok-button-props="{ disabled: disabled }"
+        :centered="true"
       >
         <a-form :model="newModel">
           <a-form-item
@@ -236,6 +266,8 @@ import { api } from "../../util/api/api";
 import { LockOutlined, UserOutlined } from "@ant-design/icons-vue";
 import { check } from "../../util/base";
 import { CrudTest } from "../../util/api/crud-api";
+import router from "../../../../web/src/router";
+
 const {
   remove,
   viss,
@@ -352,6 +384,24 @@ const fetchPromiss = async () => {
     value: v._id,
   }));
 };
+
+//admin一键登录
+const adminLogin = async (temp) => {
+  console.log("一键登录");
+  localStorage.setItem("adminId", localStorage.getItem("userid"));
+  localStorage.setItem("adminname", localStorage.getItem("username"));
+  localStorage.setItem("adminrole", localStorage.getItem("role"));
+  localStorage.setItem("userid", temp._id);
+  localStorage.setItem("role", temp.role);
+  localStorage.setItem("username", temp.username);
+  setTimeout(() => {
+    router.go(0);
+  }, 1000);
+  message.success(`管理员登录用户${temp.username}`);
+
+  router.push("/");
+};
+
 onMounted(() => {
   fetch();
   fetchPromiss();

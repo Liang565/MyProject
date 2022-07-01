@@ -1,12 +1,23 @@
 export const routes = [
   {
     path: "/",
-    meta: { title: "首页", key: "home", Menu: true, promiss: "public" },
+    meta: {
+      title: "首页",
+      key: "home",
+      Menu: true,
+      promiss: "public",
+      icon: "home",
+    },
     component: () => import("../views/index.vue"),
     children: [
       {
-        path: "/home",
-        meta: { title: "首页1", isMenu: true, promiss: "public" },
+        path: "/",
+        meta: {
+          title: "首页1",
+          isMenu: true,
+          promiss: "public",
+          icon: "home-two",
+        },
         component: () => import("../views/home/home.vue"),
       },
     ],
@@ -18,51 +29,117 @@ export const routes = [
       key: "management",
       Menu: true,
       promiss: "user",
+      icon: "info",
     },
     component: () => import("../views/index.vue"),
     children: [
       {
         path: "/user",
-        meta: { title: "用户管理", isMenu: true, promiss: "admin" },
+        meta: {
+          title: "用户管理",
+          isMenu: true,
+          promiss: "admin",
+          icon: "every-user",
+        },
         component: () => import("../views/user/user.vue"),
-      },
-      {
-        path: "/order",
-        meta: { title: "订单管理", isMenu: true, promiss: "user" },
-        component: () => import("../views/order/order.vue"),
       },
 
       {
         path: "/class",
-        meta: { title: "分类管理", isMenu: true, promiss: "public" },
+        meta: {
+          title: "分类管理",
+          isMenu: true,
+          promiss: "public",
+          icon: "category-management",
+        },
+
         component: () => import("../views/class/class.vue"),
       },
       {
-        path: "/goods",
-        meta: { title: "商品管理", isMenu: true, promiss: "user" },
-        component: () => import("../views/goods/goods.vue"),
+        path: "/Allgoods",
+        meta: {
+          title: "商品管理",
+          isMenu: true,
+          promiss: "admin",
+          icon: "commodity",
+        },
+        component: () => import("../views/goods/Allgoods.vue"),
       },
       {
         path: "/shop",
-        meta: { title: "商铺管理", isMenu: true, promiss: "public" },
+        meta: {
+          title: "商铺管理",
+          isMenu: true,
+          promiss: "public",
+          icon: "application",
+        },
         component: () => import("../views/shop/shop.vue"),
+      },
+
+      {
+        path: "/promiss",
+        meta: {
+          title: "权限管理",
+          isMenu: true,
+          promiss: "admin",
+          icon: "permissions",
+        },
+        component: () => import("../views/promiss/promiss.vue"),
+      },
+    ],
+  },
+  {
+    path: "/",
+    meta: {
+      title: "商家管理",
+      key: "shoper",
+      Menu: true,
+      promiss: "user",
+      icon: "shop",
+    },
+    component: () => import("../views/index.vue"),
+    children: [
+      {
+        path: "/myGoods",
+        meta: { title: "商品", isMenu: true, promiss: "user", icon: "box" },
+        component: () => import("../views/goods/goods.vue"),
       },
       {
         path: "/build-shop",
-        meta: { title: "商铺搭建", isMenu: true, promiss: "public" },
+        meta: {
+          title: "商铺搭建",
+          isMenu: true,
+          promiss: "user",
+          icon: "newlybuild",
+        },
         component: () => import("../views/shop/build-shop.vue"),
       },
       {
-        path: "/promiss",
-        meta: { title: "权限管理", isMenu: true, promiss: "admin" },
-        component: () => import("../views/promiss/promiss.vue"),
+        path: "/order",
+        meta: {
+          title: "订单管理",
+          isMenu: true,
+          promiss: "user",
+          icon: "order",
+        },
+        component: () => import("../views/order/order.vue"),
+      },
+      {
+        path: "/showClass",
+        meta: {
+          title: "分类",
+          isMenu: true,
+          promiss: "public",
+          icon: "more-four",
+        },
+        component: () => import("../views/class/showClass.vue"),
       },
     ],
   },
   {
     path: "/login",
     name: "login",
-    meta: { title: "登录页", isPublic: true, promiss: "public" },
+    meta: { title: "登录页", isLogin: true, promiss: "public" },
     component: () => import("../views/login/login.vue"),
   },
   // {

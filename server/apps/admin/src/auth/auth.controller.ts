@@ -6,6 +6,7 @@ import {
   Post,
   Req,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
@@ -19,8 +20,10 @@ import {
 import { prop, ReturnModelType } from '@typegoose/typegoose';
 import { User } from 'libs/db/models/user.model';
 import { InjectModel } from 'nestjs-typegoose-next';
+import { ShopInterceptorInterceptor } from '../shops/shop-interceptor.interceptor';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { LoginInterceptor } from './login.interceptor';
 
 @Controller('auth')
 @ApiTags('登录')
@@ -54,6 +57,8 @@ export class AuthController {
       throw new BadRequestException('用户已注册');
     }
   }
+
+  //给登录添加一个拦截器，如果是admin登录，不需要密码就能登录？
 
   //登录，这个是需要用本地用户名验证的策略
   @Post('login')

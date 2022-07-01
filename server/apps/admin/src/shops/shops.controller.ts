@@ -5,6 +5,7 @@ import {
   Param,
   Post,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -14,12 +15,14 @@ import { Crud } from 'nestjs-mongoose-crud';
 import { InjectModel } from 'nestjs-typegoose-next';
 import { CurrentUserId } from '../auth/current-user';
 import { ShopDto } from '../auth/dto/shop.dto';
+import { ShopInterceptorInterceptor } from './shop-interceptor.interceptor';
 
 @Crud({
   model: Shop,
   routes: {
     find: {
       populate: 'user',
+      // decorators: [UseInterceptors(ShopInterceptorInterceptor)],//大神的包里面可以用拦截器
     },
     create: {},
     findOne: {},
@@ -27,11 +30,14 @@ import { ShopDto } from '../auth/dto/shop.dto';
 })
 @Controller('shops')
 @ApiTags('商铺')
+//拦截全局
+// @UseInterceptors(ShopInterceptorInterceptor)
 export class ShopsController {
   constructor(
     @InjectModel(Shop) private readonly model: ReturnModelType<typeof Shop>,
   ) {}
 
+  // @UseInterceptors(ShopInterceptorInterceptor)//拦截这个请求下
   @UseGuards(AuthGuard('jwt'))
   @Post('addShop')
   @ApiOperation({ summary: '新增店铺' })

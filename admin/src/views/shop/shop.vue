@@ -18,6 +18,7 @@
               :allowClear="allowClear"
             >
             </a-select>
+            <!-- <a-input v-model:value="where.user"></a-input> -->
           </a-form-item>
           <a-form-item>
             <a-button type="primary" @click="search">搜索</a-button>
@@ -39,9 +40,15 @@
           dataIndex="title"
           key="title"
           class="w-60"
+          align="center"
         />
-        <a-table-column title="id" dataIndex="_id" key="_id" />
-        <a-table-column title="所属用户" dataIndex="user" key="user">
+        <a-table-column title="id" dataIndex="_id" key="_id" align="center" />
+        <a-table-column
+          title="所属用户"
+          dataIndex="user"
+          key="user"
+          align="center"
+        >
           <template #="{ record }">
             <span>{{ record.user?.username }}</span>
           </template>
@@ -50,17 +57,38 @@
           title="商铺简介"
           dataIndex="description"
           key="description"
+          align="center"
         />
-        <a-table-column title="商铺头像" dataIndex="images" key="images">
+        <a-table-column
+          title="商铺头像"
+          dataIndex="images"
+          key="images"
+          align="center"
+        >
           <template #="{ record }">
             <myimage :URL="record.images" />
             <!-- {{ record.images }} -->
           </template>
         </a-table-column>
-        <a-table-column title="商铺地址" dataIndex="address" key="address" />
-        <a-table-column title="商铺电话" dataIndex="phone" key="phone" />
+        <a-table-column
+          title="商铺地址"
+          dataIndex="address"
+          key="address"
+          align="center"
+        />
+        <a-table-column
+          title="商铺电话"
+          dataIndex="phone"
+          key="phone"
+          align="center"
+        />
 
-        <a-table-column title="操作" dataIndex="operation" key="operation">
+        <a-table-column
+          title="操作"
+          dataIndex="operation"
+          key="operation"
+          align="center"
+        >
           <template #="{ record }">
             <div>
               <a-button type="link" @click="edit(record)">修改</a-button>
@@ -80,6 +108,7 @@
       title="新增商铺"
       @ok="addOk(newModel, addUrl)"
       :afterClose="cancelModel"
+      :centered="true"
     >
       <a-form :model="newModel">
         <a-form-item label="商店名">
@@ -118,6 +147,7 @@
       title="修改信息"
       :afterClose="cancelModel"
       @ok="editOk(editId, newModel)"
+      :centered="true"
     >
       <a-form :model="newModel">
         <a-form-item label="商店名">
@@ -243,7 +273,6 @@ const cancelModel = () => {
 //修改
 let editId = ref("");
 const edit = (temp) => {
-  console.log(temp);
   for (let i in newModel.value) newModel.value[i] = temp[i];
   newModel.value.user = temp.user._id;
   editId.value = temp._id;

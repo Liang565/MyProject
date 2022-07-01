@@ -20,6 +20,8 @@ async function bootstrap() {
   const PROT = process.env.APP_PROT;
 
   await app.listen(PROT);
-  console.log(`http://localhost:3002/api-docs`);
+  console.log(`http://localhost:${PROT}/api-docs`);
+
+  // console.log(`http://localhost:3002/api-docs`);
 }
 bootstrap();

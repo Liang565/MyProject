@@ -107,7 +107,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 const prop = defineProps({
-  URL: String,
+  URL: Object,
 });
 // 鼠标悬停
 let mouse = ref(true);

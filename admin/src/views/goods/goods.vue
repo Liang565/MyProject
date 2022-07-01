@@ -18,8 +18,8 @@
           </a-form-item>
         </a-form>
       </div>
-    </div>
-    <div>
+      <!-- </div>
+    <div> -->
       <div>
         <a-form layout="inline">
           <a-form-item label="商品名：" class="w-52">
@@ -42,7 +42,7 @@
       </div>
     </div>
 
-    <a-modal v-model:visible="visible" title="Basic Modal" @ok="handleOk">
+    <a-modal v-model:visible="visible" title="Basic Modal" :centered="true">
       <img :src="imgUrl" />
     </a-modal>
     <div class="mt-5">
@@ -53,40 +53,68 @@
         @change="pageChange"
         :scroll="{ y: 390 }"
       >
-        <a-table-column title="id" dataIndex="_id" key="_id" class="w-40" />
+        <!-- <a-table-column title="id" dataIndex="_id" key="_id" class="w-40" /> -->
         <a-table-column
           title="商品名"
           dataIndex="commodityName"
           key="commodityName"
+          align="center"
         />
         <a-table-column
           title="商品介绍"
           dataIndex="commodityIntroduce"
           key="commodityIntroduce"
+          align="center"
         />
-        <a-table-column title="参数" dataIndex="parameter" key="parameter">
+        <a-table-column
+          title="参数"
+          dataIndex="parameter"
+          key="parameter"
+          align="center"
+        >
           <template #="{ record }">
             <span>{{ record.parameter }}</span>
           </template>
         </a-table-column>
         <a-table-column
+          align="center"
           title="数量"
           dataIndex="commodityNum"
           key="commodityNum"
         />
-
-        <a-table-column title="分类" dataIndex="title" key="title">
+        <a-table-column
+          title="价格"
+          dataIndex="price"
+          key="price"
+          align="center"
+        />
+        <a-table-column
+          title="分类"
+          dataIndex="title"
+          key="title"
+          align="center"
+        >
           <template #="{ record }">
             <span>{{ record.title?.title }}</span>
           </template>
         </a-table-column>
-        <a-table-column title="所属商铺" dataIndex="shop" key="shop">
+        <a-table-column
+          title="所属商铺"
+          dataIndex="shop"
+          key="shop"
+          align="center"
+        >
           <template #="{ record }">
             <span>{{ record.shop?.title }}</span>
           </template>
         </a-table-column>
 
-        <a-table-column title="图片" dataIndex="image" key="image">
+        <a-table-column
+          title="图片"
+          dataIndex="image"
+          key="image"
+          align="center"
+        >
           <template #="{ record }">
             <div v-if="record.image.length == 0">空</div>
             <div v-else>
@@ -95,7 +123,12 @@
           </template>
         </a-table-column>
 
-        <a-table-column title="操作" dataIndex="operation" key="operation">
+        <a-table-column
+          title="操作"
+          dataIndex="operation"
+          key="operation"
+          align="center"
+        >
           <template #="{ record }">
             <div>
               <a-button type="link" @click="edit(record)">修改</a-button>
@@ -115,11 +148,10 @@
       title="新增商品"
       @ok="addOk(newModel)"
       :afterClose="cancelModel"
+      :centered="true"
     >
       <!-- 选框里面的  :filter-Option="filterOption"用于搜索选项 -->
-      <div>
-        {{ newModel }}
-      </div>
+
       <a-form :model="newModel">
         <a-form-item label="商品名">
           <a-input v-model:value="newModel.commodityName"></a-input>
@@ -139,19 +171,23 @@
         </a-form-item>
         <a-form-item label="商品图片">
           <!-- 这里要搞一个图片列表 -->
-          <uploadList
+          <list-upload
             @on-success="
               (aa) => {
                 newModel.image = aa;
               }
             "
-          ></uploadList>
+            :resetList="resetList"
+          />
         </a-form-item>
         <a-form-item label="参数">
           <a-input v-model:value="newModel.parameter"></a-input>
         </a-form-item>
         <a-form-item label="数量">
           <a-input v-model:value="newModel.commodityNum"></a-input>
+        </a-form-item>
+        <a-form-item label="价格">
+          <a-input v-model:value="newModel.price"></a-input>
         </a-form-item>
       </a-form>
     </a-modal>
@@ -163,11 +199,10 @@
       title="修改商品信息"
       @ok="editOk(editId, newModel)"
       :afterClose="cancelModel"
+      :centered="true"
     >
       <!-- 选框里面的  :filter-Option="filterOption"用于搜索选项 -->
-      <div>
-        {{ newModel }}
-      </div>
+
       <a-form :model="newModel">
         <a-form-item label="商品名">
           <a-input v-model:value="newModel.commodityName"></a-input>
@@ -187,20 +222,24 @@
         </a-form-item>
         <a-form-item label="商品图片">
           <!-- 这里要搞一个图片列表 -->
-          <uploadList
-            :fileList1="newModel.image"
+          <list-upload
+            :imgList="newModel.image"
+            :resetList="resetList"
             @on-success="
               (aa) => {
                 newModel.image = aa;
               }
             "
-          ></uploadList>
+          />
         </a-form-item>
         <a-form-item label="参数">
           <a-input v-model:value="newModel.parameter"></a-input>
         </a-form-item>
         <a-form-item label="数量">
           <a-input v-model:value="newModel.commodityNum"></a-input>
+        </a-form-item>
+        <a-form-item label="价格">
+          <a-input v-model:value="newModel.price"></a-input>
         </a-form-item>
       </a-form>
     </a-modal>
@@ -209,13 +248,16 @@
 <script lang="ts" setup>
 import { onMounted } from "@vue/runtime-core";
 import { message, Modal } from "ant-design-vue";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { api } from "../../util/api/api";
 import { http } from "../../util/http";
 import { CrudTest } from "../../util/api/crud-api";
-import uploadList from "../../components/uploadList.vue";
+
+import ListUpload from "../../components/ListUpload.vue";
+
 import adminStore from "../../stores/admin-store";
 import myimg from "../../components/myImg/myimglist.vue";
+
 const {
   remove,
   viss,
@@ -229,7 +271,7 @@ const {
   pagination,
   pageChange,
 } = CrudTest("commoditys");
-
+let resetList = ref(true);
 let visible = ref(false);
 let imgUrl = ref("");
 
@@ -283,16 +325,20 @@ let newModel = ref({
   title: "", //分类
   parameter: [], //参数
   commodityNum: 0, //数量
+  price: 0, //价格
   shop: "", //所属店铺
 });
 const resetModel = () => {
   newModel.value = {
     commodityName: "", // "商品名",
     commodityIntroduce: "", // "商品介绍",
-    image: newModel.value.image, //图片
+    // image: newModel.value.image, //图片
+    image: [],
     title: "", //分类
     parameter: [], //参数
     commodityNum: 0, //数量
+    price: 0, //价格
+
     shop: newModel.value.shop,
   };
 };
@@ -302,6 +348,8 @@ const addShop = () => {
     message.error("该用户下无店铺,不能新增商品");
   } else {
     viss.value.add = true;
+    //组件Listupload 的属性，要求有变化就行
+    resetList.value = !resetList.value;
   }
 };
 
@@ -323,17 +371,16 @@ const filterOption = (input: string, optionsClass: any) => {
 };
 const cancelModel = () => {
   resetModel();
+
   console.log("cancel");
 };
 
 //修改
 let editId = ref("");
 const edit = (temp) => {
-  console.log(temp);
-
   newModel.value.image = temp.image;
   newModel.value.commodityName = temp.commodityName;
-
+  newModel.value.price = temp.price;
   newModel.value.commodityIntroduce = temp.commodityIntroduce; // "商品介绍",
   newModel.value.title = temp.title._id; //分类
   newModel.value.parameter = temp.parameter; //参数
@@ -341,9 +388,19 @@ const edit = (temp) => {
   // newModel.value.shop: "", //所属店铺
   editId.value = temp._id;
   viss.value.edit = true;
+  //组件Listupload 的属性，要求有变化就行
+  resetList.value = !resetList.value;
 };
+watch(resetList, (newValue, oldValue) => {
+  console.log("aaa侦听器");
+  console.log(newValue);
+  console.log(oldValue);
+});
 onMounted(() => {
   findClassOptions();
   setOptionsShop();
+  if (localStorage.getItem("role") == "admin") {
+    fetch();
+  }
 });
 </script>

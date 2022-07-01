@@ -1,18 +1,59 @@
 <template>
-  <div class="bg-gray-400 h-800">
+  <div class="bg-gray-400">
     <!-- 用户的信息 -->
-    <div class="flex mx-5 pt-10">
-      <div class="border-2 w-20 h-20">
+    <div class="flex mx-5 pt-10 justify-start">
+      <div class="border-2 w-24 h-24">
         <!-- 点击图片进入修改头像 -->
-        <van-image width="80" :src="Image" />
+        <van-image width="92" height="92" :src="Image" @click="editImg" />
+        <div>
+          <van-popup
+            v-model:show="editImgviss"
+            closeable
+            close-icon="close"
+            @close="closePopup"
+          >
+            <div class="my-10">
+              <div>
+                <van-image width="400" :src="Image" />
+              </div>
+              <div class="flex justify-center pb-2">
+                <a-upload
+                  :action="httpURL + '/upload'"
+                  @change="handleChange"
+                  v-if="showUpload"
+                  :max-count="1"
+                >
+                  <van-button
+                    color="linear-gradient(to right, #ff6034, #ee0a24)"
+                    class="w-56"
+                  >
+                    修改头像
+                  </van-button>
+                </a-upload>
+                <div class="flex w-full justify-around" v-if="!showUpload">
+                  <div>
+                    <van-button type="warning" @click="editimgColose"
+                      >取消</van-button
+                    >
+                  </div>
+                  <div>
+                    <van-button type="success" @click="editimgOk"
+                      >确认</van-button
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </van-popup>
+        </div>
       </div>
-      <div>
-        <div>用户名：{{ userStore.state.admin.username }}</div>
-        <div>账号id：{{ userStore.state.admin.id }}</div>
+      <div class="ml-3">
+        <div class="pt-12">用户名: {{ Username }}</div>
+        <div>账号id: {{ Idd }}</div>
       </div>
     </div>
     <!-- 我的订单 -->
-    <div class="mt-10">
+    <div class="mt-8">
       <van-cell-group :inset="true">
         <van-cell title="我的订单" is-link @click="test">
           <!-- 使用 title 插槽来自定义标题 -->
@@ -32,7 +73,7 @@
       </van-cell-group>
     </div>
     <!-- 地址等设置 -->
-    <div class="mt-10">
+    <div class="mt-8">
       <van-cell-group inset>
         <van-cell>
           <template #title>
@@ -66,55 +107,122 @@
         </van-cell>
       </van-cell-group>
     </div>
-    <div class="flex justify-center my-10">
-      <van-button type="danger" class="w-400" @click="LogOut"
-        >退出登录</van-button
-      >
+
+    <div class="flex justify-center pt-10 pb-20">
+      <div v-if="Login">
+        <van-button type="danger" class="w-80" @click="LogOut"
+          >退出登录</van-button
+        >
+      </div>
+      <div v-if="!Login">
+        <van-button type="primary" class="w-80" @click="toLogin"
+          >登录</van-button
+        >
+      </div>
     </div>
+  </div>
+  <!-- 信息确认框 -->
+  <div>
+    <login-dialog :showDialog="showDialog" />
   </div>
 </template>
 <script lang="ts" setup>
-import router from "../../router";
 import userStore from "../../stores/user-store";
-import { http } from "../../util/http";
+import { http, httpURL } from "../../util/http";
 import { onMounted, ref } from "vue";
-
+import { Toast, Popup, Button, Dialog } from "vant";
+import { useRouter } from "vue-router";
+import loginDialog from "../../components/loginDialog.vue";
+const router = useRouter();
 const test = () => {
   router.push("/my/order-index");
 };
 //退出登录 删除token？
 const LogOut = () => {
   console.log("执行logOut");
-  // message.success("退出");
+  Toast.success("退出登录");
   localStorage.removeItem("token");
-  router.push("/login");
-};
-//获取当前用户信息
-//获取用户名
-
-const getUser = async () => {
-  const data = await http.get("auth/user");
-  console.log(data);
-  userStore.setAdmin(data); //设置全局的用户名
-};
-let Image = ref("");
-const setImage = () => {
-  // if(userStore.state.admin.image?&&userStore.state.admin.image?!=""&&userStore.state.admin.image?!='https://cdn.jsdelivr.net/npm/@vant/assets/cat.jpeg')
-  if (
-    userStore.state.admin.image &&
-    userStore.state.admin.image !=
-      "https://cdn.jsdelivr.net/npm/@vant/assets/cat.jpeg"
-  ) {
-    console.log("tttt");
-
-    console.log(userStore.state.admin.image);
-  } else {
-    // Image.value = "https://cdn.jsdelivr.net/npm/@vant/assets/cat.jpeg";
+  localStorage.removeItem("userid");
+  localStorage.removeItem("username");
+  localStorage.removeItem("image");
+  localStorage.removeItem("role");
+  setTimeout(() => {
+    showDialog.value = true;
+    Login.value = !Login.value;
     Image.value = "";
+    Username.value = "";
+    Idd.value = "";
+  }, 1000);
+};
+let Image = ref();
+Image.value = localStorage.getItem("image");
+let Username = ref();
+Username.value = localStorage.getItem("username");
+let Idd = ref();
+Idd.value = localStorage.getItem("userid");
+
+let editImgviss = ref(false);
+const editImg = () => {
+  if (localStorage.getItem("token")) {
+    console.log("修改头像");
+    editImgviss.value = true;
+  } else {
+    Toast.fail("当前身份为游客，请登录！");
   }
 };
+let showUpload = ref(true);
+const handleChange = (file, fileList, e) => {
+  if (file.file.status == "done") {
+    //上传成功
+    Image.value = file.file.response?.url;
+    Toast.success("上传成功");
+    showUpload.value = false;
+  }
+  if (file.file.status == "uploading") {
+    Toast.loading("上传中");
+  }
+  if (file.file.status == "error") {
+    Toast.fail("上传失败");
+  }
+};
+//关闭弹出层
+const closePopup = () => {
+  showUpload.value = true;
+  Image.value = localStorage.getItem("image");
+};
+//确认修改
+let ImgModel = ref({ image: String });
+const editimgOk = async () => {
+  const IDD = localStorage.getItem("userid");
+  ImgModel.value.image = Image.value;
+  console.log(IDD);
+  console.log(ImgModel.value);
+  const res = await http.put(`/users/${IDD}`, ImgModel.value);
+  if (res) {
+    localStorage.setItem("image", Image.value);
+    Toast.success("修改成功");
+  }
+  closePopup();
+};
+//取消修改
+const editimgColose = () => {
+  closePopup();
+};
+//是否登录？
+
+let Login = ref(false);
+const toLogin = () => {
+  router.push("login");
+  // router.push("/login");
+};
+//信息确认框
+let showDialog = ref(false);
+
 onMounted(() => {
-  getUser();
-  setImage();
+  if (localStorage.getItem("token")) {
+    Login.value = !Login.value;
+  } else {
+    showDialog.value = true;
+  }
 });
 </script>

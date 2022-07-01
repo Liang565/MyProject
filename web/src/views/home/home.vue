@@ -4,11 +4,9 @@
       <!-- 搜索框 -->
       <form action="/">
         <van-search
-          v-model="value"
-          show-action
+          @click-input="goSearch"
           placeholder="请输入搜索关键词"
-          @search="onSearch"
-          @cancel="onCancel"
+          shape="round"
         />
       </form>
     </div>
@@ -22,16 +20,7 @@
         </van-swipe>
       </div>
       <!-- 推荐 随机抽取 -->
-      <div>
-        <van-grid square>
-          <van-grid-item
-            v-for="value in 8"
-            :key="value"
-            icon="photo-o"
-            text="文字"
-          />
-        </van-grid>
-      </div>
+      <div></div>
       <div>
         <!-- 商品随机抽取 -->
         <div>
@@ -47,9 +36,20 @@
   </div>
 </template>
 <script lang="ts" setup>
-const images = [
-  "https://cdn.jsdelivr.net/npm/@vant/assets/apple-1.jpeg",
-  "https://cdn.jsdelivr.net/npm/@vant/assets/apple-2.jpeg",
-];
+import { useRouter } from "vue-router";
+import { Grid, Swipe } from "vant";
+import { Curd } from "../../util/api/curd";
+import { onMounted } from "vue";
+const router = useRouter();
+const goSearch = () => {
+  // 这里要跳转到搜索页
+  console.log("点击搜索条");
+  router.push("/search");
+};
+const { fetch, search, data, query, goGoods, total } = Curd("commoditys");
+
+onMounted(() => {
+  fetch();
+});
 </script>
 <style scoped></style>

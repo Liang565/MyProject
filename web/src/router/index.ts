@@ -3,15 +3,15 @@ import { routes } from "./routes";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes,
+  routes: [...routes],
 });
 
 export default router;
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.isPublic || localStorage.token) {
-    return next();
-  } else {
-    router.push("/login");
-  }
+  // if (to.path === "/my" && !localStorage.getItem("token")) {
+  //   router.push("/login");
+  // } else {
+  //   }
+  next();
 });

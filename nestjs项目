@@ -6,7 +6,7 @@ $ nest new project-name  //创建项目
 在子项目里面创建模块 nest g mo -p admin users（-p admin users 在 admin 里面创建模块 users）
 然后创建控制器 nest g co -p admin users
 然后是 service nest g s -p admin users
-
+（非必要）创建拦截器 nest g in -p admin sss(拦截器名字)
 3.创建公共库 libs
 nest g lib db  (创建公共库db)
 

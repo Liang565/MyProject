@@ -1,8 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { prop, Ref } from '@typegoose/typegoose';
+import { index, prop, Ref } from '@typegoose/typegoose';
 import { User } from './user.model';
 
+@index({ title: 1 })
 export class Shop {
+  //_id默认索引
   @prop()
   @ApiProperty({ description: '商铺名称' })
   title: string;

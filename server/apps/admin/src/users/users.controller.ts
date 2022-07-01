@@ -17,6 +17,11 @@ import { UsersService } from './users.service';
 
 @Crud({
   model: User,
+  routes: {
+    find: {
+      sort: { _id: -1 },
+    },
+  },
 })
 @Controller('users')
 @ApiTags('用户')
@@ -42,6 +47,58 @@ export class UsersController {
   // }) query
   // await http.get(`zhuce/${id}`);
   // }
+
+  @Get()
+  async find(@Query() query) {
+    const { limit, page, where } = JSON.parse(query.query);
+    let match = {};
+    if (where._id) {
+      match['_id'] = where._id;
+    }
+    if (where.username) {
+      match['username'] = { $regex: where.username };
+    }
+    let skip = (page - 1) * limit;
+    let aggregate = [
+      // {
+      //   $lookup: {
+      //     from: 'promiss',
+      //     localField: 'promiss',
+      //     foreignField: '_id',
+      //     as: 'promiss',
+      //   },
+      // },
+      // {
+      //   $unwind: 'promiss',
+      // },
+      {
+        $match: match,
+      },
+      {
+        $sort: { _id: -1 },
+      },
+    ];
+    const data = await this.model.aggregate([
+      ...aggregate,
+      {
+        $skip: skip,
+      },
+      {
+        $limit: limit,
+      },
+    ]);
+    const count = await this.model.aggregate([
+      ...aggregate,
+      { $group: { _id: null, count: { $sum: 1 } } },
+    ]);
+    let total = count[0].count;
+    let lastPage = Math.floor(total / limit);
+    return {
+      data,
+      total,
+      lastPage,
+    };
+  }
 
   //注册的路径：习惯用register
   @Post('add')

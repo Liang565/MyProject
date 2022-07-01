@@ -15,12 +15,14 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
     super({
       usernameField: 'username',
       passwordField: 'password',
+
       //这两个自动从request包里面请求过来的然后
     } as IStrategyOptions); //本地策略接收的参数  as明确表示前面的{}是个什么类型
   }
   //表示如何去执行验证 async validate()
   //上面username password 这两个自动从request包里面请求过来的然后自动调用下面方法并传值
   async validate(username: string, password: string) {
+    console.log('执行守卫');
     const user = await this.userModel
       .findOne({ username: username })
       .select('+password'); //通过用户名查用户 select 手动把密码查出来
