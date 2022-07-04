@@ -34,11 +34,7 @@
       <div>
         <!-- 点击进去后是一个搜索页 -->
         <button @click="goSearch">
-          <van-search
-            shape="round"
-            v-model="value"
-            placeholder="请输入搜索关键词"
-          />
+          <van-search shape="round" placeholder="请输入搜索关键词" />
         </button>
       </div>
       <div class="translate-y-1/4">
@@ -99,7 +95,20 @@
     <div>
       <van-action-bar>
         <van-action-bar-icon icon="chat-o" text="客服" />
-        <van-action-bar-icon icon="cart-o" text="购物车" @click="goCart" />
+        <van-action-bar-icon
+          icon="star"
+          text="已收藏"
+          color="#ff5000"
+          @click="cancelCollection"
+          v-if="collected"
+        />
+        <van-action-bar-icon
+          icon="star-o"
+          text="收藏"
+          @click="collect"
+          v-else
+        />
+
         <van-action-bar-icon icon="shop-o" text="店铺" @click="goShop" />
         <van-action-bar-button
           type="warning"
@@ -118,7 +127,7 @@
           <div class="m-5 h-5/6">
             <div class="flex justify-start">
               <div>
-                <myimage :src="images" :height="60" />
+                <myimage :src="images" :height="'60'" />
               </div>
               <div class="text-lg text-red-600 translate-y-1/2">
                 <span class="text-sm">￥</span>{{ price }}
@@ -170,7 +179,7 @@
               <van-button
                 type="primary"
                 class="w-80"
-                round="true"
+                :round="true"
                 @click="addCartOk"
                 >确定</van-button
               >
@@ -278,8 +287,52 @@ const addCartOk = async () => {
   }
 };
 
-//
+//用户id
+const userid = localStorage.getItem("userid");
+//展示未收藏和已收藏
+let collected = ref(false);
+//收藏商品
+const collect = async () => {
+  collectedList.value.push(props.id);
+  let model = {
+    commodity: collectedList.value,
+  };
+  await http.put(`users/${userid}`, model);
+  Toast.success("收藏成功~");
+  isCollect();
+};
+//取消收藏
+const cancelCollection = async () => {
+  let temp = [];
+  for (let i in collectedList.value) {
+    if (collectedList.value[i] === props.id)
+      console.log(collectedList.value[i]);
+    else {
+      temp.push(collectedList.value[i]);
+    }
+  }
+  let model = {
+    commodity: temp,
+  };
+  await http.put(`users/${userid}`, model);
+  Toast.success("取消收藏~");
+  isCollect();
+};
+//收藏列表
+let collectedList = ref();
+//查看是否已经收藏并获取收藏列表
+const isCollect = async () => {
+  const res = await http.put(`users/${userid}`);
+  collectedList.value = res.commodity;
+  for (let i in res.commodity) {
+    if (res.commodity[i] === props.id) {
+      collected.value = true;
+      break;
+    } else collected.value = false;
+  }
+};
 onMounted(() => {
+  isCollect();
   findOne();
 });
 </script>

@@ -36,7 +36,7 @@
       </div>
       <div class="text-xl">购物车({{ total }})</div>
       <!-- 编辑 -->
-      <div class="w-16">
+      <div class="w-16 h-7">
         <button @click="editCart">
           <icon-park
             type="edit-two"
@@ -90,9 +90,10 @@
         </van-checkbox>
       </van-checkbox-group>
     </div>
-    <div
+    <!-- <div
       class="flex justify-between items-center pl-3 p-3 w-full fixed bottom-12 bg-white"
-    >
+    > -->
+    <div :class="goodsCome ? buttom2 : buttom1">
       <div>
         <button @click="toggleAll">
           <div class="flex">
@@ -133,12 +134,17 @@
           <van-button round type="primary">结算</van-button>
         </div>
       </div>
-      <div class="flex" v-if="!isEditCart">
+      <div class="flex items-center" v-if="!isEditCart">
         <div>
           已选：<span>{{ checked.length }}</span>
         </div>
-        <div class="-translate-y-1/4 ml-3">
-          <van-button round type="primary">删除</van-button>
+        <div class="mx-2">
+          <van-button
+            round
+            type="primary"
+            @click="removeCart(checked, thisUser)"
+            >删除</van-button
+          >
         </div>
       </div>
     </div>
@@ -160,12 +166,13 @@ import {
 } from "vant";
 import { http } from "../../util/http";
 import iconPark from "../../components/iconPark.vue";
+import { object } from "vue-types";
 
 const router = useRouter();
 let goodsCome = ref(false);
-const { fetch, search, data, query, goGoods, total, totalSum } =
+const { fetch, search, data, query, goGoods, total, totalSum, removeCart } =
   Curd("shopping-cart");
-const minusGNum = async (temp) => {
+const minusGNum = async (temp: { goodsNum: number; _id: any }) => {
   if (temp.goodsNum === 1) {
     Toast.fail("商品不能再减少了~");
   } else {
@@ -181,7 +188,7 @@ const minusGNum = async (temp) => {
     }, 500);
   }
 };
-const plusGNum = async (temp) => {
+const plusGNum = async (temp: { _id: any; goodsNum: number }) => {
   Toast.loading({
     message: "加载中...",
     forbidClick: true,
@@ -205,6 +212,7 @@ let isEditCart = ref(true);
 const editCart = () => {
   isEditCart.value = !isEditCart.value;
 };
+
 //复选
 let checked = ref([]);
 let isCheckAll = ref(false);
@@ -228,6 +236,12 @@ watch(checked, (newValue, oldValue) => {
     isCheckAll.value = false;
   }
 });
+let buttom1 =
+  "flex justify-between items-center pl-3 p-3 w-full fixed bottom-12 bg-white";
+let buttom2 =
+  "flex justify-between items-center pl-3 p-3 w-full fixed bottom-0 bg-white";
+
+let thisUser = localStorage.getItem("userid");
 onMounted(() => {
   query.value.where = { user: localStorage.getItem("userid") };
   fetch();
@@ -237,3 +251,4 @@ onMounted(() => {
   }
 });
 </script>
+<style></style>

@@ -3,7 +3,7 @@ import { defaultClasses, modelOptions, prop, Ref } from '@typegoose/typegoose';
 import { hashSync } from 'bcryptjs';
 import { Deflate } from 'zlib';
 import { Promiss } from './promiss.model';
-
+import { Commodity } from './commodity.model';
 export enum roles {
   ADMIN = 'admin',
   USER = 'user',
@@ -52,4 +52,11 @@ export class User {
   @ApiProperty({ description: '权限' })
   @prop({ ref: 'Promiss' })
   promiss: Ref<Promiss>[];
+
+  @ApiProperty({ description: '收藏' })
+
+  //绑定商品
+  @ApiProperty({ description: '绑定商品' })
+  @prop({ ref: 'Commodity' })
+  commodity: Ref<Commodity>[];
 }

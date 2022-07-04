@@ -69,7 +69,7 @@ export class UsersController {
       //   },
       // },
       // {
-      //   $unwind: 'promiss',
+      //   $unwind: 'promiss',//转换成对象
       // },
       {
         $match: match,
@@ -79,7 +79,24 @@ export class UsersController {
       },
     ];
     const data = await this.model.aggregate([
-      ...aggregate,
+      // ...aggregate,
+      // {
+      //   $lookup: {
+      //     from: 'promiss',
+      //     localField: 'promiss',
+      //     foreignField: '_id',
+      //     as: 'promiss',
+      //   },
+      // },
+      // {
+      //   $unwind: 'promiss',//转换成对象
+      // },
+      {
+        $match: match,
+      },
+      {
+        $sort: { _id: -1 },
+      },
       {
         $skip: skip,
       },
@@ -88,7 +105,24 @@ export class UsersController {
       },
     ]);
     const count = await this.model.aggregate([
-      ...aggregate,
+      // ...aggregate,
+      // {
+      //   $lookup: {
+      //     from: 'promiss',
+      //     localField: 'promiss',
+      //     foreignField: '_id',
+      //     as: 'promiss',
+      //   },
+      // },
+      // {
+      //   $unwind: 'promiss',//转换成对象
+      // },
+      {
+        $match: match,
+      },
+      {
+        $sort: { _id: -1 },
+      },
       { $group: { _id: null, count: { $sum: 1 } } },
     ]);
     let total = count[0].count;

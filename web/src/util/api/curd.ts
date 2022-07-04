@@ -1,4 +1,5 @@
-import { Toast } from "vant";
+import { toNumber } from "@vue/shared";
+import { Toast, Popup, Dialog } from "vant";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { http } from "../http";
@@ -56,6 +57,31 @@ export const Curd = (url: string) => {
     }
     return totalSum;
   };
+
+  //删除
+  const removeCart = (temp: any, userId: any) => {
+    let num = temp.length;
+    if (num === 0) {
+      Toast.fail("您还没有选择商品~");
+    } else
+      Dialog.confirm({
+        title: `已选择${num}个商品`,
+        message: "确定要删除吗？",
+        cancelButtonText: "我再想想",
+      })
+        .then(async () => {
+          for (let i in temp) {
+            console.log(temp[i]);
+            await http.delete(`${url}/${temp[i]}`);
+          }
+          query.value.where = { user: userId };
+          fetch();
+          Toast.success("已删除~");
+        })
+        .catch(() => {
+          // on cancel
+        });
+  };
   return {
     fetch,
     search,
@@ -64,5 +90,6 @@ export const Curd = (url: string) => {
     goGoods,
     total,
     totalSum,
+    removeCart,
   };
 };

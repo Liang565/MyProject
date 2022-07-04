@@ -1,7 +1,7 @@
 <template>
   <div class="bg-gray-400">
     <!-- 用户的信息 -->
-    <div class="flex mx-5 pt-10 justify-start">
+    <div class="flex mx-5 justify-start items-center pt-5">
       <div class="border-2 w-24 h-24">
         <!-- 点击图片进入修改头像 -->
         <van-image width="92" height="92" :src="Image" @click="editImg" />
@@ -48,14 +48,20 @@
         </div>
       </div>
       <div class="ml-3">
-        <div class="pt-12">用户名: {{ Username }}</div>
-        <div>账号id: {{ Idd }}</div>
+        <div>
+          <span class="text-sm"> 用户名:</span>
+          {{ Username }}
+        </div>
+        <div>
+          <span class="text-sm">账号id: </span>
+          {{ userid }}
+        </div>
       </div>
     </div>
     <!-- 我的订单 -->
     <div class="mt-8">
       <van-cell-group :inset="true">
-        <van-cell title="我的订单" is-link @click="test">
+        <van-cell title="我的订单" is-link @click="goOrder">
           <!-- 使用 title 插槽来自定义标题 -->
           <template #value>
             <span class="text-xs">全部</span>
@@ -80,7 +86,7 @@
             <van-icon name="location-o"> 地址管理 </van-icon>
           </template>
         </van-cell>
-        <van-cell>
+        <van-cell @click="goMyCollect">
           <template #title>
             <van-icon name="star-o"> 我的收藏 </van-icon>
           </template>
@@ -134,9 +140,14 @@ import { Toast, Popup, Button, Dialog } from "vant";
 import { useRouter } from "vue-router";
 import loginDialog from "../../components/loginDialog.vue";
 const router = useRouter();
-const test = () => {
+//页面跳转
+const goOrder = () => {
   router.push("/my/order-index");
 };
+const goMyCollect = () => {
+  router.push("/myCollect");
+};
+
 //退出登录 删除token？
 const LogOut = () => {
   console.log("执行logOut");
@@ -151,15 +162,15 @@ const LogOut = () => {
     Login.value = !Login.value;
     Image.value = "";
     Username.value = "";
-    Idd.value = "";
+    userid.value = "";
   }, 1000);
 };
 let Image = ref();
 Image.value = localStorage.getItem("image");
 let Username = ref();
 Username.value = localStorage.getItem("username");
-let Idd = ref();
-Idd.value = localStorage.getItem("userid");
+let userid = ref();
+userid.value = localStorage.getItem("userid");
 
 let editImgviss = ref(false);
 const editImg = () => {
@@ -195,8 +206,6 @@ let ImgModel = ref({ image: String });
 const editimgOk = async () => {
   const IDD = localStorage.getItem("userid");
   ImgModel.value.image = Image.value;
-  console.log(IDD);
-  console.log(ImgModel.value);
   const res = await http.put(`/users/${IDD}`, ImgModel.value);
   if (res) {
     localStorage.setItem("image", Image.value);
