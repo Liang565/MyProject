@@ -12,6 +12,9 @@ import { CommodityClassModule } from './commodity-class/commodity-class.module';
 import { CommoditysModule } from './commoditys/commoditys.module';
 import { ShoppingCartController } from './shopping-cart/shopping-cart.controller';
 import { ShoppingCartModule } from './shopping-cart/shopping-cart.module';
+import { ActionModule } from './action/action.module';
+import { ActionController } from './action/action.controller';
+import { ActionService } from './action/action.service';
 const MAO = require('multer-aliyun-oss');
 @Module({
   imports: [
@@ -42,8 +45,9 @@ const MAO = require('multer-aliyun-oss');
     ShopsModule,
     OrdersModule,
     ShoppingCartModule,
+    ActionModule,
   ],
-  controllers: [AppController, ShoppingCartController],
-  providers: [AppService],
+  controllers: [AppController, ShoppingCartController, ActionController],
+  providers: [AppService, ActionService],
 })
 export class AppModule {}

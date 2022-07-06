@@ -35,4 +35,9 @@ export const routes2 = [
     meta: { title: "我的收藏", key: "myCollect" },
     component: () => import("../views/my/manage/myCollect.vue"),
   },
+  {
+    path: "/myInfo",
+    meta: { title: "地址管理", key: "myInfo" },
+    component: () => import("../views/my/manage/myInfo.vue"),
+  },
 ];

@@ -99,7 +99,7 @@
           icon="star"
           text="已收藏"
           color="#ff5000"
-          @click="cancelCollection"
+          @click="collect"
           v-if="collected"
         />
         <van-action-bar-icon
@@ -203,6 +203,7 @@ import { ActionBar, ActionBarIcon, ActionBarButton, Popup, Toast } from "vant";
 import { useRouter } from "vue-router";
 import myimage from "../../components/myimage.vue";
 import { Commodity } from "@icon-park/vue-next/es/map";
+import { Action } from "@/util/api/action-api";
 
 const router = useRouter();
 
@@ -282,57 +283,32 @@ const addCartOk = async () => {
   if (cartModel.value.goodsNum === 0) {
     Toast.fail("数量为0~");
   } else {
+    const res = await http.post("shopping-cart/addCart", cartModel.value);
     Toast.success("添加成功~");
-    const res = await http.post("shopping-cart", cartModel.value);
   }
 };
 
+const { Collect, getCollect } = Action();
 //用户id
 const userid = localStorage.getItem("userid");
 //展示未收藏和已收藏
 let collected = ref(false);
 //收藏商品
 const collect = async () => {
-  collectedList.value.push(props.id);
-  let model = {
-    commodity: collectedList.value,
-  };
-  await http.put(`users/${userid}`, model);
-  Toast.success("收藏成功~");
-  isCollect();
-};
-//取消收藏
-const cancelCollection = async () => {
-  let temp = [];
-  for (let i in collectedList.value) {
-    if (collectedList.value[i] === props.id)
-      console.log(collectedList.value[i]);
-    else {
-      temp.push(collectedList.value[i]);
-    }
-  }
-  let model = {
-    commodity: temp,
-  };
-  await http.put(`users/${userid}`, model);
-  Toast.success("取消收藏~");
-  isCollect();
-};
-//收藏列表
-let collectedList = ref();
-//查看是否已经收藏并获取收藏列表
-const isCollect = async () => {
-  const res = await http.put(`users/${userid}`);
-  collectedList.value = res.commodity;
-  for (let i in res.commodity) {
-    if (res.commodity[i] === props.id) {
-      collected.value = true;
-      break;
-    } else collected.value = false;
+  Collect(props.id).then((t) => {
+    collected.value = t;
+  });
+  if (collected.value) {
+    Toast.success("收藏成功~");
+  } else {
+    Toast.success("取消收藏~");
   }
 };
+
 onMounted(() => {
-  isCollect();
   findOne();
+  getCollect(props.id).then((t) => {
+    collected.value = t;
+  });
 });
 </script>
