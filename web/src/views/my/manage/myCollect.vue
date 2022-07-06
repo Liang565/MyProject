@@ -77,25 +77,36 @@
         <div v-for="i in data" class="flex justify-center">
           <van-checkbox :name="i.object._id" class="pr-3" v-if="showEdit" />
           <div class="w-90vw mb-2">
-            <van-card
-              :price="i.object.price"
-              :desc="i.object._id"
-              :thumb="i.object.image[0].url"
-              @click="goGoods(i.object)"
-            >
-              <template #title>
-                <div class="text-xl">
-                  {{ i.object.commodityName }}
-                </div>
+            <van-swipe-cell>
+              <van-card
+                :price="i.object.price"
+                :desc="i.object._id"
+                :thumb="i.object.image[0].url"
+                @click="goGoods(i.object)"
+              >
+                <template #title>
+                  <div class="text-xl">
+                    {{ i.object.commodityName }}
+                  </div>
+                </template>
+                <template #footer>
+                  <div>
+                    库存：
+                    <span v-if="i.object.commodityNum < 10">低~</span>
+                    <span v-else>充足</span>
+                  </div>
+                </template>
+              </van-card>
+              <template #right>
+                <van-button
+                  square
+                  text="删除"
+                  type="danger"
+                  class="delete-button"
+                  @click="removeCollect(i.object._id)"
+                />
               </template>
-              <template #footer>
-                <div>
-                  库存：
-                  <span v-if="i.object.commodityNum < 10">低~</span>
-                  <span v-else>充足</span>
-                </div>
-              </template>
-            </van-card>
+            </van-swipe-cell>
           </div>
         </div>
       </van-checkbox-group>
@@ -138,7 +149,7 @@
           已选：<span>{{ checked.length }}</span>
         </div>
         <div class="mx-2">
-          <van-button round type="primary" @click="removeCollect()"
+          <van-button round type="primary" @click="removeCollect(0)"
             >删除</van-button
           >
         </div>
@@ -162,6 +173,7 @@ import {
   CheckboxGroup,
   RadioGroup,
   Radio,
+  SwipeCell,
 } from "vant";
 let Data = ref([]);
 let data = ref();
@@ -209,7 +221,13 @@ watch(checked, (newValue, oldValue) => {
   }
 });
 //删除
-const removeCollect = () => {
+const removeCollect = (temp?) => {
+  if (temp !== 0) {
+    checked.value = [temp];
+    console.log(temp);
+
+    console.log("被执行");
+  }
   console.log(checked);
   Toast.loading("...");
   for (let i in checked.value) {
@@ -225,6 +243,9 @@ const removeCollect = () => {
         data.value = t;
       });
     }
+    if (temp !== 0) {
+      checked.value = [];
+    }
   }, 500);
 };
 let a = ref({ a: "阿" });
@@ -237,3 +258,8 @@ onMounted(() => {
   });
 });
 </script>
+<style>
+.delete-button {
+  height: 100%;
+}
+</style>

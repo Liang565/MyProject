@@ -57,35 +57,47 @@
     <div class="m-2 pb-11">
       <van-checkbox-group v-model="checked" ref="checkboxGroup">
         <van-checkbox :name="i._id" v-for="i in data">
-          <div class="w-90vw mb-2">
-            <van-card
-              :num="i.goodsNum"
-              :price="i.goodsNum * i.commodity.price"
-              :desc="i.commodity._id"
-              :thumb="i.commodity.image[0].url"
-              @click="goGoods(i.commodity)"
-            >
-              <template #title>
-                <div class="text-xl">
-                  {{ i.commodity.commodityName }}
-                </div>
-              </template>
-              <!-- @click.stop() 阻止事件冒泡 -->
-              <template #footer>
+          <div class="w-80vw mb-2">
+            <van-swipe-cell>
+              <van-card
+                :num="i.goodsNum"
+                :price="i.goodsNum * i.commodity.price"
+                :desc="i.commodity._id"
+                :thumb="i.commodity.image[0].url"
+                @click="goGoods(i.commodity)"
+              >
+                <template #title>
+                  <div class="text-xl">
+                    {{ i.commodity.commodityName }}
+                  </div>
+                </template>
+                <!-- @click.stop() 阻止事件冒泡 -->
+                <template #footer>
+                  <van-button
+                    size="small"
+                    icon="minus"
+                    color="rgb(59, 130, 246)"
+                    @click.stop="minusGNum(i)"
+                  />
+                  <van-button
+                    size="small"
+                    icon="plus"
+                    color="rgb(59, 130, 246)"
+                    @click.stop="plusGNum(i)"
+                  />
+                </template>
+              </van-card>
+
+              <template #right>
                 <van-button
-                  size="small"
-                  icon="minus"
-                  color="rgb(59, 130, 246)"
-                  @click.stop="minusGNum(i)"
-                />
-                <van-button
-                  size="small"
-                  icon="plus"
-                  color="rgb(59, 130, 246)"
-                  @click.stop="plusGNum(i)"
+                  square
+                  text="删除"
+                  type="danger"
+                  class="delete-button"
+                  @click="removeCart([i._id], thisUser)"
                 />
               </template>
-            </van-card>
+            </van-swipe-cell>
           </div>
         </van-checkbox>
       </van-checkbox-group>
@@ -163,6 +175,7 @@ import {
   CheckboxGroup,
   RadioGroup,
   Radio,
+  SwipeCell,
 } from "vant";
 import { http } from "../../util/http";
 import iconPark from "../../components/iconPark.vue";
@@ -251,4 +264,8 @@ onMounted(() => {
   }
 });
 </script>
-<style></style>
+<style>
+.delete-button {
+  height: 100%;
+}
+</style>
