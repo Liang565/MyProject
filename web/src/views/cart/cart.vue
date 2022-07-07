@@ -54,7 +54,7 @@
       </div>
     </div>
 
-    <div class="m-2 pb-11">
+    <div class="m-4 pb-11">
       <van-checkbox-group v-model="checked" ref="checkboxGroup">
         <van-checkbox :name="i._id" v-for="i in data">
           <div class="w-80vw mb-2">
