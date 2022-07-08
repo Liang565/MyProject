@@ -22,7 +22,7 @@
         <div class="pl-3">我的收货地址</div>
         <!-- 编辑 -->
         <div class="w-16 h-7">
-          <button @click="editCart">
+          <button @click="editTwo">
             <icon-park
               type="edit-two"
               theme="outline"
@@ -38,64 +38,126 @@
           </button>
         </div>
       </div>
-
-      <div class="rounded">
-        <!-- 自己重新写，#item-bottom不能获取每一条的信息 -->
-        <van-address-list
-          :list="data"
-          default-tag-text="默认"
-          :switchable="false"
-          @add="addinfo"
-          @edit="onEdit"
-          @click-item="clickItem"
-          add-button-text="添加收货地址"
-        >
-          <template #item-bottom>
-            <!-- <div
-              v-if="!isEditInfo"
-              class="border-t-2 pt-2 flex justify-between items-center"
-            >
-              <div class="flex items-center">
-                <div>
-                  <button @click="setDefault">
+      <!-- 数据主体 -->
+      <div class="rounded flex justify-center pb-20">
+        <div class="w-full">
+          <div v-for="i in data" class="py-1">
+            <van-cell-group inset>
+              <van-cell>
+                <template #title>
+                  <div class="flex justify-start items-center">
+                    <div class="custom-title">
+                      <span class="text-lg">{{ i.name }}</span>
+                      <span>{{ i.tel }}</span>
+                    </div>
+                    <div v-if="i.isDefault">
+                      <van-tag round type="danger">默认</van-tag>
+                    </div>
+                  </div>
+                </template>
+                <template #label>
+                  <div>
+                    {{ i.province }}/ {{ i.city }}/ {{ i.county }}/
+                    {{ i.address }}
+                  </div>
+                </template>
+                <template #right-icon>
+                  <button @click="editInfo(i)">
                     <icon-park
-                      type="round"
+                      type="edit"
                       theme="outline"
-                      size="18"
+                      size="20  "
                       :spin="false"
                       fill="#000000"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       :strokeWidth="2"
+                      v-if="isEditInfo"
                     />
                   </button>
+                </template>
+              </van-cell>
+              <van-cell v-if="!isEditInfo">
+                <div class="flex justify-between items-center">
+                  <div class="flex items-center">
+                    <div>
+                      <button @click="setDefault(i._id)">
+                        <icon-park
+                          type="round"
+                          theme="outline"
+                          size="18"
+                          :spin="false"
+                          fill="#000000"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          :strokeWidth="2"
+                        />
+                      </button>
+                    </div>
+                    <div class="text-sm">默认地址</div>
+                  </div>
+                  <div>
+                    <button @click="deleteAdress(i._id)">
+                      <div class="text-sm">删除</div>
+                    </button>
+                  </div>
                 </div>
-                <div class="text-sm">默认地址</div>
-              </div>
-              <div>
-                <button @click="deleteAdress">
-                  <div class="text-sm">删除</div>
-                </button>
-              </div>
-            </div> -->
-          </template>
-        </van-address-list>
+              </van-cell>
+            </van-cell-group>
+          </div>
+        </div>
       </div>
+      <div
+        class="flex justify-between items-center pl-3 p-3 w-full fixed bottom-0 bg-white"
+      >
+        <van-button
+          type="primary"
+          size="large"
+          icon="plus"
+          round
+          @click="showAddPopup"
+        >
+          添加地址
+        </van-button>
+      </div>
+    </div>
+    <!-- 新增或者修改 -->
+    <div>
+      <van-popup
+        round
+        :closeable="true"
+        v-model:show="show"
+        position="bottom"
+        @close="fetch()"
+      >
+        <div class="h-80vh" v-if="show">
+          <address-edit
+            :type="addressEditType"
+            :addressObject="addressObject"
+            @end="
+              (aa) => {
+                show = aa;
+              }
+            "
+          />
+        </div>
+      </van-popup>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import { Curd } from "@/util/api/curd";
 import { http } from "@/util/http";
-import { Button, AddressList, Toast, Dialog } from "vant";
-import type { AddressListProps, AddressListAddress } from "vant";
+import type { AnyTypeAnnotation } from "@babel/types";
+import { Button, AddressList, Toast, Dialog, Cell, CellGroup } from "vant";
 import { onMounted, ref } from "vue";
 import iconPark from "../../../components/iconPark.vue";
+import AddressEdit from "./myInfo/addressEdit.vue";
 const { fetch, data } = Curd("user-info");
 //查询地址
 //编辑Info
 let isEditInfo = ref(true);
-const editCart = () => {
+const editTwo = () => {
   isEditInfo.value = !isEditInfo.value;
 };
 let model = ref({
@@ -109,25 +171,23 @@ const addinfo = () => {
   http.put("user-info/62c6f234b3bdb3014b714020", model.value);
 };
 
-//存储地址的id
-let addressId = ref("");
 //设置为默认地址
-const setDefault = async () => {
+const setDefault = async (temp: any) => {
   Toast.loading("~");
   setTimeout(async () => {
-    await http.put(`user-info/${addressId.value}`, { isDefault: true });
+    await http.put(`user-info/${temp}`, { isDefault: true });
     fetch();
   }, 1000);
 };
 //删除地址
-const deleteAdress = () => {
+const deleteAdress = (temp: any) => {
   Dialog.confirm({
     title: "确定要删除该地址吗？",
     cancelButtonText: "我再想想",
   })
     .then(async () => {
       setTimeout(async () => {
-        await http.delete(`user-info/${addressId.value}`);
+        await http.delete(`user-info/${temp}`);
         fetch();
         Toast.success("已删除~");
       }, 1000);
@@ -136,12 +196,21 @@ const deleteAdress = () => {
       // on cancel
     });
 };
-//依靠这个获取地址的id
-const clickItem = (i: any) => {
-  addressId.value = i._id;
+//地址编辑框
+let show = ref(false);
+const showAddPopup = () => {
+  show.value = !show.value;
+  addressEditType.value = "add";
 };
-const aaa = (i) => {
-  console.log(i);
+//地址编辑框组件参数
+let addressObject = ref({});
+let addressEditType = ref();
+
+//修改
+const editInfo = (i: any) => {
+  show.value = !show.value;
+  addressEditType.value = "edit";
+  addressObject.value = i;
 };
 onMounted(() => {
   fetch();

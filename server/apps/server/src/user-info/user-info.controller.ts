@@ -33,13 +33,40 @@ export class UserInfoController {
   @Post()
   @JwtAuth()
   async create(@CurrentUserId() userid, @Body() body: info) {
-    const { name, address, tel, postalCode, isDefault } = body;
+    const {
+      name,
+      province,
+      city,
+      county,
+      address,
+      tel,
+      postalCode,
+      isDefault,
+    } = body;
     if (!name || name === '') throw new BadRequestException('姓名为空');
     if (!address || address === '') throw new BadRequestException('地址为空');
     if (!tel || tel === '') throw new BadRequestException('联系电话为空');
-
+    //只能有一个默认地址，切换后把其他地址的isDefault改成false
+    if (isDefault == true) {
+      const changeIs = await this.model.find({
+        isDefault: isDefault,
+        user: userid,
+      });
+      for (let i in changeIs) {
+        const iid = changeIs[i]._id;
+        const info1 = await this.model.updateOne(
+          { _id: iid },
+          {
+            isDefault: false,
+          },
+        );
+      }
+    }
     const mo = {
       name,
+      province,
+      city,
+      county,
       address,
       tel,
       postalCode,
@@ -55,13 +82,25 @@ export class UserInfoController {
   async updated(@Param('id') id, @Body() body: info, @CurrentUserId() userid) {
     const res = await this.model.findById({ _id: id });
     if (res) {
-      const { name, address, tel, postalCode, isDefault } = body;
+      const {
+        name,
+        province,
+        city,
+        county,
+        address,
+        tel,
+        postalCode,
+        isDefault,
+      } = body;
       if (name === '') throw new BadRequestException('姓名为空');
       if (address === '') throw new BadRequestException('地址为空');
       if (tel === '') throw new BadRequestException('联系电话为空');
       //只能有一个默认地址，切换后把其他地址的isDefault改成false
       if (isDefault == true) {
-        const changeIs = await this.model.find({ isDefault: isDefault });
+        const changeIs = await this.model.find({
+          isDefault: isDefault,
+          user: userid,
+        });
         for (let i in changeIs) {
           const iid = changeIs[i]._id;
           const info1 = await this.model.updateOne(

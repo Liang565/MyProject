@@ -6,6 +6,19 @@ export class UserInfo {
   @ApiProperty({ description: '收货人' })
   @prop()
   name: string;
+
+  @ApiProperty({ description: '省份' })
+  @prop()
+  province: string;
+
+  @ApiProperty({ description: '城市' })
+  @prop()
+  city: string;
+
+  @ApiProperty({ description: '区县' })
+  @prop()
+  county: string;
+
   @ApiProperty({ description: '地址' })
   @prop()
   address: string;
