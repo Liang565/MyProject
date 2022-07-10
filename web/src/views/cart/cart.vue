@@ -229,7 +229,7 @@ const editCart = () => {
 //复选
 let checked = ref([]);
 let isCheckAll = ref(false);
-const checkboxGroup = ref(null);
+const checkboxGroup = ref();
 let TotalAmount = ref(0); //总金额
 // 全选
 const toggleAll = () => {

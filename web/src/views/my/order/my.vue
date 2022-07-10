@@ -134,8 +134,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import userStore from "../../stores/user-store";
-import { http, httpURL } from "../../util/http";
+import { http, httpURL } from "../../../util/http";
 import { onMounted, ref } from "vue";
 import { Toast, Popup, Button, Dialog } from "vant";
 import { useRouter } from "vue-router";
@@ -183,7 +182,11 @@ const editImg = () => {
   }
 };
 let showUpload = ref(true);
-const handleChange = (file, fileList, e) => {
+const handleChange = (
+  file: { file: { status: string; response: { url: any } } },
+  fileList: any,
+  e: any
+) => {
   if (file.file.status == "done") {
     //上传成功
     Image.value = file.file.response?.url;

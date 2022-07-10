@@ -32,8 +32,8 @@ const change = () => {
 const routerMap = router
   .getRoutes()
   .map((v) => ({
-    title: v.meta.title,
-    icon: v.meta.icon,
+    title: <string>v.meta.title,
+    icon: <string>v.meta.icon,
     key: v.meta.key,
     path: v.path,
     meta: v.meta,

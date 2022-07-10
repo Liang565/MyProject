@@ -203,7 +203,7 @@ import { ActionBar, ActionBarIcon, ActionBarButton, Popup, Toast } from "vant";
 import { useRouter } from "vue-router";
 import myimage from "../../components/myimage.vue";
 import { Commodity } from "@icon-park/vue-next/es/map";
-import { Action } from "@/util/api/action-api";
+import { Action } from "../../util/api/action-api";
 
 const router = useRouter();
 
@@ -295,7 +295,7 @@ const userid = localStorage.getItem("userid");
 let collected = ref(false);
 //收藏商品
 const collect = async () => {
-  Collect(props.id).then((t) => {
+  Collect(<string>props.id).then((t) => {
     collected.value = t;
   });
   if (collected.value) {
@@ -307,7 +307,8 @@ const collect = async () => {
 
 onMounted(() => {
   findOne();
-  getCollect(props.id).then((t) => {
+
+  getCollect(<string>props.id).then((t) => {
     collected.value = t;
   });
 });

@@ -149,7 +149,7 @@
           已选：<span>{{ checked.length }}</span>
         </div>
         <div class="mx-2">
-          <van-button round type="primary" @click="removeCollect(0)"
+          <van-button round type="primary" @click="removeCollect()"
             >删除</van-button
           >
         </div>
@@ -158,9 +158,9 @@
   </div>
 </template>
 <script setup lang="ts">
-import { Action } from "@/util/api/action-api";
-import { Curd } from "@/util/api/curd";
-import { http } from "@/util/http";
+import { Action } from "../../../util/api/action-api";
+import { Curd } from "../../../util/api/curd";
+import { http } from "../../../util/http";
 import { onMounted, ref, watch } from "@vue/runtime-dom";
 import iconPark from "../../../components/iconPark.vue";
 import myimage from "../../../components/myimage.vue";
@@ -205,7 +205,7 @@ const clearSearch = () => {
 //复选
 let checked = ref([]);
 let isCheckAll = ref(false);
-const checkboxGroup = ref(null);
+const checkboxGroup = ref();
 let TotalAmount = ref(0); //总金额
 // 全选
 const toggleAll = () => {
@@ -221,8 +221,8 @@ watch(checked, (newValue, oldValue) => {
   }
 });
 //删除
-const removeCollect = (temp?) => {
-  if (temp !== 0) {
+const removeCollect = (temp?: never) => {
+  if (temp !== 0 && temp) {
     checked.value = [temp];
     console.log(temp);
 

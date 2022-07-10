@@ -119,7 +119,7 @@
           <div class="w-full h-full bg-gray-200">
             <!-- 图片 -->
             <div class="flex justify-center">
-              <myimage :src="i.image" :height="80" :radius="10" />
+              <myimage :src="i.image" height="80" radius="10" />
             </div>
 
             <!-- 标题 -->
@@ -194,8 +194,9 @@ onMounted(() => {
     search();
   }
   //搜索结果的展示方法
-  if (sessionStorage.getItem("upright")) {
-    upright.value = JSON.parse(sessionStorage.getItem("upright"));
+  const item = sessionStorage.getItem("upright");
+  if (item) {
+    upright.value = JSON.parse(item);
   }
 });
 </script>

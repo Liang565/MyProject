@@ -183,7 +183,9 @@ const editImg = () => {
   }
 };
 let showUpload = ref(true);
-const handleChange = (file, fileList, e) => {
+const handleChange = (file: {
+  file: { status: string; response: { url: any } };
+}) => {
   if (file.file.status == "done") {
     //上传成功
     Image.value = file.file.response?.url;

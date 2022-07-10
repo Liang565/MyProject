@@ -21,6 +21,8 @@
     "test:e2e": "jest --config ./apps/server/test/jest-e2e.json",
     "push": "cd .. && git add -A && git commit -am '图片'&&git push",
     "admin": "rm -rf ./public/admin/ && cd ../admin && npm run build && cd ../server",
+    "web": "rm -rf ./public/web/ && cd ../web && npm run build && cd ../server",
+
     "server": "rm -rf prod && cp -rf dist prod"
   },
   "dependencies": {

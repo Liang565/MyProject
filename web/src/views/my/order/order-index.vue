@@ -39,7 +39,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import router from "../../../router";
-
+let value = ref("");
 let active = ref("");
 const change = () => {
   console.log(active);
@@ -47,7 +47,7 @@ const change = () => {
 const routerMap = router
   .getRoutes()
   .map((v) => ({
-    title: v.meta.title,
+    title: <string>v.meta.title,
     icon: v.meta.icon,
     key: v.meta.key,
     path: v.path,

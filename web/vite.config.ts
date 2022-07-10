@@ -20,4 +20,9 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
+  // 打包配置
+  build: {
+    target: "modules",
+    outDir: "../server/public/web", //指定输出路径
+  },
 });

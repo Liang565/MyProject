@@ -146,8 +146,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { Curd } from "@/util/api/curd";
-import { http } from "@/util/http";
+import { Curd } from "../../../util/api/curd";
+import { http } from "../../../util//http";
 import type { AnyTypeAnnotation } from "@babel/types";
 import { Button, AddressList, Toast, Dialog, Cell, CellGroup } from "vant";
 import { onMounted, ref } from "vue";

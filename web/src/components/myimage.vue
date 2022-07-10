@@ -22,9 +22,21 @@
 <script lang="ts" setup>
 import { Image as VanImage } from "vant";
 const props = defineProps({
-  src: Object,
-  width: String,
-  height: String,
-  radius: String,
+  src: {
+    type: Object,
+    default: "",
+  },
+  width: {
+    type: String,
+    default: "60",
+  },
+  height: {
+    type: String,
+    default: "60",
+  },
+  radius: {
+    type: String,
+    default: "0",
+  },
 });
 </script>
