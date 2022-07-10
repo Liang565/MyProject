@@ -130,7 +130,7 @@
   </div>
   <!-- 信息确认框 -->
   <div>
-    <login-dialog :showDialog="showDialog" />
+    <login-dialog v-model:showDialog="showDialog" />
   </div>
 </template>
 <script lang="ts" setup>
