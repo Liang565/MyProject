@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   Param,
   Post,
   Put,
@@ -22,6 +23,7 @@ import { identity } from 'rxjs';
 })
 @Controller('user-info')
 @ApiTags('用户信息')
+@JwtAuth()
 export class UserInfoController {
   constructor(
     @InjectModel(UserInfo)
@@ -31,7 +33,6 @@ export class UserInfoController {
   //创建用户
   @ApiOperation({ summary: '新增信息' })
   @Post()
-  @JwtAuth()
   async create(@CurrentUserId() userid, @Body() body: info) {
     const {
       name,
@@ -114,5 +115,15 @@ export class UserInfoController {
 
       const info = await this.model.updateOne({ _id: id }, body);
     } else throw new BadRequestException('请刷新重新尝试~');
+  }
+  @Post('/find')
+  @ApiOperation({ summary: '查询' })
+  async find(@CurrentUserId() userid) {
+    const res = await this.model.find({ user: userid });
+    if (res) {
+      return res;
+    } else {
+      throw new BadRequestException('没有数据');
+    }
   }
 }

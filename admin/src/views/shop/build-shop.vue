@@ -31,7 +31,7 @@ const {
 let imgg = ref([]);
 const aaaa = async () => {
   const res = await http.get("commoditys", {
-    params: { limit: 999 },
+    params: { query: { limit: 999 } },
   });
   imgg.value = res.data
     .map((v) => ({

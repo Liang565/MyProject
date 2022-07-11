@@ -38,7 +38,7 @@
         rowKey="title"
         :pagination="pagination"
         @change="pageChange"
-        :scroll="{ y: 390 }"
+        :scroll="{ y: 395 }"
       >
         <a-table-column
           title="id"
@@ -300,7 +300,7 @@ const addShop = () => {
 let optionsClass = ref<any>([]);
 const findClassOptions = async () => {
   const res: any = await http.get("commodity-class", {
-    params: { limit: 999 },
+    params: { query: { limit: 999 } },
   });
   optionsClass.value = res.data.map((v) => ({
     label: v.title,

@@ -81,13 +81,7 @@
     <!-- 地址等设置 -->
     <div class="mt-8">
       <van-cell-group inset>
-        <van-cell
-          @click="
-            () => {
-              router.push('myInfo');
-            }
-          "
-        >
+        <van-cell @click="goInfo">
           <template #title>
             <van-icon name="location-o"> 地址管理 </van-icon>
           </template>
@@ -143,10 +137,25 @@ import loginDialog from "../../components/loginDialog.vue";
 const router = useRouter();
 //页面跳转
 const goOrder = () => {
-  router.push("/my/order-index");
+  if (token) {
+    router.push("/my/order-index");
+  } else {
+    Toast.fail("当前身份为游客，请登录！");
+  }
 };
 const goMyCollect = () => {
-  router.push("/myCollect");
+  if (token) {
+    router.push("/myCollect");
+  } else {
+    Toast.fail("当前身份为游客，请登录！");
+  }
+};
+const goInfo = () => {
+  if (token) {
+    router.push("/myInfo");
+  } else {
+    Toast.fail("当前身份为游客，请登录！");
+  }
 };
 
 //退出登录 删除token？
@@ -175,7 +184,7 @@ userid.value = localStorage.getItem("userid");
 
 let editImgviss = ref(false);
 const editImg = () => {
-  if (localStorage.getItem("token")) {
+  if (token) {
     console.log("修改头像");
     editImgviss.value = true;
   } else {
@@ -229,9 +238,9 @@ const toLogin = () => {
 };
 //信息确认框
 let showDialog = ref(false);
-
+let token = localStorage.getItem("token");
 onMounted(() => {
-  if (localStorage.getItem("token")) {
+  if (token) {
     Login.value = !Login.value;
   } else {
     showDialog.value = true;

@@ -59,7 +59,7 @@
         </div>
       </a-layout-sider>
       <a-layout>
-        <a-layout-header class="mb-1" style="background-color: #fff">
+        <a-layout-header style="background-color: #fff">
           <div class="flex justify-between w-full">
             <div class="-ml-12">
               <a-button type="ghost" @click="toggleCollapsed">
@@ -80,11 +80,11 @@
           </div>
         </a-layout-header>
 
-        <a-layout-content>
+        <a-layout-content class="h-auto">
           <div class="px-5"><router-view></router-view></div>
         </a-layout-content>
 
-        <!-- <a-layout-footer class="bg-black">Footer</a-layout-footer> -->
+        <!-- <a-layout-footer>Footer</a-layout-footer> -->
       </a-layout>
     </a-layout>
   </div>
@@ -130,7 +130,7 @@ const Menw = router
     return v.meta.Menu;
   });
 const handleClick = ({ key }) => {
-  SelectedKeys.value[0] = key;
+  SelectedKeys.value[0] = <never>key;
   router.push(key);
 };
 //默认选中的页面
@@ -143,9 +143,9 @@ let OpenKeys = ref();
 let isAdminLogin = ref(false);
 const AdminLogOut = () => {
   console.log("执行adminLogOut");
-  localStorage.setItem("userid", localStorage.getItem("adminId"));
-  localStorage.setItem("username", localStorage.getItem("adminname"));
-  localStorage.setItem("role", localStorage.getItem("adminrole"));
+  localStorage.setItem("userid", <string>localStorage.getItem("adminId"));
+  localStorage.setItem("username", <string>localStorage.getItem("adminname"));
+  localStorage.setItem("role", <string>localStorage.getItem("adminrole"));
   localStorage.removeItem("adminId");
   localStorage.removeItem("adminname");
   localStorage.removeItem("adminrole");
@@ -165,7 +165,7 @@ onMounted(() => {
   }
   getUser();
   //设置全局的用户名
-  SelectedKeys.value[0] = router.currentRoute.value.href; //获取当前页面路由
+  SelectedKeys.value[0] = <never>router.currentRoute.value.href; //获取当前页面路由
 
   //展开的导航栏根据不同用户而不同
   if (localStorage.getItem("role") == "user") {

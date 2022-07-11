@@ -5,7 +5,7 @@
         <div class="mr-5 ml-2 flex justify-between items-center">
           <div>
             <!-- 返回前一个页面 -->
-            <button @click="$router.go(-2)">
+            <button @click="$router.go(-1)">
               <icon-park
                 type="back"
                 theme="outline"
@@ -128,7 +128,7 @@
         :closeable="true"
         v-model:show="show"
         position="bottom"
-        @close="fetch()"
+        @close="fetch1()"
       >
         <div class="h-80vh" v-if="show">
           <address-edit
@@ -153,7 +153,14 @@ import { Button, AddressList, Toast, Dialog, Cell, CellGroup } from "vant";
 import { onMounted, ref } from "vue";
 import iconPark from "../../../components/iconPark.vue";
 import AddressEdit from "./myInfo/addressEdit.vue";
-const { fetch, data } = Curd("user-info");
+
+// const { fetch, data } = Curd("user-info");
+let data = ref([]);
+const fetch = async () => {
+  const res = await http.post("user-info/find");
+  data.value = res;
+  if (data.value.length === 0) Toast.fail("无数据~");
+};
 //查询地址
 //编辑Info
 let isEditInfo = ref(true);
@@ -212,7 +219,16 @@ const editInfo = (i: any) => {
   addressEditType.value = "edit";
   addressObject.value = i;
 };
+
+const fetch1 = () => {
+  if (token) {
+    fetch();
+  }
+};
+let token = localStorage.getItem("token");
 onMounted(() => {
-  fetch();
+  if (token) {
+    fetch();
+  }
 });
 </script>

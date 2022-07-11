@@ -160,6 +160,10 @@
         </div>
       </div>
     </div>
+    <!-- 登录提示框 -->
+    <div>
+      <login-dialog v-model:showDialog="showDialog" />
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -180,6 +184,8 @@ import {
 import { http } from "../../util/http";
 import iconPark from "../../components/iconPark.vue";
 import { object } from "vue-types";
+import loginDialog from "../../components/loginDialog.vue";
+let token = localStorage.getItem("token");
 
 const router = useRouter();
 let goodsCome = ref(false);
@@ -196,7 +202,7 @@ const minusGNum = async (temp: { goodsNum: number; _id: any }) => {
     });
     http.put(`shopping-cart/${temp._id}`, { goodsNum: temp.goodsNum - 1 });
     setTimeout(() => {
-      query.value.where = { user: localStorage.getItem("userid") };
+      query.value.where = { user: thisUser };
       fetch();
     }, 500);
   }
@@ -209,7 +215,7 @@ const plusGNum = async (temp: { _id: any; goodsNum: number }) => {
   });
   http.put(`shopping-cart/${temp._id}`, { goodsNum: temp.goodsNum + 1 });
   setTimeout(() => {
-    query.value.where = { user: localStorage.getItem("userid") };
+    query.value.where = { user: thisUser };
     fetch();
   }, 500);
 };
@@ -223,7 +229,11 @@ const goHome = () => {
 //编辑购物车
 let isEditCart = ref(true);
 const editCart = () => {
-  isEditCart.value = !isEditCart.value;
+  if (token) {
+    isEditCart.value = !isEditCart.value;
+  } else {
+    Toast.fail("当前身份为游客，请登录！");
+  }
 };
 
 //复选
@@ -233,8 +243,12 @@ const checkboxGroup = ref();
 let TotalAmount = ref(0); //总金额
 // 全选
 const toggleAll = () => {
-  isCheckAll.value = !isCheckAll.value;
-  checkboxGroup.value.toggleAll(isCheckAll.value);
+  if (token) {
+    isCheckAll.value = !isCheckAll.value;
+    checkboxGroup.value.toggleAll(isCheckAll.value);
+  } else {
+    Toast.fail("当前身份为游客，请登录！");
+  }
 };
 //监听器，监听checked的变化从而更改结算价格的变化
 watch(checked, (newValue, oldValue) => {
@@ -255,12 +269,17 @@ let buttom2 =
   "flex justify-between items-center pl-3 p-3 w-full fixed bottom-0 bg-white";
 
 let thisUser = localStorage.getItem("userid");
+let showDialog = ref(false);
 onMounted(() => {
-  query.value.where = { user: localStorage.getItem("userid") };
-  fetch();
-  //key=cart1，其他地方进入购物车页，key=cart首页切换到购物车
-  if (useRoute().meta.key == "cart1") {
-    goodsCome.value = true; //返回键是否显示
+  if (token) {
+    query.value.where = { user: thisUser };
+    fetch();
+    //key=cart1，其他地方进入购物车页，key=cart首页切换到购物车
+    if (useRoute().meta.key == "cart1") {
+      goodsCome.value = true; //返回键是否显示
+    }
+  } else {
+    showDialog.value = true;
   }
 });
 </script>

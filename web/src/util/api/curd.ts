@@ -25,7 +25,7 @@ export const Curd = (url: string) => {
       },
     });
     if (res.total == 0) {
-      Toast.fail("内容为空");
+      Toast.fail("无数据~");
       data.value = [];
     } else {
       const query1 = JSON.stringify(query.value);

@@ -95,7 +95,7 @@ const props = defineProps({
   },
   //这个要有变化
   resetList: {
-    type: Object,
+    type: Boolean,
     default: false,
   },
 });

@@ -1,5 +1,4 @@
 <template>
-  <!-- <div>{{ newModel }}</div> -->
   <div>
     <div class="mb-2 text-2xl">商品管理</div>
     <div class="mb-2 flex justify-start">
@@ -18,8 +17,6 @@
           </a-form-item>
         </a-form>
       </div>
-      <!-- </div>
-    <div> -->
       <div>
         <a-form layout="inline">
           <a-form-item label="商品名：" class="w-52">
@@ -41,10 +38,6 @@
         </a-form>
       </div>
     </div>
-
-    <a-modal v-model:visible="visible" title="Basic Modal" :centered="true">
-      <img :src="imgUrl" />
-    </a-modal>
     <div class="mt-5">
       <a-table
         :dataSource="data"
@@ -65,7 +58,15 @@
           dataIndex="commodityIntroduce"
           key="commodityIntroduce"
           align="center"
-        />
+        >
+          <template #="{ record }">
+            <a-button
+              type="link"
+              @click="look(record.commodityIntroduce, '商品介绍')"
+              >查看</a-button
+            >
+          </template>
+        </a-table-column>
         <a-table-column
           title="参数"
           dataIndex="parameter"
@@ -73,7 +74,9 @@
           align="center"
         >
           <template #="{ record }">
-            <span>{{ record.parameter }}</span>
+            <a-button type="link" @click="look(record.parameter, '参数')"
+              >查看</a-button
+            >
           </template>
         </a-table-column>
         <a-table-column
@@ -132,7 +135,9 @@
           <template #="{ record }">
             <div>
               <a-button type="link" @click="edit(record)">修改</a-button>
-              <a-button type="link" @click="remove(record, record.title)"
+              <a-button
+                type="link"
+                @click="remove(record, record.commodityName)"
                 >删除</a-button
               >
             </div>
@@ -140,115 +145,115 @@
         </a-table-column>
       </a-table>
     </div>
-  </div>
-  <!-- 新增商品 -->
-  <div>
-    <a-modal
-      v-model:visible="viss.add"
-      title="新增商品"
-      @ok="addOk(newModel)"
-      :afterClose="cancelModel"
-      :centered="true"
-    >
-      <!-- 选框里面的  :filter-Option="filterOption"用于搜索选项 -->
+    <!-- 新增商品 -->
+    <div>
+      <a-modal
+        v-model:visible="viss.add"
+        title="新增商品"
+        @ok="addOk(newModel)"
+        :afterClose="cancelModel"
+        :centered="true"
+      >
+        <!-- 选框里面的  :filter-Option="filterOption"用于搜索选项 -->
 
-      <a-form :model="newModel">
-        <a-form-item label="商品名">
-          <a-input v-model:value="newModel.commodityName"></a-input>
-        </a-form-item>
-        <a-form-item label="分类">
-          <a-select
-            :allowClear="true"
-            :showSearch="true"
-            :options="optionsClass"
-            v-model:value="newModel.title"
-            :filter-Option="filterOption"
-          >
-          </a-select>
-        </a-form-item>
-        <a-form-item label="商品简介">
-          <a-input v-model:value="newModel.commodityIntroduce"></a-input>
-        </a-form-item>
-        <a-form-item label="商品图片">
-          <!-- 这里要搞一个图片列表 -->
-          <list-upload
-            @on-success="
-              (aa) => {
-                newModel.image = aa;
-              }
-            "
-            :resetList="resetList"
-          />
-        </a-form-item>
-        <a-form-item label="参数">
-          <a-input v-model:value="newModel.parameter"></a-input>
-        </a-form-item>
-        <a-form-item label="数量">
-          <a-input v-model:value="newModel.commodityNum"></a-input>
-        </a-form-item>
-        <a-form-item label="价格">
-          <a-input v-model:value="newModel.price"></a-input>
-        </a-form-item>
-      </a-form>
-    </a-modal>
-  </div>
-  <!-- 修改商品 -->
-  <div>
-    <a-modal
-      v-model:visible="viss.edit"
-      title="修改商品信息"
-      @ok="editOk(editId, newModel)"
-      :afterClose="cancelModel"
-      :centered="true"
-    >
-      <!-- 选框里面的  :filter-Option="filterOption"用于搜索选项 -->
+        <a-form :model="newModel">
+          <a-form-item label="商品名">
+            <a-input v-model:value="newModel.commodityName"></a-input>
+          </a-form-item>
+          <a-form-item label="分类">
+            <a-select
+              :allowClear="true"
+              :showSearch="true"
+              :options="optionsClass"
+              v-model:value="newModel.title"
+              :filter-Option="filterOption"
+            >
+            </a-select>
+          </a-form-item>
+          <a-form-item label="商品简介">
+            <a-input v-model:value="newModel.commodityIntroduce"></a-input>
+          </a-form-item>
+          <a-form-item label="商品图片">
+            <!-- 这里要搞一个图片列表 -->
+            <list-upload
+              @on-success="
+                (aa) => {
+                  newModel.image = aa;
+                }
+              "
+              :resetList="resetList"
+            />
+          </a-form-item>
+          <a-form-item label="参数">
+            <a-input v-model:value="newModel.parameter"></a-input>
+          </a-form-item>
+          <a-form-item label="数量">
+            <a-input v-model:value="newModel.commodityNum"></a-input>
+          </a-form-item>
+          <a-form-item label="价格">
+            <a-input v-model:value="newModel.price"></a-input>
+          </a-form-item>
+        </a-form>
+      </a-modal>
+    </div>
+    <!-- 修改商品 -->
+    <div>
+      <a-modal
+        v-model:visible="viss.edit"
+        title="修改商品信息"
+        @ok="editOk(editId, newModel)"
+        :afterClose="cancelModel"
+        :centered="true"
+      >
+        <!-- 选框里面的  :filter-Option="filterOption"用于搜索选项 -->
 
-      <a-form :model="newModel">
-        <a-form-item label="商品名">
-          <a-input v-model:value="newModel.commodityName"></a-input>
-        </a-form-item>
-        <a-form-item label="分类">
-          <a-select
-            :allowClear="true"
-            :showSearch="true"
-            :options="optionsClass"
-            v-model:value="newModel.title"
-            :filter-Option="filterOption"
-          >
-          </a-select>
-        </a-form-item>
-        <a-form-item label="商品简介">
-          <a-input v-model:value="newModel.commodityIntroduce"></a-input>
-        </a-form-item>
-        <a-form-item label="商品图片">
-          <!-- 这里要搞一个图片列表 -->
-          <list-upload
-            :imgList="newModel.image"
-            :resetList="resetList"
-            @on-success="
-              (aa) => {
-                newModel.image = aa;
-              }
-            "
-          />
-        </a-form-item>
-        <a-form-item label="参数">
-          <a-input v-model:value="newModel.parameter"></a-input>
-        </a-form-item>
-        <a-form-item label="数量">
-          <a-input v-model:value="newModel.commodityNum"></a-input>
-        </a-form-item>
-        <a-form-item label="价格">
-          <a-input v-model:value="newModel.price"></a-input>
-        </a-form-item>
-      </a-form>
-    </a-modal>
+        <a-form :model="newModel">
+          <a-form-item label="商品名">
+            <a-input v-model:value="newModel.commodityName"></a-input>
+          </a-form-item>
+          <a-form-item label="分类">
+            <a-select
+              :allowClear="true"
+              :showSearch="true"
+              :options="optionsClass"
+              v-model:value="newModel.title"
+              :filter-Option="filterOption"
+            >
+            </a-select>
+          </a-form-item>
+          <a-form-item label="商品简介">
+            <a-input v-model:value="newModel.commodityIntroduce"></a-input>
+          </a-form-item>
+          <a-form-item label="商品图片">
+            <!-- 这里要搞一个图片列表 -->
+            <list-upload
+              :imgList="newModel.image"
+              :resetList="resetList"
+              @on-success="
+                (aa) => {
+                  newModel.image = aa;
+                }
+              "
+            />
+          </a-form-item>
+          <a-form-item label="参数">
+            <a-input v-model:value="newModel.parameter"></a-input>
+          </a-form-item>
+          <a-form-item label="数量">
+            <a-input v-model:value="newModel.commodityNum"></a-input>
+          </a-form-item>
+          <a-form-item label="价格">
+            <a-input v-model:value="newModel.price"></a-input>
+          </a-form-item>
+        </a-form>
+      </a-modal>
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
 import { onMounted } from "@vue/runtime-core";
 import { message, Modal } from "ant-design-vue";
-import { ref, watch } from "vue";
+import { ref, watch, h } from "vue";
 import { api } from "../../util/api/api";
 import { http } from "../../util/http";
 import { CrudTest } from "../../util/api/crud-api";
@@ -274,11 +279,6 @@ const {
 let resetList = ref(true);
 let visible = ref(false);
 let imgUrl = ref("");
-
-const changeUrl = (url) => {
-  imgUrl.value = url;
-  visible.value = true;
-};
 
 //切换店铺
 let optionsShop = ref<any>([]);
@@ -357,7 +357,10 @@ const addShop = () => {
 let optionsClass = ref<any>([]);
 const findClassOptions = async () => {
   const res: any = await http.get("commodity-class", {
-    params: { limit: 999 },
+    params: {
+      //展示条件
+      query: { limit: 999 },
+    },
   });
   optionsClass.value = res.data.map((v) => ({
     label: v.title,
@@ -396,6 +399,16 @@ watch(resetList, (newValue, oldValue) => {
   console.log(newValue);
   console.log(oldValue);
 });
+const look = (temp, text) => {
+  console.log(temp);
+  Modal.info({
+    title: `${text}`,
+    content: h("div", {}, `${temp}`),
+    onOk() {
+      console.log("ok");
+    },
+  });
+};
 onMounted(() => {
   findClassOptions();
   setOptionsShop();

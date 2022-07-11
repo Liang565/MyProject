@@ -18,7 +18,6 @@
               :allowClear="allowClear"
             >
             </a-select>
-            <!-- <a-input v-model:value="where.user"></a-input> -->
           </a-form-item>
           <a-form-item>
             <a-button type="primary" @click="search">搜索</a-button>
@@ -27,13 +26,13 @@
       </div>
     </div>
 
-    <div class="my-5">
+    <div class="mt-5">
       <a-table
         :dataSource="data"
         rowKey="title"
         :pagination="pagination"
         @change="pageChange"
-        :scroll="{ y: 400 }"
+        :scroll="{ y: 395 }"
       >
         <a-table-column
           title="商铺名"
@@ -162,7 +161,7 @@
         </a-form-item>
         <a-form-item label="商铺头像">
           <upload
-            :imageUrl="newModel.images"
+            v-model:imageUrl="newModel.images"
             @on-success="
               (imageUrl) => {
                 newModel.images = imageUrl;
@@ -205,9 +204,14 @@ const {
 
 //新增接口路径
 let addUrl = ref("addShop");
-
+where.value = {
+  title: "",
+  user: "",
+};
+const Rold = localStorage.getItem("role");
+const userid = localStorage.getItem("userid");
 //搜索
-if (localStorage.getItem("role") === "admin")
+if (Rold === "admin")
   where.value = {
     title: "",
     user: "",
@@ -215,13 +219,13 @@ if (localStorage.getItem("role") === "admin")
 else {
   where.value = {
     title: "",
-    user: localStorage.getItem("userid"),
+    user: userid,
   };
 }
 
 let newModel = ref({
   title: "",
-  user: localStorage.getItem("userid"),
+  user: userid,
   description: "",
   images: "",
   address: "",
@@ -247,7 +251,7 @@ let allowClear = ref(false);
 let options = ref<any>([]);
 const findUserOptions = async () => {
   // map foreach for
-  if (localStorage.getItem("role") === "admin") {
+  if (Rold === "admin") {
     const res: any = await api.user.find({ limit: 999 });
     options.value = res.data.map((v) => ({
       label: v.username,
@@ -259,7 +263,7 @@ const findUserOptions = async () => {
     options.value = [
       {
         label: localStorage.getItem("username"),
-        value: localStorage.getItem("userid"),
+        value: userid,
       },
     ];
   }

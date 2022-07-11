@@ -14,7 +14,7 @@
           @ok="addClassOk"
           :centered="true"
         >
-          <a-form :model="newModel">
+          <a-form v-model:model="newModel">
             <a-form-item
               label="分类名"
               name="title"
@@ -108,7 +108,7 @@
         {{ showParent }}
       </a-form-item>
 
-      <a-form :model="newModel">
+      <a-form v-model:model="newModel">
         <a-form-item label="新分类名" name="title">
           <a-input v-model:value="newModel.title"></a-input>
         </a-form-item>
@@ -132,7 +132,7 @@
       @ok="addSonOk"
       :centered="true"
     >
-      <a-form :model="newModel">
+      <a-form v-model:model="newModel">
         <a-form-item label="当前类">
           {{ showTitle }}
         </a-form-item>
@@ -157,7 +157,6 @@
 </template>
 <script lang="ts" setup>
 import { message, Modal } from "ant-design-vue";
-import { ListGridType } from "ant-design-vue/lib/list";
 import api from "ant-design-vue/lib/notification";
 import { createVNode, onMounted, reactive, ref } from "vue";
 import { classApi } from "../../util/api/class-api";
@@ -176,11 +175,8 @@ let pagination = ref({
 //展示条件
 let query = ref({
   limit: pagination.value.pageSize, //一页展示多少条,默认0时会全部展示，
-  page: 1, //展示页码
-  // where: ref({}),
+  page: 1,
   where: { parent: { $exists: false } },
-  // where: ref(wheres) //展示筛选条件 where 别加s
-  // populate: "user", //展示关联表的内容
 });
 
 const fetch1 = async () => {
@@ -193,11 +189,6 @@ const fetch1 = async () => {
   classData.value = res.data;
   pagination.value.total = res.total;
   pagination.value.pageSize = res.total;
-  // data1.value = [{}];
-  // options.value = res.data.map((v) => ({
-  //   label: v.title,
-  //   value: v._id,
-  // }));
   setOptions();
 };
 //更改选框选项
@@ -224,19 +215,20 @@ const filterOption = (input: string, optionsClass: any) => {
 };
 //搜索
 let Classwhere = ref({ _id: "" });
+
 const searchClass = () => {
   //选框id空时不执行
-  if (Classwhere.value._id == "") {
+  let id = Classwhere.value._id;
+  if (id == "") {
     message.warn("未选择");
-  } else if (typeof Classwhere.value._id === "undefined") {
+  } else if (typeof id === "undefined") {
     query.value.where = { parent: { $exists: false } };
     fetch1();
   } else {
     //删除了parent。
     delete query.value.where.parent;
     query.value.where = <any>Classwhere.value;
-    // console.log(query.value.where);
-    // console.log(query);
+
     fetch1();
   }
 };
@@ -278,6 +270,8 @@ const addSonOk = async () => {
   await http.post("commodity-class/addClass", newModel.value);
   message.success("添加成功");
   fetch1();
+  resetModel();
+
   viss.value.addSon = false;
 };
 //新增分类,传进来的父类需要用名字搜索id

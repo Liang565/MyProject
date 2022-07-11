@@ -18,6 +18,7 @@ module.exports = {
         "50vw": "50vw",
         "30vw": "30vw",
         "35vw": "35vw",
+        "70vh": "70vh",
       },
     },
   },

@@ -89,9 +89,10 @@ const filterOption = (input: string, optionsClass: any) => {
 let Classwhere = ref({ _id: "" });
 const searchClass = () => {
   //选框id空时不执行
-  if (Classwhere.value._id == "") {
+  let id = Classwhere.value._id;
+  if (id == "") {
     message.warn("未选择");
-  } else if (typeof Classwhere.value._id === "undefined") {
+  } else if (typeof id === "undefined") {
     query.value.where = { parent: { $exists: false } };
     fetch();
   } else {

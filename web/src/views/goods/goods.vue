@@ -204,6 +204,7 @@ import { useRouter } from "vue-router";
 import myimage from "../../components/myimage.vue";
 import { Commodity } from "@icon-park/vue-next/es/map";
 import { Action } from "../../util/api/action-api";
+let token = localStorage.getItem("token");
 
 const router = useRouter();
 
@@ -245,8 +246,11 @@ const goHome = () => {
 };
 const goCart = () => {
   // 这里要跳转到购物车
-
-  router.push("/cart1");
+  if (token) {
+    router.push("/cart1");
+  } else {
+    Toast.fail("当前身份为游客，请登录！");
+  }
 };
 
 const share = () => {
@@ -277,7 +281,11 @@ const addCatNum = () => {
   cartModel.value.goodsNum++;
 };
 const addCart = () => {
-  addCartshow.value = true;
+  if (token) {
+    addCartshow.value = true;
+  } else {
+    Toast.fail("当前身份为游客，请登录！");
+  }
 };
 const addCartOk = async () => {
   if (cartModel.value.goodsNum === 0) {
@@ -295,13 +303,17 @@ const userid = localStorage.getItem("userid");
 let collected = ref(false);
 //收藏商品
 const collect = async () => {
-  Collect(<string>props.id).then((t) => {
-    collected.value = t;
-  });
-  if (collected.value) {
-    Toast.success("收藏成功~");
+  if (token) {
+    Collect(<string>props.id).then((t) => {
+      collected.value = t;
+    });
+    if (collected.value) {
+      Toast.success("收藏成功~");
+    } else {
+      Toast.success("取消收藏~");
+    }
   } else {
-    Toast.success("取消收藏~");
+    Toast.fail("当前身份为游客，请登录！");
   }
 };
 
