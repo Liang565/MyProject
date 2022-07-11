@@ -2425,11 +2425,19 @@ let UserInfoController = class UserInfoController {
         else
             throw new common_1.BadRequestException('请刷新重新尝试~');
     }
+    async find(userid) {
+        const res = await this.model.find({ user: userid });
+        if (res) {
+            return res;
+        }
+        else {
+            throw new common_1.BadRequestException('没有数据');
+        }
+    }
 };
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: '新增信息' }),
     (0, common_1.Post)(),
-    (0, auth_decorator_1.JwtAuth)(),
     __param(0, (0, current_user_1.CurrentUserId)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -2447,12 +2455,21 @@ __decorate([
     __metadata("design:paramtypes", [Object, typeof (_b = typeof info_dto_1.info !== "undefined" && info_dto_1.info) === "function" ? _b : Object, Object]),
     __metadata("design:returntype", Promise)
 ], UserInfoController.prototype, "updated", null);
+__decorate([
+    (0, common_1.Post)('/find'),
+    (0, swagger_1.ApiOperation)({ summary: '查询' }),
+    __param(0, (0, current_user_1.CurrentUserId)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserInfoController.prototype, "find", null);
 UserInfoController = __decorate([
     (0, nestjs_mongoose_crud_1.Crud)({
         model: userInfo_model_1.UserInfo,
     }),
     (0, common_1.Controller)('user-info'),
     (0, swagger_1.ApiTags)('用户信息'),
+    (0, auth_decorator_1.JwtAuth)(),
     __param(0, (0, nestjs_typegoose_next_1.InjectModel)(userInfo_model_1.UserInfo)),
     __metadata("design:paramtypes", [typeof (_c = typeof typegoose_1.ReturnModelType !== "undefined" && typegoose_1.ReturnModelType) === "function" ? _c : Object])
 ], UserInfoController);
