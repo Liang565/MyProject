@@ -54,19 +54,29 @@
           key="commodityName"
         />
         <a-table-column
-          align="center"
           title="商品介绍"
           dataIndex="commodityIntroduce"
           key="commodityIntroduce"
-        />
-        <a-table-column
           align="center"
+        >
+          <template #="{ record }">
+            <a-button
+              type="link"
+              @click="look(record.commodityIntroduce, '商品介绍')"
+              >查看</a-button
+            >
+          </template>
+        </a-table-column>
+        <a-table-column
           title="参数"
           dataIndex="parameter"
           key="parameter"
+          align="center"
         >
           <template #="{ record }">
-            <span>{{ record.parameter }}</span>
+            <a-button type="link" @click="look(record.parameter, '参数')"
+              >查看</a-button
+            >
           </template>
         </a-table-column>
         <a-table-column
@@ -191,7 +201,7 @@
 <script lang="ts" setup>
 import { onMounted } from "@vue/runtime-core";
 import { message, Modal } from "ant-design-vue";
-import { ref, watch } from "vue";
+import { ref, watch, h } from "vue";
 import { api } from "../../util/api/api";
 import { http } from "../../util/http";
 import { CrudTest } from "../../util/api/crud-api";
@@ -337,6 +347,17 @@ const edit = (temp) => {
 watch(resetList, (newValue, oldValue) => {
   console.log("aaa侦听器");
 });
+
+const look = (temp, text) => {
+  console.log(temp);
+  Modal.info({
+    title: `${text}`,
+    content: h("div", {}, `${temp}`),
+    onOk() {
+      console.log("ok");
+    },
+  });
+};
 onMounted(() => {
   findClassOptions();
   setOptionsShop();
