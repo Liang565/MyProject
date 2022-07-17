@@ -13,7 +13,7 @@ export const routes = [
       {
         path: "/",
         meta: {
-          title: "首页1",
+          title: "首页搭建",
           isMenu: true,
           promiss: "public",
           icon: "home-two",
@@ -101,7 +101,7 @@ export const routes = [
     children: [
       {
         path: "/myGoods",
-        meta: { title: "商品", isMenu: true, promiss: "user", icon: "box" },
+        meta: { title: "我的商品", isMenu: true, promiss: "user", icon: "box" },
         component: () => import("../views/goods/goods.vue"),
       },
       {
@@ -127,7 +127,7 @@ export const routes = [
       {
         path: "/showClass",
         meta: {
-          title: "分类",
+          title: "查看分类",
           isMenu: true,
           promiss: "public",
           icon: "more-four",

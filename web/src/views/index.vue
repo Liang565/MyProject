@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div><router-view /></div>
+    <div class="h-100vh"><router-view /></div>
     <div>
       <van-tabbar v-model="active" @click="change" :placeholder="true">
         <van-tabbar-item
@@ -17,7 +17,7 @@
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { Tabbar } from "vant";
+import { Tabbar, TabbarItem } from "vant";
 import userStore from "../stores/user-store";
 let router = useRouter();
 let route = useRoute(); //这个和Router()不一样

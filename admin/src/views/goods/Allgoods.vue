@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div class="mb-2 text-2xl">商品管理</div>
     <div>
       <div>
         <a-form layout="inline">
@@ -24,21 +23,12 @@
       </div>
     </div>
 
-    <a-modal
-      v-model:visible="visible"
-      title="Basic Modal"
-      @ok="handleOk"
-      :centered="true"
-    >
-      <img :src="imgUrl" />
-    </a-modal>
-    <div class="mt-5">
+    <div class="mt-5 h-70vh overflow-y-auto">
       <a-table
         :dataSource="data"
         rowKey="title"
         :pagination="pagination"
         @change="pageChange"
-        :scroll="{ y: 395 }"
       >
         <a-table-column
           title="id"
@@ -228,6 +218,7 @@ let resetList = ref(true);
 let visible = ref(false);
 let imgUrl = ref("");
 
+const Role = localStorage.getItem("role");
 const changeUrl = (url) => {
   imgUrl.value = url;
   visible.value = true;
@@ -241,7 +232,9 @@ const setOptionsShop = async () => {
   );
   //如果没有商铺会提示无商铺
   if (res.length === 0) {
-    message.info("该用户下无店铺");
+    if (Role === "admin") {
+      message.info("当前为管理员用户");
+    } else message.error("该用户下无店铺,不能新增商品");
   } else {
     optionsShop.value = res.map((v) => ({
       label: v.title,
@@ -298,7 +291,9 @@ const resetModel = () => {
 
 const addShop = () => {
   if (optionsShop.value.length === 0) {
-    message.error("该用户下无店铺,不能新增商品");
+    if (Role === "admin") {
+      message.info("当前为管理员用户");
+    } else message.error("该用户下无店铺,不能新增商品");
   } else {
     viss.value.add = true;
     //组件Listupload 的属性，要求有变化就行
@@ -361,7 +356,7 @@ const look = (temp, text) => {
 onMounted(() => {
   findClassOptions();
   setOptionsShop();
-  if (localStorage.getItem("role") == "admin") {
+  if (Role == "admin") {
     fetch();
   }
 });

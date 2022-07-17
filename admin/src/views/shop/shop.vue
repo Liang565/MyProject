@@ -1,7 +1,5 @@
 <template>
   <div>
-    <div class="mb-2 text-2xl">商铺管理</div>
-
     <div class="mb-2 flex justify-start">
       <div>
         <a-button @click="addShop" type="primary"> 新增商铺 </a-button>
@@ -26,13 +24,12 @@
       </div>
     </div>
 
-    <div class="mt-5">
+    <div class="mt-5 h-70vh overflow-y-auto">
       <a-table
         :dataSource="data"
         rowKey="title"
         :pagination="pagination"
         @change="pageChange"
-        :scroll="{ y: 395 }"
       >
         <a-table-column
           title="商铺名"
@@ -208,10 +205,10 @@ where.value = {
   title: "",
   user: "",
 };
-const Rold = localStorage.getItem("role");
+const Role = localStorage.getItem("role");
 const userid = localStorage.getItem("userid");
 //搜索
-if (Rold === "admin")
+if (Role === "admin")
   where.value = {
     title: "",
     user: "",
@@ -251,7 +248,7 @@ let allowClear = ref(false);
 let options = ref<any>([]);
 const findUserOptions = async () => {
   // map foreach for
-  if (Rold === "admin") {
+  if (Role === "admin") {
     const res: any = await api.user.find({ limit: 999 });
     options.value = res.data.map((v) => ({
       label: v.username,
@@ -286,5 +283,6 @@ const edit = (temp) => {
 onMounted(() => {
   search();
   findUserOptions();
+  if (Role == "admin") message.info("当前为管理员用户");
 });
 </script>

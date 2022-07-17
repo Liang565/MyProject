@@ -1,6 +1,7 @@
 import { Action } from './models/action.model';
 import { Commodity } from './models/commodity.model';
 import { CommodityClass } from './models/commodityClass.model';
+import { Components } from './models/components.model';
 import { Order } from './models/order.model';
 import { Promiss } from './models/promiss.model';
 import { Shop } from './models/shop.model';
@@ -19,4 +20,5 @@ export const models = [
   ShoppingCart,
   UserInfo,
   Action,
+  Components,
 ];

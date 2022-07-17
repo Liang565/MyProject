@@ -1,7 +1,6 @@
 <template>
   <!-- <div>{{ newModel }}</div> -->
   <div>
-    <div class="mb-2 text-2xl">权限管理</div>
     <div class="mb-2">
       <a-button @click="addShop" type="primary"> 新增权限 </a-button>
     </div>
@@ -23,13 +22,12 @@
         </a-form-item>
       </a-form>
     </div>
-    <div class="mt-5">
+    <div class="mt-5 h-70vh overflow-y-auto">
       <a-table
         :dataSource="data"
         rowKey="title"
         :pagination="pagination"
         @change="pageChange"
-        :scroll="{ y: 390 }"
       >
         <a-table-column
           title="id"

@@ -26,6 +26,9 @@ const DiaConfirm = () => {
   router.push("/login");
 };
 const props = defineProps({
-  showDialog: Boolean,
+  showDialog: {
+    type: Boolean,
+    default: false,
+  },
 });
 </script>

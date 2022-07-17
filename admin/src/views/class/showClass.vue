@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div class="text-2xl">分类</div>
     <!-- 搜索 -->
     <div class="">
       <a-form layout="inline">
@@ -19,13 +18,8 @@
         </a-form-item>
       </a-form>
     </div>
-    <div class="mt-4">
-      <a-table
-        :dataSource="data"
-        rowKey="_id"
-        :scroll="{ y: 400 }"
-        class="h-400"
-      >
+    <div class="mt-4 h-70vh overflow-y-auto">
+      <a-table :dataSource="data" rowKey="_id">
         <a-table-column
           title="类别"
           dataIndex="title"

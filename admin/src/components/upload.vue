@@ -7,11 +7,10 @@
     @change="handleChange"
     :before-upload="beforeUpload"
   >
-    <img v-if="imageUrl" :src="imageUrl" alt="avatar" />
-
+    <div v-if="imageUrl">
+      <img :src="imageUrl" alt="avatar" class="image" />
+    </div>
     <div v-else>
-      <loading-outlined v-if="loading"></loading-outlined>
-      <plus-outlined v-else></plus-outlined>
       <div class="ant-upload-text">点击上传</div>
     </div>
   </a-upload>
@@ -31,3 +30,9 @@ const beforeUpload = () => {
   return true;
 };
 </script>
+<style>
+.image {
+  height: 102px;
+  width: 102px;
+}
+</style>

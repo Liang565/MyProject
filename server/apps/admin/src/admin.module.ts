@@ -11,6 +11,8 @@ import { ShopsModule } from './shops/shops.module';
 import { OrdersModule } from './orders/orders.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { PromissModule } from './promiss/promiss.module';
+import { ComponentsController } from './components/components.controller';
+import { ComponentsModule } from './components/components.module';
 const MAO = require('multer-aliyun-oss');
 @Module({
   imports: [
@@ -41,8 +43,9 @@ const MAO = require('multer-aliyun-oss');
     ShopsModule,
     OrdersModule,
     PromissModule,
+    ComponentsModule,
   ],
-  controllers: [AdminController],
+  controllers: [AdminController, ComponentsController],
   providers: [AdminService],
 })
 export class AdminModule {}

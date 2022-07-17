@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div class="text-2xl">分类管理</div>
     <!-- 新增分类 -->
     <div class="mt-2 flex">
       <div>
@@ -52,14 +51,8 @@
         </a-form>
       </div>
     </div>
-    <div class="mt-4">
-      <a-table
-        :dataSource="classData"
-        rowKey="_id"
-        :scroll="{ y: 400 }"
-        class="h-400"
-        :pagination="pagination"
-      >
+    <div class="mt-4 h-70vh overflow-y-auto">
+      <a-table :dataSource="classData" rowKey="_id" :pagination="pagination">
         <a-table-column
           title="类别"
           dataIndex="title"

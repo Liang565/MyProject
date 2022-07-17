@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-400">
+  <div class="bg-gray-400 h-100vh">
     <!-- 用户的信息 -->
     <div class="flex mx-5 justify-start items-center pt-5">
       <div class="border-2 w-24 h-24">
@@ -134,6 +134,8 @@ import { onMounted, ref } from "vue";
 import { Toast, Popup, Button, Dialog } from "vant";
 import { useRouter } from "vue-router";
 import loginDialog from "../../components/loginDialog.vue";
+let showDialog = ref(false);
+
 const router = useRouter();
 //页面跳转
 const goOrder = () => {
@@ -237,7 +239,6 @@ const toLogin = () => {
   // router.push("/login");
 };
 //信息确认框
-let showDialog = ref(false);
 let token = localStorage.getItem("token");
 onMounted(() => {
   if (token) {

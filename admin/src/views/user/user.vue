@@ -19,7 +19,7 @@
           </a-form-item>
         </a-form>
       </div>
-      <div>
+      <div class="h-70vh overflow-y-auto">
         <a-table
           :dataSource="data"
           rowKey="_id"

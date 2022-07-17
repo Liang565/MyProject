@@ -80,7 +80,8 @@
           </div>
         </a-layout-header>
 
-        <a-layout-content class="h-auto">
+        <a-layout-content>
+          <div class="text-2xl mx-5 my-2">{{ $route.meta.title }}</div>
           <div class="px-5"><router-view></router-view></div>
         </a-layout-content>
 

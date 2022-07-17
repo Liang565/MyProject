@@ -34,7 +34,9 @@
           </button>
         </div>
       </div>
-      <div class="text-xl">购物车({{ total }})</div>
+      <div class="text-xl">
+        购物车<span v-if="total">({{ total }})</span>
+      </div>
       <!-- 编辑 -->
       <div class="w-16 h-7">
         <button @click="editCart">
