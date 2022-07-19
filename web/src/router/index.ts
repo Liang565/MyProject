@@ -9,10 +9,10 @@ const router = createRouter({
 
 export default router;
 
-router.beforeEach((to, from, next) => {
-  // if (to.path === "/my" && !localStorage.getItem("token")) {
-  //   router.push("/login");
-  // } else {
-  //   }
-  next();
-});
+// router.beforeEach((to, from, next) => {
+//   // if (to.path === "/my" && !localStorage.getItem("token")) {
+//   //   router.push("/login");
+//   // } else {
+//   //   }
+//   next();
+// });

@@ -10,7 +10,11 @@
       >
         <SwipeItem v-for="list in content.image">
           <div class="imgDiv">
-            <van-image :src="list.url" fit="contain" :height="option.height" />
+            <van-image
+              :src="list.image"
+              fit="contain"
+              :height="option.height"
+            />
           </div>
         </SwipeItem>
         <SwipeItem v-for="list in 5" v-if="!content.image">{{
@@ -33,14 +37,14 @@
                       <upload
                         @on-success="
                           (res) => {
-                            item.url = res;
+                            item.image = res;
                           }
                         "
-                        v-model:imageUrl="item.url"
+                        v-model:imageUrl="item.image"
                       />
                     </a-form-item>
                     <a-form-item label="地址">
-                      <a-input v-model:value="item.title"></a-input>
+                      <a-input v-model:value="item.url"></a-input>
                     </a-form-item>
                     <div class="mt-3">
                       <a-button
@@ -94,7 +98,7 @@
 
 <script setup lang="ts">
 import { Swipe, SwipeItem, Stepper, Image } from "vant";
-import { ref, withDefaults } from "vue";
+import { ref } from "vue";
 import upload from "../../../components/upload.vue";
 let activeKey = ref("1");
 

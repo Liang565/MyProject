@@ -23,8 +23,9 @@ yarn add mongoose
 6.在公共库db的module.ts里面配置
 里面是数据表
 
-@Global() //全局配置
+
 const models = TypegooseModule.forFeature([User, Car, Park, Article, Order]);
+@Global() //全局配置
 @Module({
   imports: [
     TypegooseModule.forRootAsync({

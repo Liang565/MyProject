@@ -75,19 +75,16 @@
           :is="pushComponents(i.name)"
           :option="i.option"
           :content="i.content"
-          :index="i.index"
-        ></component>
+        />
       </div>
     </div>
-    <!-- 底部导航 -->
-    <div></div>
   </div>
 </template>
 <script setup lang="ts">
 import { defineAsyncComponent, onMounted, ref } from "vue";
 import iconPark from "../../components/iconPark.vue";
 import { http } from "../../util/http";
-import { ActionBar, ActionBarIcon, ActionBarButton, Popup, Toast } from "vant";
+import { Toast, Search, Tabbar, TabbarItem } from "vant";
 import { useRouter } from "vue-router";
 const props = defineProps({
   id: String,
@@ -130,10 +127,9 @@ const goCart = () => {
 const fetch = async () => {
   const res = await http.get(`shops/${props.id}`);
   console.log(res.components);
-  if (res) {
-    data.value = res;
-    COMPS.value = res.components;
-  }
+
+  data.value = res;
+  COMPS.value = res.components;
 };
 onMounted(() => {
   fetch();
