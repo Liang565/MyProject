@@ -93,7 +93,17 @@ const changeShop = () => {
  * 获取组件
  */
 const fetchComponents = async () => {
-  const res = await http.get("components");
+  const res = await http.get("components", {
+    params: {
+      //展示条件
+      query: {
+        limit: 999,
+        where: {
+          key: "user",
+        },
+      },
+    },
+  });
   Components.value = res.data;
 };
 // 获取店铺信息

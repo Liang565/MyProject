@@ -74,7 +74,6 @@ const fetchComponents = async () => {
 const fetch = async () => {
   const res = await http.post("build-home/findone", { name: "首页" });
   home.value = res;
-  console.log(home.value);
 };
 /**
  * 添加组件
@@ -88,7 +87,6 @@ const addComponent = (temp: any) => {
       content: {},
       index: Date.now(),
     });
-    fetchGoods();
   } else {
     home.value.components.push({
       name: temp,
@@ -113,7 +111,6 @@ const fetchGoods = async () => {
       query: { limit: 999 },
     },
   });
-  console.log(res.data);
 
   goods.value = res.data;
 };
@@ -130,6 +127,8 @@ const saveModel = async () => {
 
 onMounted(() => {
   fetchComponents();
+  fetchGoods();
+
   fetch();
 });
 </script>

@@ -29,8 +29,11 @@
           />
         </button>
       </div>
-      <div>
-        <div class="text-lg">{{ title }}</div>
+      <div class="flex items-center">
+        <div>
+          <van-image round width="3rem" height="3rem" :src="img" />
+        </div>
+        <div class="text-lg ml-3">{{ title }}</div>
       </div>
       <div>
         <!-- 分享 -->
@@ -72,7 +75,7 @@ const props = defineProps({
 let data = ref();
 let COMPS = ref();
 let title = ref("");
-
+let img = ref("");
 /**添加组件 */
 const pushComponents = (components: any) => {
   return defineAsyncComponent(
@@ -98,6 +101,7 @@ const fetch = async () => {
   data.value = res;
   COMPS.value = res.components;
   title.value = data.value.title;
+  img.value = data.value.images;
 };
 onMounted(() => {
   fetch();

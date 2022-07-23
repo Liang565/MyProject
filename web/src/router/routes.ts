@@ -12,8 +12,27 @@ export const routes = [
       {
         path: "/recommend",
         meta: { title: "推荐", key: "recommend", icon: "fire-o", Nav: true },
-
         component: () => import("../views/recommend/recommend.vue"),
+        children: [
+          {
+            path: "/recommend",
+            meta: {
+              title: "商品推荐",
+              key: "hotGoods",
+              hot: true,
+            },
+            component: () => import("../views/recommend/hotGoods.vue"),
+          },
+          {
+            path: "/hotShops",
+            meta: {
+              title: "商铺推荐",
+              key: "hotShops",
+              hot: true,
+            },
+            component: () => import("../views/recommend/hotShops.vue"),
+          },
+        ],
       },
       {
         path: "/cart",

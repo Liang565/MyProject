@@ -1,9 +1,16 @@
 <template>
   <div>
-    <div>
-      <van-tabs v-model:active="active" swipeable>
-        <van-tab title="热门推荐"> 热门推荐 </van-tab>
-        <van-tab title="店铺推荐"> 店铺推荐 </van-tab>
+    <div class="h-full">
+      <van-tabs v-model:active="active" swipeable @change="change">
+        <van-tab
+          v-for="index in routerMap"
+          :title="index.title"
+          :name="index.path"
+        >
+          <div>
+            <router-view></router-view>
+          </div>
+        </van-tab>
       </van-tabs>
     </div>
   </div>
@@ -11,5 +18,23 @@
 <script setup lang="ts">
 import { ActionBar, ActionBarIcon, ActionBarButton } from "vant";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
 let active = ref("");
+const change = () => {
+  console.log(active);
+  router.push(active.value);
+};
+const routerMap = router
+  .getRoutes()
+  .map((v) => ({
+    title: <string>v.meta.title,
+    icon: v.meta.icon,
+    key: v.meta.key,
+    path: v.path,
+    meta: v.meta,
+  }))
+  .filter((v: any) => {
+    return v.meta.hot;
+  });
 </script>

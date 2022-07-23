@@ -27,4 +27,7 @@ export class Components {
   @prop()
   @ApiProperty({ description: '标题' })
   title: string;
+  @prop({ default: {} })
+  @ApiProperty({ description: '类型' })
+  key: string;
 }
