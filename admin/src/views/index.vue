@@ -166,13 +166,13 @@ onMounted(() => {
   }
   getUser();
   //设置全局的用户名
-  SelectedKeys.value[0] = <never>router.currentRoute.value.href; //获取当前页面路由
+  SelectedKeys.value[0] = <never>router.currentRoute.value?.href; //获取当前页面路由
 
   //展开的导航栏根据不同用户而不同
   if (localStorage.getItem("role") == "user") {
     OpenKeys.value = ["home", "shoper"];
   } else {
-    OpenKeys.value = ["home", "management"];
+    OpenKeys.value = ["home", "web", "management"];
   }
 });
 let collapsed = ref(false);

@@ -74,40 +74,39 @@
     </div>
     <div class="m-2 pb-11">
       <van-checkbox-group v-model="checked" ref="checkboxGroup">
-        <div v-for="i in data" class="flex justify-center">
+        <div v-for="i in data" class="flex justify-center mb-2">
           <van-checkbox :name="i.object._id" class="pr-3" v-if="showEdit" />
-          <div class="w-90vw mb-2">
-            <van-swipe-cell>
-              <van-card
-                :price="i.object.price"
-                :desc="i.object._id"
-                :thumb="i.object.image[0].url"
-                @click="goGoods(i.object)"
-              >
-                <template #title>
-                  <div class="text-xl">
-                    {{ i.object.commodityName }}
-                  </div>
-                </template>
-                <template #footer>
-                  <div>
-                    库存：
-                    <span v-if="i.object.commodityNum < 10">低~</span>
-                    <span v-else>充足</span>
-                  </div>
-                </template>
-              </van-card>
-              <template #right>
-                <van-button
-                  square
-                  text="删除"
-                  type="danger"
-                  class="delete-button"
-                  @click="removeCollect(i.object._id)"
-                />
+
+          <van-swipe-cell class="w-90vw rounded-lg">
+            <van-card
+              :price="i.object.price"
+              :desc="i.object._id"
+              :thumb="i.object.image[0].url"
+              @click="goGoods(i.object)"
+            >
+              <template #title>
+                <div class="text-xl">
+                  {{ i.object.commodityName }}
+                </div>
               </template>
-            </van-swipe-cell>
-          </div>
+              <template #footer>
+                <div>
+                  库存：
+                  <span v-if="i.object.commodityNum < 10">低~</span>
+                  <span v-else>充足</span>
+                </div>
+              </template>
+            </van-card>
+            <template #right>
+              <van-button
+                square
+                text="删除"
+                type="danger"
+                class="delete-button"
+                @click="removeCollect(i.object._id)"
+              />
+            </template>
+          </van-swipe-cell>
         </div>
       </van-checkbox-group>
     </div>

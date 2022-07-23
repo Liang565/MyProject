@@ -1,4 +1,5 @@
 import { Action } from './models/action.model';
+import { buildHome } from './models/buildHome.model';
 import { Commodity } from './models/commodity.model';
 import { CommodityClass } from './models/commodityClass.model';
 import { Components } from './models/components.model';
@@ -21,4 +22,5 @@ export const models = [
   UserInfo,
   Action,
   Components,
+  buildHome,
 ];

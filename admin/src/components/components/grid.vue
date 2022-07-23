@@ -17,7 +17,7 @@
         <van-image :src="item.image" fit="contain" />
         <div class="price">
           <div>{{ item.title }}</div>
-          <div>{{ item.price }}</div>
+          <div>￥{{ item.price }}</div>
         </div>
       </GridItem>
       <!-- 图片 -->
@@ -124,11 +124,11 @@
 </template>
 
 <script setup lang="ts">
-import IconPark from "../../../components/icon.vue";
+import IconPark from "../icon.vue";
 import { Grid, GridItem, Slider, Toast, Stepper } from "vant";
 import { defineProps, onMounted, ref, watch } from "vue";
 import type { SelectProps } from "ant-design-vue";
-import upload from "../../../components/upload.vue";
+import upload from "../upload.vue";
 
 let activeKey = ref("1");
 const prop = defineProps({
@@ -205,7 +205,7 @@ if (prop.goods !== []) {
   optionsGoods.value = prop.goods.map((v) => ({
     label: v.commodityName,
     value: v._id,
-    Img: v.image[0].url,
+    Img: v.image[0]?.url,
     price: v.price,
   }));
 }

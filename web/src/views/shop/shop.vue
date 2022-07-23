@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="flex justify-evenly">
-      <div class="translate-y-1/4">
+    <div class="flex justify-between items-center m-2">
+      <div>
         <!-- 返回前一个页面 -->
-        <button @click="goBack">
+        <button @click="goBack" class="mx-2">
           <icon-park
             type="back"
             theme="outline"
@@ -15,8 +15,6 @@
             :strokeWidth="2"
           />
         </button>
-      </div>
-      <div class="translate-y-1/4">
         <!-- 返回首页 -->
         <button @click="goHome">
           <icon-park
@@ -32,27 +30,9 @@
         </button>
       </div>
       <div>
-        <!-- 点击进去后是一个搜索页 -->
-        <button @click="goSearch">
-          <van-search shape="round" placeholder="请输入搜索关键词" />
-        </button>
+        <div class="text-lg">{{ title }}</div>
       </div>
-      <div class="translate-y-1/4">
-        <!-- 跳转到购物车 -->
-        <button @click="goCart">
-          <icon-park
-            type="shopping"
-            theme="outline"
-            size="24"
-            :spin="false"
-            fill="#000000"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            :strokeWidth="2"
-          />
-        </button>
-      </div>
-      <div class="translate-y-1/4">
+      <div>
         <!-- 分享 -->
         <button @click="share">
           <icon-park
@@ -91,19 +71,15 @@ const props = defineProps({
 });
 let data = ref();
 let COMPS = ref();
-let token = localStorage.getItem("token");
+let title = ref("");
+
 /**添加组件 */
 const pushComponents = (components: any) => {
-  return defineAsyncComponent(() => import(`./components/${components}.vue`));
+  return defineAsyncComponent(
+    () => import(`../../components/components/${components}.vue`)
+  );
 };
 const router = useRouter();
-
-const goSearch = () => {
-  // 这里要跳转到搜索页
-  console.log("点击搜索条");
-
-  router.push("/search");
-};
 
 const share = () => {
   // 这里展示分享页面
@@ -115,21 +91,13 @@ const goBack = () => {
 const goHome = () => {
   router.push("/");
 };
-const goCart = () => {
-  // 这里要跳转到购物车
-  if (token) {
-    router.push("/cart1");
-  } else {
-    Toast.fail("当前身份为游客，请登录！");
-  }
-};
 
 const fetch = async () => {
   const res = await http.get(`shops/${props.id}`);
   console.log(res.components);
-
   data.value = res;
   COMPS.value = res.components;
+  title.value = data.value.title;
 };
 onMounted(() => {
   fetch();

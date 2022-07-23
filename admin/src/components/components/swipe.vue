@@ -99,7 +99,7 @@
 <script setup lang="ts">
 import { Swipe, SwipeItem, Stepper, Image } from "vant";
 import { ref } from "vue";
-import upload from "../../../components/upload.vue";
+import upload from "../upload.vue";
 let activeKey = ref("1");
 
 const prop = defineProps({

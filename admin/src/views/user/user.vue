@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div class="text-2xl">用户管理</div>
     <div>
       <div class="my-2">
         <a-button @click="addUser" type="primary">新增用户</a-button>

@@ -13,12 +13,58 @@ export const routes = [
       {
         path: "/",
         meta: {
-          title: "首页搭建",
+          title: "首页",
           isMenu: true,
           promiss: "public",
           icon: "home-two",
         },
         component: () => import("../views/home/home.vue"),
+      },
+    ],
+  },
+  {
+    path: "/",
+    meta: {
+      title: "移动端管理",
+      key: "web",
+      Menu: true,
+      promiss: "admin",
+      icon: "spanner",
+    },
+    component: () => import("../views/index.vue"),
+    children: [
+      {
+        path: "/buildHome",
+        meta: {
+          title: "首页搭建",
+          isMenu: true,
+          promiss: "admin",
+
+          icon: "spanner",
+        },
+        component: () => import("../views/webManage/buildHome.vue"),
+      },
+      {
+        path: "/buildHotGoods",
+        meta: {
+          title: "推荐商品搭建",
+          isMenu: true,
+          promiss: "admin",
+
+          icon: "endocrine",
+        },
+        component: () => import("../views/webManage/buildHotGoods.vue"),
+      },
+      {
+        path: "/buildHotShop",
+        meta: {
+          title: "推荐商铺搭建",
+          isMenu: true,
+          promiss: "admin",
+
+          icon: "booth",
+        },
+        component: () => import("../views/webManage/buildHotShop.vue"),
       },
     ],
   },

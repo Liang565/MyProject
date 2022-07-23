@@ -56,10 +56,10 @@
       </div>
     </div>
 
-    <div class="m-4 pb-11">
+    <div class="pb-11">
       <van-checkbox-group v-model="checked" ref="checkboxGroup">
-        <van-checkbox :name="i._id" v-for="i in data">
-          <div class="w-80vw mb-2">
+        <div v-for="i in data" class="flex mb-3 justify-center">
+          <van-checkbox :name="i._id" class="px-5 bg-gray-50 rounded-lg">
             <van-swipe-cell>
               <van-card
                 :num="i.goodsNum"
@@ -69,7 +69,9 @@
                 @click="goGoods(i.commodity)"
               >
                 <template #title>
-                  <div class="text-xl">
+                  <div
+                    class="text-xl w-40 overflow-hidden text-ellipsis whitespace-nowrap"
+                  >
                     {{ i.commodity.commodityName }}
                   </div>
                 </template>
@@ -100,8 +102,8 @@
                 />
               </template>
             </van-swipe-cell>
-          </div>
-        </van-checkbox>
+          </van-checkbox>
+        </div>
       </van-checkbox-group>
     </div>
     <!-- <div

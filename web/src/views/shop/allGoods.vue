@@ -4,7 +4,7 @@
       <div>
         <!-- 返回前一个页面 -->
         <!-- <button @click="$router.go(-1)"> -->
-        <button @click="goBack" class="mx-2">
+        <button @click="goBack">
           <icon-park
             type="back"
             theme="outline"
@@ -16,7 +16,8 @@
             :strokeWidth="2"
           />
         </button>
-
+      </div>
+      <div class="ml-2">
         <!-- 返回首页 -->
         <button @click="goHome">
           <icon-park
@@ -157,25 +158,38 @@ import { Card, Grid, GridItem, Toast } from "vant";
 import myimage from "../../components/myimage.vue";
 import { useRoute, useRouter } from "vue-router";
 import { Curd } from "../../util/api/curd";
-import { Empty } from "@icon-park/vue-next/es/map";
 
 const { search, data, query, goGoods } = Curd("commoditys");
+const props = defineProps({
+  id: String,
+});
 //搜索关键词
 let SearchModel = ref();
 //搜索方法
 const goSearch = async () => {
   if (SearchModel.value == "" || !SearchModel.value) {
-    data.value = null;
     Toast.fail("请输入关键词");
+    query.value.where = {
+      shop: props.id,
+    };
+    search();
   } else {
     //$regex:模糊搜索
-    query.value.where = { commodityName: { $regex: SearchModel.value } };
+    query.value.where = {
+      commodityName: { $regex: SearchModel.value },
+      shop: props.id,
+    };
     search();
   }
 };
+
 //清空搜索框
+const clearModel = ref();
 const clearSearch = () => {
-  data.value = [];
+  query.value.where = {
+    shop: props.id,
+  };
+  search();
 };
 //改变搜索的视图
 let upright = ref(true);
@@ -201,6 +215,8 @@ onMounted(() => {
     const a = <any>useRoute().query.query1;
     query.value = JSON.parse(a);
     search();
+  } else {
+    goSearch();
   }
   //搜索结果的展示方法
   const item = sessionStorage.getItem("upright");

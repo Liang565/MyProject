@@ -13,6 +13,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { PromissModule } from './promiss/promiss.module';
 import { ComponentsController } from './components/components.controller';
 import { ComponentsModule } from './components/components.module';
+import { BuildHomeModule } from './build-home/build-home.module';
 const MAO = require('multer-aliyun-oss');
 @Module({
   imports: [
@@ -44,6 +45,7 @@ const MAO = require('multer-aliyun-oss');
     OrdersModule,
     PromissModule,
     ComponentsModule,
+    BuildHomeModule,
   ],
   controllers: [AdminController, ComponentsController],
   providers: [AdminService],

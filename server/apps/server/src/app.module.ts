@@ -17,6 +17,7 @@ import { ActionController } from './action/action.controller';
 import { ActionService } from './action/action.service';
 import { UserInfoController } from './user-info/user-info.controller';
 import { UserInfoModule } from './user-info/user-info.module';
+import { BuildHomeModule } from './build-home/build-home.module';
 const MAO = require('multer-aliyun-oss');
 @Module({
   imports: [
@@ -49,6 +50,7 @@ const MAO = require('multer-aliyun-oss');
     ShoppingCartModule,
     ActionModule,
     UserInfoModule,
+    BuildHomeModule,
   ],
   controllers: [AppController, ShoppingCartController],
   providers: [AppService, ActionService],

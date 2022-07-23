@@ -10,46 +10,43 @@
         />
       </form>
     </div>
-    <div>
-      <!-- 轮播图 -->
-      <div>
-        <!-- <van-swipe :autoplay="3000" lazy-render>
-          <van-swipe-item v-for="image in data" :key="image">
-            <myimage :src="image.image" />
-
-            {{ image.image[0].url }}
-          </van-swipe-item>
-        </van-swipe> -->
-      </div>
-      <!-- 推荐 随机抽取 -->
-      <div></div>
-      <div>
-        <!-- 商品随机抽取 -->
-
-        <van-grid direction="horizontal" :column-num="2">
-          <van-grid-item v-for="i in data">
-            <myimage :src="i.image" />
-          </van-grid-item>
-        </van-grid>
+    <div class="mb-20">
+      <div v-for="i in COMPS">
+        <component
+          :is="pushComponents(i.name)"
+          :option="i.option"
+          :content="i.content"
+        />
       </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
 import { useRouter } from "vue-router";
-import { Grid, Swipe } from "vant";
-import { Curd } from "../../util/api/curd";
-import { onMounted, ref } from "vue";
-import myimage from "../../components/myimage.vue";
+import { http } from "../../util/http";
+import { defineAsyncComponent, onMounted, ref } from "vue";
+let COMPS = ref();
+let data = ref();
+
 //轮播图，存入商品对象
-const { fetch, search, data, query, goGoods, total } = Curd("commoditys");
 const router = useRouter();
 const goSearch = () => {
   // 这里要跳转到搜索页
   console.log("点击搜索条");
   router.push("/search");
 };
-
+/**添加组件 */
+const pushComponents = (components: any) => {
+  return defineAsyncComponent(
+    () => import(`../../components/components/${components}.vue`)
+  );
+};
+const fetch = async () => {
+  const res = await http.post("build-home/findone", { name: "首页" });
+  console.log(res);
+  data.value = res;
+  COMPS.value = res.components;
+};
 onMounted(() => {
   fetch();
 });

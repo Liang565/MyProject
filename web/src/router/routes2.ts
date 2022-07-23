@@ -11,12 +11,37 @@ export const routes2 = [
   {
     path: "/shop/:id",
     meta: {
-      title: "商铺",
-      key: "shop",
+      title: "店铺索引",
+      key: "shopIndex",
     },
-    component: () => import("../views/shop/shop.vue"),
+    component: () => import("../views/shop/index.vue"),
     props: true,
+    children: [
+      {
+        path: "/shop/:id",
+        meta: {
+          title: "商铺首页",
+          key: "shop",
+          icon: "home-o",
+          shop: true,
+        },
+        component: () => import("../views/shop/shop.vue"),
+        props: true,
+      },
+      {
+        path: "/allGoods/:id",
+        meta: {
+          title: "所有商品",
+          key: "allGoods",
+          icon: "gift-o",
+          shop: true,
+        },
+        component: () => import("../views/shop/allGoods.vue"),
+        props: true,
+      },
+    ],
   },
+
   {
     path: "/search",
     meta: {
