@@ -99,7 +99,7 @@ const fetchComponents = async () => {
       query: {
         limit: 999,
         where: {
-          key: "user",
+          key: "public",
         },
       },
     },

@@ -2,10 +2,10 @@
   <div>
     <div
       v-for="item in content.menu"
-      class="flex items-center justify-center w-full my-2"
+      class="flex items-center justify-center my-2 mx-5"
     >
       <div
-        class="flex justify-between bg-pink-100 h-20 w-3/4 rounded-2xl"
+        class="flex justify-between bg-pink-100 h-20 w-full rounded-2xl"
         @click="goShop(item.id)"
       >
         <div class="flex items-center ml-3">

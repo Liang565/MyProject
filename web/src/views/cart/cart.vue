@@ -57,9 +57,17 @@
     </div>
 
     <div class="pb-11">
-      <van-checkbox-group v-model="checked" ref="checkboxGroup">
-        <div v-for="i in data" class="flex mb-3 justify-center">
-          <van-checkbox :name="i._id" class="px-5 bg-gray-50 rounded-lg">
+      <van-checkbox-group
+        v-model="checked"
+        ref="checkboxGroup"
+        class="flex justify-center"
+      >
+        <div class="w-90vw">
+          <van-checkbox
+            :name="i._id"
+            v-for="i in data"
+            class="bg-gray-50 rounded-lg flex justify-between mb-3"
+          >
             <van-swipe-cell>
               <van-card
                 :num="i.goodsNum"
@@ -274,6 +282,7 @@ let buttom2 =
 
 let thisUser = localStorage.getItem("userid");
 let showDialog = ref(false);
+
 onMounted(() => {
   if (token) {
     query.value.where = { user: thisUser };

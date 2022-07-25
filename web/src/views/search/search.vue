@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flex justify-between items-center mx-2">
-      <div>
+      <div class="flex">
         <!-- 返回前一个页面 -->
         <!-- <button @click="$router.go(-1)"> -->
         <button @click="goBack" class="mx-2">
