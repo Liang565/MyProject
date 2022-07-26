@@ -2,10 +2,10 @@
   <div>
     <div>
       <div class="my-2">
-        <a-button @click="addCom" type="primary">新增组件</a-button>
+        <a-button @click="addCom" type="primary">新增配置</a-button>
       </div>
       <div>
-        <a-alert message="修改组件title或者删除组件可能会使页面出错！" banner />
+        <a-alert message="不可随意修改配置名称！" banner />
       </div>
       <div class="h-70vh overflow-y-auto">
         <a-table
@@ -29,21 +29,6 @@
             width="20%"
           />
           <a-table-column
-            title="title"
-            dataIndex="title"
-            key="title"
-            align="center"
-            width="10%"
-          />
-
-          <a-table-column
-            title="key"
-            dataIndex="key"
-            key="key"
-            align="center"
-            width="10%"
-          />
-          <a-table-column
             key="setting"
             title="setting"
             align="center"
@@ -53,10 +38,6 @@
               <div class="flex justify-center">
                 <a-button @click="editCom(record)" type="link">修改</a-button>
                 <!-- 修改用户 -->
-
-                <a-button @click="remove(record, record.name)" type="link"
-                  >删除</a-button
-                >
               </div>
             </template>
           </a-table-column>
@@ -67,24 +48,14 @@
     <div>
       <a-modal
         v-model:visible="viss.add"
-        title="新增组件"
-        @ok="addOk(newModel)"
+        title="新增"
+        @ok="addOk(newModel, addUrl)"
         :afterClose="cancelModel"
         :centered="true"
       >
         <a-form :model="newModel">
-          <a-form-item label="组件name" name="name">
+          <a-form-item label="配置name" name="name">
             <a-input v-model:value="newModel.name"> </a-input>
-          </a-form-item>
-
-          <a-form-item label="组件title" name="title">
-            <a-input v-model:value="newModel.title"> </a-input>
-          </a-form-item>
-          <a-form-item label="key">
-            <a-radio-group v-model:value="newModel.key">
-              <a-radio-button value="admin">admin</a-radio-button>
-              <a-radio-button value="public">public</a-radio-button>
-            </a-radio-group>
           </a-form-item>
         </a-form>
       </a-modal>
@@ -94,24 +65,14 @@
     <div>
       <a-modal
         v-model:visible="viss.edit"
-        title="修改组件"
+        title="修改"
         @ok="editOk1(editId, newModel)"
         :afterClose="cancelModel"
         :centered="true"
       >
         <a-form :model="newModel">
-          <a-form-item label="组件name" name="name">
+          <a-form-item label="配置name" name="name">
             <a-input v-model:value="newModel.name"> </a-input>
-          </a-form-item>
-
-          <a-form-item label="组件title" name="title">
-            <a-input v-model:value="newModel.title"> </a-input>
-          </a-form-item>
-          <a-form-item label="key">
-            <a-radio-group v-model:value="newModel.key">
-              <a-radio-button value="admin">admin</a-radio-button>
-              <a-radio-button value="public">public</a-radio-button>
-            </a-radio-group>
           </a-form-item>
         </a-form>
       </a-modal>
@@ -134,7 +95,9 @@ const {
   search,
   pagination,
   pageChange,
-} = CrudTest("components");
+} = CrudTest("build-home");
+let addUrl = ref("create");
+
 //新增组件
 const addCom = () => {
   viss.value.add = true;
@@ -143,8 +106,6 @@ let editId = ref("");
 const editCom = (temp) => {
   viss.value.edit = true;
   newModel.value.name = temp.name;
-  newModel.value.title = temp.title;
-  newModel.value.key = temp.key;
   editId.value = temp._id;
 };
 
@@ -158,15 +119,11 @@ const editOk1 = (editId, model) => {
 };
 let newModel = ref({
   name: "",
-  title: "",
-  key: "public",
 });
 
 const resetModel = () => {
   newModel.value = {
     name: "",
-    title: "",
-    key: "public",
   };
   editId.value = "";
 };
@@ -174,6 +131,7 @@ const cancelModel = () => {
   resetModel();
   console.log("cancel");
 };
+
 onMounted(() => {
   fetch();
 });

@@ -76,6 +76,16 @@ export const routes = [
         },
         component: () => import("../views/webManage/components.vue"),
       },
+      {
+        path: "/webConfig",
+        meta: {
+          title: "移动端配置管理",
+          isMenu: true,
+          promiss: "admin",
+          icon: "booth",
+        },
+        component: () => import("../views/webManage/webConfig.vue"),
+      },
     ],
   },
   {
