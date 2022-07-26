@@ -17,11 +17,11 @@ import { UsersService } from './users.service';
 
 @Crud({
   model: User,
-  routes: {
-    find: {
-      sort: { _id: -1 },
-    },
-  },
+  // routes: {
+  //   find: {
+  //     sort: { _id: -1 },
+  //   },
+  // },
 })
 @Controller('users')
 @ApiTags('用户')
