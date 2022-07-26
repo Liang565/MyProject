@@ -374,7 +374,6 @@ where.value = {
   _id: "",
   username: "",
 };
-
 let promiss = ref<any>([]);
 const fetchPromiss = async () => {
   const res: any = await api.promiss.find();
@@ -387,9 +386,12 @@ const fetchPromiss = async () => {
 //admin一键登录
 const adminLogin = async (temp) => {
   console.log("一键登录");
-  localStorage.setItem("adminId", localStorage.getItem("userid"));
-  localStorage.setItem("adminname", localStorage.getItem("username"));
-  localStorage.setItem("adminrole", localStorage.getItem("role"));
+  let uId = localStorage.getItem("userid");
+  let uName = localStorage.getItem("username");
+  let rO = localStorage.getItem("role");
+  localStorage.setItem("adminId", uId != null ? uId : "");
+  localStorage.setItem("adminname", uName != null ? uName : "");
+  localStorage.setItem("adminrole", rO != null ? rO : "");
   localStorage.setItem("userid", temp._id);
   localStorage.setItem("role", temp.role);
   localStorage.setItem("username", temp.username);

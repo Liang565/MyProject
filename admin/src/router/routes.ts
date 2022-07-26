@@ -66,6 +66,16 @@ export const routes = [
         },
         component: () => import("../views/webManage/buildHotShop.vue"),
       },
+      {
+        path: "/components",
+        meta: {
+          title: "组件管理",
+          isMenu: true,
+          promiss: "admin",
+          icon: "booth",
+        },
+        component: () => import("../views/webManage/components.vue"),
+      },
     ],
   },
   {
