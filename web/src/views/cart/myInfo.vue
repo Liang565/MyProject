@@ -3,21 +3,7 @@
     <div class="bg-gray-100 p-0 w-100vw h-100vh">
       <div class="flex justify-between items-center pt-2">
         <div class="mr-5 ml-2 flex justify-between items-center">
-          <div>
-            <!-- 返回前一个页面 -->
-            <button @click="$router.go(-1)">
-              <icon-park
-                type="back"
-                theme="outline"
-                size="24"
-                :spin="false"
-                fill="#000000"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                :strokeWidth="2"
-              />
-            </button>
-          </div>
+          <div></div>
         </div>
         <div class="pl-3">我的收货地址</div>
         <!-- 编辑 -->
@@ -41,7 +27,7 @@
       <!-- 数据主体 -->
       <div class="rounded flex justify-center pb-20">
         <div class="w-full">
-          <div v-for="i in data" class="py-1">
+          <div v-for="i in data" class="py-1" @click="selectInfo(i)">
             <van-cell-group inset>
               <van-cell>
                 <template #title>
@@ -62,7 +48,7 @@
                   </div>
                 </template>
                 <template #right-icon>
-                  <button @click="editInfo(i)">
+                  <button @click.stop="editInfo(i)">
                     <icon-park
                       type="edit"
                       theme="outline"
@@ -81,7 +67,7 @@
                 <div class="flex justify-between items-center">
                   <div class="flex items-center">
                     <div>
-                      <button @click="setDefault(i._id)">
+                      <button @click.stop="setDefault(i._id)">
                         <icon-park
                           type="round"
                           theme="outline"
@@ -97,7 +83,7 @@
                     <div class="text-sm">默认地址</div>
                   </div>
                   <div>
-                    <button @click="deleteAdress(i._id)">
+                    <button @click.stop="deleteAdress(i._id)">
                       <div class="text-sm">删除</div>
                     </button>
                   </div>
@@ -146,15 +132,19 @@
   </div>
 </template>
 <script setup lang="ts">
-import { Curd } from "../../../util/api/curd";
-import { http } from "../../../util//http";
+import { Curd } from "../../util/api/curd";
+import { http } from "../../util//http";
 import type { AnyTypeAnnotation } from "@babel/types";
 import { Button, AddressList, Toast, Dialog, Cell, CellGroup } from "vant";
 import { onMounted, ref } from "vue";
-import iconPark from "../../../components/iconPark.vue";
+import iconPark from "../../components/iconPark.vue";
 import AddressEdit from "./myInfo/addressEdit.vue";
-
-// const { fetch, data } = Curd("user-info");
+//选择地址
+const emit = defineEmits(["selectMyInfo"]);
+const selectInfo = (temp: any) => {
+  Toast.success("选择成功~");
+  emit("selectMyInfo", temp);
+};
 let data = <any>ref([]);
 const fetch = async () => {
   const res = await http.post("user-info/find");

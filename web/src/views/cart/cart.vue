@@ -56,7 +56,7 @@
       </div>
     </div>
 
-    <div class="pb-11">
+    <div class="pb-28">
       <van-checkbox-group
         v-model="checked"
         ref="checkboxGroup"
@@ -72,7 +72,6 @@
               <van-card
                 :num="i.goodsNum"
                 :price="i.goodsNum * i.commodity.price"
-                :desc="i.commodity._id"
                 :thumb="i.commodity.image[0].url"
                 @click="goGoods(i.commodity)"
               >
@@ -81,6 +80,13 @@
                     class="text-xl w-40 overflow-hidden text-ellipsis whitespace-nowrap"
                   >
                     {{ i.commodity.commodityName }}
+                  </div>
+                </template>
+                <template #desc>
+                  <div
+                    class="w-40 overflow-hidden text-ellipsis whitespace-nowrap"
+                  >
+                    {{ i.commodity.commodityIntroduce }}
                   </div>
                 </template>
                 <!-- @click.stop() 阻止事件冒泡 -->
@@ -155,7 +161,7 @@
           <span class="text-xl text-red-500">{{ TotalAmount }}</span>
         </div>
         <div class="ml-3">
-          <van-button round type="primary">结算</van-button>
+          <van-button round type="primary" @click="settlement">结算</van-button>
         </div>
       </div>
       <div class="flex items-center" v-if="!isEditCart">
@@ -248,25 +254,34 @@ const editCart = () => {
   }
 };
 
-//复选
+//复选,选中的商品数组
 let checked = ref([]);
 let isCheckAll = ref(false);
 const checkboxGroup = ref();
 let TotalAmount = ref(0); //总金额
+let orderModel = ref([]);
+let buttom1 =
+  "flex justify-between items-center pl-3 p-3 w-full fixed bottom-12 bg-white";
+let buttom2 =
+  "flex justify-between items-center pl-3 p-3 w-full fixed bottom-0 bg-white";
+
+let thisUser = localStorage.getItem("userid");
+let showDialog = ref(false);
 // 全选
 const toggleAll = () => {
-  if (token) {
-    isCheckAll.value = !isCheckAll.value;
-    checkboxGroup.value.toggleAll(isCheckAll.value);
-  } else {
+  if (!token) {
     Toast.fail("当前身份为游客，请登录！");
+    return;
   }
+  isCheckAll.value = !isCheckAll.value;
+  checkboxGroup.value.toggleAll(isCheckAll.value);
 };
 //监听器，监听checked的变化从而更改结算价格的变化
 watch(checked, (newValue, oldValue) => {
   totalSum(checked.value).then((tt) => {
     //返回值是个promise
-    TotalAmount.value = tt;
+    TotalAmount.value = tt.totalSum;
+    orderModel.value = tt.goodsOrder;
   });
   //改变全选图标
   if (checked.value.length == data.value.length) {
@@ -275,14 +290,22 @@ watch(checked, (newValue, oldValue) => {
     isCheckAll.value = false;
   }
 });
-let buttom1 =
-  "flex justify-between items-center pl-3 p-3 w-full fixed bottom-12 bg-white";
-let buttom2 =
-  "flex justify-between items-center pl-3 p-3 w-full fixed bottom-0 bg-white";
 
-let thisUser = localStorage.getItem("userid");
-let showDialog = ref(false);
-
+//结算
+const settlement = () => {
+  if (!token) {
+    Toast.fail("当前身份为游客，请登录！");
+    return;
+  }
+  //userid,model,
+  router.push(
+    `settlement/${JSON.stringify({
+      model: orderModel.value,
+      total: TotalAmount.value,
+    })}`
+  );
+  console.log(orderModel.value);
+};
 onMounted(() => {
   if (token) {
     query.value.where = { user: thisUser };

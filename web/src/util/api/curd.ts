@@ -50,12 +50,25 @@ export const Curd = (url: string) => {
   //计算总金额
   const totalSum = async (temp: any) => {
     let totalSum = 0;
+    let goodsOrder = <any>[];
     for (let i in temp) {
+      //返回购物车信息
       const res = await http.put(`/${url}/${temp[i]}`);
+      //res.goodsNum当前商品的数量
+      //res.commodity商品id
+      //返回商品信息
       const good = await http.put(`commoditys/${res.commodity}`);
+      console.log(good);
+      goodsOrder.push({
+        goodsNum: res.goodsNum, //数量
+        commodity: res.commodity, //商品id
+        // price: good.price, //商品单价
+        // totalMoney: res.goodsNum * good.price, //价格
+      });
       totalSum = totalSum + res.goodsNum * good.price;
     }
-    return totalSum;
+    console.log(goodsOrder);
+    return { totalSum, goodsOrder };
   };
 
   //删除

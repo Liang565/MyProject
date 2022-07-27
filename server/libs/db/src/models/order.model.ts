@@ -8,6 +8,7 @@ import {
 import { Commodity } from './commodity.model';
 
 import { User } from './user.model';
+import { UserInfo } from './userInfo.model';
 
 @modelOptions({
   schemaOptions: {
@@ -23,22 +24,19 @@ export class Order {
   @ApiProperty({ description: '绑定商品' })
   @prop({ ref: 'Commodity' })
   commodity: Ref<Commodity>;
-
+  //绑定收货人信息
+  @ApiProperty({ description: '收货人信息' })
+  @prop({ ref: 'UserInfo' })
+  userInfo: Ref<UserInfo>;
   @ApiProperty({ description: '订单数量' })
   @prop()
   goodsNum: number;
+  @ApiProperty({ description: '金额' })
+  @prop()
+  money: string;
   @ApiProperty({ description: '发货地址' })
   @prop()
   goodsAddress: string;
-  @ApiProperty({ description: '收货地址' })
-  @prop()
-  consigneeAddress: string;
-  @ApiProperty({ description: '收货人姓名' })
-  @prop()
-  consigneeName: string;
-  @ApiProperty({ description: '收货人联系电话' })
-  @prop()
-  consigneeTel: string;
   @ApiProperty({ description: '备注' })
   @prop()
   remarks: string;

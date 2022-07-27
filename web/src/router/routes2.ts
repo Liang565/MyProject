@@ -65,4 +65,10 @@ export const routes2 = [
     meta: { title: "地址管理", key: "myInfo" },
     component: () => import("../views/my/manage/myInfo.vue"),
   },
+  {
+    path: "/settlement/:model",
+    meta: { title: "结算页", key: "settlement" },
+    component: () => import("../views/cart/settlement.vue"),
+    props: true,
+  },
 ];
