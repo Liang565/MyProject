@@ -22,7 +22,7 @@ const pushComponents = (components: any) => {
 };
 const fetch = async () => {
   const res = await http.post("build-home/findone", { name: "商品推荐" });
-  console.log(res);
+
   data.value = res;
   COMPS.value = res.components;
 };

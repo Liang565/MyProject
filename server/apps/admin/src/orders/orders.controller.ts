@@ -7,6 +7,12 @@ import { InjectModel } from 'nestjs-typegoose-next';
 
 @Crud({
   model: Order,
+  routes: {
+    //查询绑定的其他表
+    find: {
+      populate: ['user', 'commodity', 'userInfo'], //
+    },
+  },
 })
 @Controller('orders')
 @ApiTags('订单管理')

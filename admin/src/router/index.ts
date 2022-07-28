@@ -21,8 +21,7 @@ router.beforeEach((to, from, next) => {
     //判断页面权限和当前登录权限是否一致
     if (
       to.meta.promiss !== "public" &&
-      to.meta.promiss !== localStorage.getItem("role") &&
-      localStorage.getItem("role") !== "admin"
+      to.meta.promiss !== localStorage.getItem("role")
     ) {
       message.warn("没有权限进入" + to.meta.title);
       if (from.path === "/") {

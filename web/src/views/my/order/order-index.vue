@@ -6,13 +6,6 @@
       left-arrow
       @click-left="$router.go(-1)"
     />
-    <!-- 顶部 -->
-    <div class="flex">
-      <div></div>
-      <div>
-        <van-search v-model="value" placeholder="请输入搜索关键词" />
-      </div>
-    </div>
 
     <div>
       <van-tabs v-model:active="active" swipeable @change="change">
@@ -22,23 +15,18 @@
           :name="index.path"
         >
           <div>
+            <!-- 整个组件 -->
             <router-view></router-view>
           </div>
-          <div>asjajd</div>
         </van-tab>
       </van-tabs>
     </div>
   </div>
-  <div>
-    {{ routerMap }}
-  </div>
-  <div>
-    {{ active }}
-  </div>
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
-import router from "../../../router";
+import { useRouter } from "vue-router";
+const router = useRouter();
 let value = ref("");
 let active = ref("");
 const change = () => {

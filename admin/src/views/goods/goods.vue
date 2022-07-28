@@ -284,6 +284,18 @@ const setOptionsShop = async () => {
   const res: Array<any> = await http.post(
     `/commoditys/Goods/${localStorage.userid}`
   );
+  console.log(res);
+  // const res =await http.get("shops",
+  // {
+  //     params: {
+  //       //展示条件
+  //       query: {
+  //         where:{
+  //           user:localStorage.userid
+  //         }
+  //       },
+  //     },
+  //   });
   //如果没有商铺会提示无商铺
   if (res.length === 0) {
     if (Role === "admin") {

@@ -297,6 +297,10 @@ const settlement = () => {
     Toast.fail("当前身份为游客，请登录！");
     return;
   }
+  if (checked.value.length === 0) {
+    Toast.fail("没有选择商品~");
+    return;
+  }
   //userid,model,
   router.push(
     `settlement/${JSON.stringify({
@@ -304,7 +308,6 @@ const settlement = () => {
       total: TotalAmount.value,
     })}`
   );
-  console.log(orderModel.value);
 };
 onMounted(() => {
   if (token) {

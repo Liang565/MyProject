@@ -1,10 +1,12 @@
 <template>
-  <div v-for="i in COMPS">
-    <component
-      :is="pushComponents(i.name)"
-      :option="i.option"
-      :content="i.content"
-    />
+  <div class="h-100vh">
+    <div v-for="i in COMPS">
+      <component
+        :is="pushComponents(i.name)"
+        :option="i.option"
+        :content="i.content"
+      />
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -22,7 +24,7 @@ const pushComponents = (components: any) => {
 };
 const fetch = async () => {
   const res = await http.post("build-home/findone", { name: "商铺推荐" });
-  console.log(res);
+
   data.value = res;
   COMPS.value = res.components;
 };

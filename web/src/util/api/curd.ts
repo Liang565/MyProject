@@ -58,16 +58,16 @@ export const Curd = (url: string) => {
       //res.commodity商品id
       //返回商品信息
       const good = await http.put(`commoditys/${res.commodity}`);
-      console.log(good);
+
       goodsOrder.push({
         goodsNum: res.goodsNum, //数量
         commodity: res.commodity, //商品id
         // price: good.price, //商品单价
         // totalMoney: res.goodsNum * good.price, //价格
+        cartId: temp[i], //购物车id
       });
       totalSum = totalSum + res.goodsNum * good.price;
     }
-    console.log(goodsOrder);
     return { totalSum, goodsOrder };
   };
 

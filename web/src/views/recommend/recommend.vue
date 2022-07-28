@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="h-full">
-      <van-tabs v-model:active="active" swipeable @change="change">
+      <!-- <van-tabs v-model:active="active" :swipeable="true" @change="change">
         <van-tab
           v-for="index in routerMap"
           :title="index.title"
@@ -11,18 +11,29 @@
             <router-view></router-view>
           </div>
         </van-tab>
+      </van-tabs> -->
+      <!-- //这里用组件 -->
+      <van-tabs v-model:active="active" swipeable>
+        <van-tab
+          v-for="index in routerMap"
+          :title="index.title"
+          :name="index.path"
+        >
+          <div>
+            <component :is="pushComponents(index.key)" />
+          </div>
+        </van-tab>
       </van-tabs>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { ActionBar, ActionBarIcon, ActionBarButton } from "vant";
-import { ref } from "vue";
+import { ActionBar, ActionBarIcon, ActionBarButton, Tab, Tabs } from "vant";
+import { defineAsyncComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 let active = ref("");
 const change = () => {
-  console.log(active);
   router.push(active.value);
 };
 const routerMap = router
@@ -37,4 +48,9 @@ const routerMap = router
   .filter((v: any) => {
     return v.meta.hot;
   });
+
+/**添加组件 */
+const pushComponents = (components: any) => {
+  return defineAsyncComponent(() => import(`./${components}.vue`));
+};
 </script>

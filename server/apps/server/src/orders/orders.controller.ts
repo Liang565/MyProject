@@ -4,11 +4,12 @@ import { ReturnModelType } from '@typegoose/typegoose';
 import { Order } from 'libs/db/models/order.model';
 import { Crud } from 'nestjs-mongoose-crud';
 import { InjectModel } from 'nestjs-typegoose-next';
+import { userInfo } from 'os';
 @Crud({
   model: Order,
   routes: {
     find: {
-      populate: ['user', 'commodity'], //
+      populate: ['user', 'commodity', 'userInfo'], //
     },
     create: {},
     findOne: {},

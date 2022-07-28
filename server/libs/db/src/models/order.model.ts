@@ -6,6 +6,7 @@ import {
   Ref,
 } from '@typegoose/typegoose';
 import { Commodity } from './commodity.model';
+import { Shop } from './shop.model';
 
 import { User } from './user.model';
 import { UserInfo } from './userInfo.model';
@@ -40,6 +41,12 @@ export class Order {
   @ApiProperty({ description: '备注' })
   @prop()
   remarks: string;
+  @ApiProperty({ description: '状态' })
+  @prop()
+  state: string;
+  @ApiProperty({ description: '商铺' })
+  @prop({ ref: 'Shop' })
+  shop: Ref<Shop>;
   /**
    *模型方法。
    * @param uid 用户id
