@@ -138,7 +138,7 @@ import type { AnyTypeAnnotation } from "@babel/types";
 import { Button, AddressList, Toast, Dialog, Cell, CellGroup } from "vant";
 import { onMounted, ref } from "vue";
 import iconPark from "../../components/iconPark.vue";
-import AddressEdit from "./myInfo/addressEdit.vue";
+import AddressEdit from "../../components/myInfo/addressEdit.vue";
 //选择地址
 const emit = defineEmits(["selectMyInfo"]);
 const selectInfo = (temp: any) => {

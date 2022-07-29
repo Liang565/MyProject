@@ -281,6 +281,7 @@ const Role = localStorage.getItem("role");
 //切换店铺
 let optionsShop = ref<any>([]);
 const setOptionsShop = async () => {
+  //这里重新写一下，后台方法用的不太对。
   const res: Array<any> = await http.post(
     `/commoditys/Goods/${localStorage.userid}`
   );

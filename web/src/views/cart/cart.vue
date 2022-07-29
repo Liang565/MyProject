@@ -84,6 +84,12 @@
                 </template>
                 <template #desc>
                   <div
+                    class="text-red-500"
+                    v-if="i.commodity.commodityNum < i.goodsNum"
+                  >
+                    库存不足
+                  </div>
+                  <div
                     class="w-40 overflow-hidden text-ellipsis whitespace-nowrap"
                   >
                     {{ i.commodity.commodityIntroduce }}
@@ -209,33 +215,41 @@ const router = useRouter();
 let goodsCome = ref(false);
 const { fetch, search, data, query, goGoods, total, totalSum, removeCart } =
   Curd("shopping-cart");
-const minusGNum = async (temp: { goodsNum: number; _id: any }) => {
-  if (temp.goodsNum === 1) {
-    Toast.fail("商品不能再减少了~");
+const minusGNum = async (temp: any) => {
+  if (temp.commodity.commodityNum < temp.goodsNum) {
+    Toast.fail("库存不足~");
   } else {
-    Toast.loading({
-      message: "加载中...",
-      forbidClick: true,
-      duration: 500,
-    });
-    http.put(`shopping-cart/${temp._id}`, { goodsNum: temp.goodsNum - 1 });
-    setTimeout(() => {
-      query.value.where = { user: thisUser };
-      fetch();
-    }, 500);
+    if (temp.goodsNum === 1) {
+      Toast.fail("商品不能再减少了~");
+    } else {
+      Toast.loading({
+        message: "加载中...",
+        forbidClick: true,
+        duration: 500,
+      });
+      http.put(`shopping-cart/${temp._id}`, { goodsNum: temp.goodsNum - 1 });
+      setTimeout(() => {
+        query.value.where = { user: thisUser };
+        fetch();
+      }, 500);
+    }
   }
 };
-const plusGNum = async (temp: { _id: any; goodsNum: number }) => {
+const plusGNum = async (temp: any) => {
   Toast.loading({
     message: "加载中...",
     forbidClick: true,
     duration: 500,
   });
-  http.put(`shopping-cart/${temp._id}`, { goodsNum: temp.goodsNum + 1 });
-  setTimeout(() => {
-    query.value.where = { user: thisUser };
-    fetch();
-  }, 500);
+  if (temp.commodity.commodityNum < temp.goodsNum) {
+    Toast.fail("库存不足~");
+  } else {
+    http.put(`shopping-cart/${temp._id}`, { goodsNum: temp.goodsNum + 1 });
+    setTimeout(() => {
+      query.value.where = { user: thisUser };
+      fetch();
+    }, 500);
+  }
 };
 
 const goBack = () => {
@@ -249,6 +263,7 @@ let isEditCart = ref(true);
 const editCart = () => {
   if (token) {
     isEditCart.value = !isEditCart.value;
+    checked.value = [];
   } else {
     Toast.fail("当前身份为游客，请登录！");
   }
@@ -301,11 +316,13 @@ const settlement = () => {
     Toast.fail("没有选择商品~");
     return;
   }
+
   //userid,model,
   router.push(
     `settlement/${JSON.stringify({
       model: orderModel.value,
       total: TotalAmount.value,
+      key: "cart",
     })}`
   );
 };

@@ -1,11 +1,6 @@
 <template>
   <div>
-    <van-nav-bar
-      title="order"
-      left-text="返回"
-      left-arrow
-      @click-left="$router.go(-1)"
-    />
+    <van-nav-bar title="order" left-text="返回" left-arrow @click-left="goMy" />
 
     <div>
       <van-tabs v-model:active="active" swipeable @change="change">
@@ -24,13 +19,19 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { http } from "@/util/http";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+
 const router = useRouter();
 let value = ref("");
 let active = ref("");
 const change = () => {
+  router.push(active.value);
   console.log(active);
+};
+const goMy = () => {
+  router.push("/my");
 };
 const routerMap = router
   .getRoutes()

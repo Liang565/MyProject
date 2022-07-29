@@ -59,14 +59,18 @@ export const Curd = (url: string) => {
       //返回商品信息
       const good = await http.put(`commoditys/${res.commodity}`);
 
-      goodsOrder.push({
-        goodsNum: res.goodsNum, //数量
-        commodity: res.commodity, //商品id
-        // price: good.price, //商品单价
-        // totalMoney: res.goodsNum * good.price, //价格
-        cartId: temp[i], //购物车id
-      });
-      totalSum = totalSum + res.goodsNum * good.price;
+      if (res.goodsNum > good.commodityNum) {
+        Toast.loading(`商品：${good.commodityName}库存不足~`);
+      } else {
+        goodsOrder.push({
+          goodsNum: res.goodsNum, //数量
+          commodity: res.commodity, //商品id
+          // price: good.price, //商品单价
+          // totalMoney: res.goodsNum * good.price, //价格
+          cartId: temp[i], //购物车id
+        });
+        totalSum = totalSum + res.goodsNum * good.price;
+      }
     }
     return { totalSum, goodsOrder };
   };

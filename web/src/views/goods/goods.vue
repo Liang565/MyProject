@@ -85,8 +85,11 @@
       <div
         class="w-11/12 bg-blue-300 h-auto relative left-1/2 -translate-x-1/2 rounded-lg mt-10"
       >
+        <div class="text-lg">{{ name }}</div>
         <div class="text-lg text-red-600">￥{{ price }}</div>
-        <div class="text-base">
+        <br />
+        <div class="text-base text-gray-700">
+          <span class="text-black">简介：</span>
           {{ commodityIntroduce }}
         </div>
       </div>
@@ -123,6 +126,7 @@
           :style="{ height: '80%' }"
           :closeable="true"
           :safe-area-inset-bottom="true"
+          @close="closePopup"
         >
           <div class="m-5 h-5/6">
             <div class="flex justify-start">
@@ -181,7 +185,7 @@
                 class="w-80"
                 :round="true"
                 @click="addCartOk"
-                >确定</van-button
+                >加入购物车</van-button
               >
             </div>
           </div>
@@ -190,7 +194,79 @@
           color="rgb(134, 239, 172)"
           type="danger"
           text="立即购买"
+          @click="playGood"
         />
+
+        <van-popup
+          v-model:show="playshow"
+          position="bottom"
+          :style="{ height: '80%' }"
+          :closeable="true"
+          :safe-area-inset-bottom="true"
+          @close="closePopup"
+        >
+          <div class="m-5 h-5/6">
+            <div class="flex justify-start">
+              <div>
+                <myimage :src="images" :height="'60'" />
+              </div>
+              <div class="text-lg text-red-600 translate-y-1/2">
+                <span class="text-sm">￥</span>{{ price }}
+              </div>
+            </div>
+            <div class="my-5">
+              <span class="border-2 border-rose-600 text-red-500">
+                {{ data.commodityName }}
+              </span>
+            </div>
+            <div class="flex justify-between">
+              <div>
+                购买数量
+                <span v-if="data.commodityNum > 0" class="text-xs text-gray-600"
+                  >有货</span
+                >
+              </div>
+              <div class="flex mr-10">
+                <div @click="minusCatNum">
+                  <icon-park
+                    type="reduce"
+                    theme="outline"
+                    size="24"
+                    :spin="false"
+                    fill="#000000"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    :strokeWidth="2"
+                  />
+                </div>
+                <div class="w-12 text-center">
+                  {{ cartModel.goodsNum }}
+                </div>
+                <div @click="addCatNum">
+                  <icon-park
+                    type="add"
+                    theme="outline"
+                    size="24"
+                    :spin="false"
+                    fill="#000000"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    :strokeWidth="2"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="fixed bottom-10 left-1/2 -translate-x-1/2">
+              <van-button
+                type="primary"
+                class="w-80"
+                :round="true"
+                @click="playOk"
+                >立即购买</van-button
+              >
+            </div>
+          </div>
+        </van-popup>
       </van-action-bar>
     </div>
   </div>
@@ -215,6 +291,8 @@ let price = ref(); //价格
 let commodityIntroduce = ref(); //简介
 let shop = ref(); //商铺id
 let images = ref();
+let goodsNum = 0; //商品余量
+let name = ref("");
 //获取商品信息 628ce027da8a5a6628010393
 //接收一个商品的id
 const findOne = async () => {
@@ -225,6 +303,8 @@ const findOne = async () => {
   commodityIntroduce.value = res.commodityIntroduce;
   shop.value = res.shop;
   images.value = res.image;
+  goodsNum = res.commodityNum;
+  name.value = res.commodityName;
 };
 
 const props = defineProps({
@@ -278,11 +358,18 @@ const minusCatNum = () => {
   } else cartModel.value.goodsNum--;
 };
 const addCatNum = () => {
-  cartModel.value.goodsNum++;
+  if (goodsNum > cartModel.value.goodsNum) cartModel.value.goodsNum++;
+  else
+    Toast({
+      message: "数量高于库存~",
+      position: "bottom",
+    });
 };
 const addCart = () => {
   if (token) {
-    addCartshow.value = true;
+    if (goodsNum <= 0) {
+      Toast.fail("库存为0~");
+    } else addCartshow.value = true;
   } else {
     Toast.fail("当前身份为游客，请登录！");
   }
@@ -295,7 +382,37 @@ const addCartOk = async () => {
     Toast.success("添加成功~");
   }
 };
-
+const closePopup = () => {
+  cartModel.value.goodsNum = 0;
+};
+//立即购买商品
+let playshow = ref(false);
+const playGood = () => {
+  if (token) {
+    playshow.value = true;
+  } else {
+    Toast.fail("当前身份为游客，请登录！");
+  }
+};
+let orderModel = <any>ref([]);
+const playOk = () => {
+  if (cartModel.value.goodsNum === 0) {
+    Toast.fail("数量为0~");
+  } else {
+    orderModel.value.push({
+      goodsNum: cartModel.value.goodsNum,
+      commodity: data.value._id,
+    });
+    router.push(
+      `/settlement/${JSON.stringify({
+        model: orderModel.value,
+        total: cartModel.value.goodsNum * data.value.price,
+        key: "goods",
+      })}`
+    );
+  }
+};
+//收藏
 const { Collect, getCollect } = Action();
 //用户id
 const userid = localStorage.getItem("userid");

@@ -138,6 +138,9 @@ import {
   Toast,
 } from "vant";
 const props = defineProps({
+  // 传进来的是一个字符串化的对象。{数组，商品总数}
+  //商品页进来就只传入一个商品对象和商品总数为1。
+  //{model: orderModel.value, total: TotalAmount.value,}
   model: { type: String, default: "1" },
 });
 
@@ -148,47 +151,59 @@ let total = ref(0);
 let goodSum = ref(0); //商品数量
 let myinfo = <any>ref(); //地址信息
 let showPay = ref(false); //支付弹窗
+let isCart = ref(false); //判断是不是购物车结算。
+let orders = <any>ref([]); //存生成的订单id
 const goBack = () => {
   router.go(-1);
 };
 model.value = JSON.parse(props.model);
 total.value = model.value.total;
-
+isCart.value = model.value.key === "cart" ? true : false;
 const fetch = async (temp: any) => {
   goodSum.value = temp.length;
+
   for (let i in temp) {
     const res = await http.get(`commoditys/${temp[i].commodity}`);
-    data.value.push({
-      id: res._id,
-      image: res.image[0].url,
-      name: res.commodityName,
-      introduce: res.commodityIntroduce, //介绍
-      price: res.price,
-      num: temp[i].goodsNum,
-      remarks: "",
-      key: i, //key用来判断备注的位置
-      cartId: temp[i].cartId,
-      shop: res.shop, //商铺id
-    });
+    if (isCart.value) {
+      data.value.push({
+        id: res._id,
+        image: res.image[0].url,
+        name: res.commodityName,
+        introduce: res.commodityIntroduce, //介绍
+        price: res.price,
+        kucun: res.commodityNum,
+        num: temp[i].goodsNum, //数量
+        remarks: "",
+        key: i, //key用来判断备注的位置
+        cartId: temp[i].cartId,
+        shop: res.shop, //商铺id
+      });
+    } else {
+      data.value.push({
+        id: res._id,
+        image: res.image[0].url,
+        name: res.commodityName,
+        introduce: res.commodityIntroduce, //介绍
+        price: res.price,
+        kucun: res.commodityNum, //库存
+        num: temp[i].goodsNum, //数量
+        remarks: "",
+        key: i, //key用来判断备注的位置
+        shop: res.shop, //商铺id
+      });
+    }
   }
 };
 fetch(model.value.model);
 //提交订单
 //这里打算一个商品就生成一个订单。
 const placeOrder = () => {
-  //弹出一个支付的弹窗
-  console.log("提交");
-  showPay.value = true;
-};
-//确认支付
-const submitPay = () => {
   Toast.loading({
     message: "加载中...",
     forbidClick: true,
   });
   setTimeout(async () => {
     for (let i in data.value) {
-      console.log();
       // 生成订单
       const res = await http.post("orders", {
         user: myinfo.value.user,
@@ -200,13 +215,38 @@ const submitPay = () => {
         state: "未支付",
         shop: data.value[i].shop,
       });
-      //删除购物车
-      const cart = await http.delete(`shopping-cart/${data.value[i].cartId}`);
+      orders.value.push(res._id); //存生成的订单id
+      if (isCart.value) {
+        //删除购物车
+        const cart = await http.delete(`shopping-cart/${data.value[i].cartId}`);
+      }
+      //库存减掉相应的数量
+      const kk = await http.put(`commoditys/${data.value[i].id}`, {
+        commodityNum: data.value[i].kucun - data.value[i].num,
+      });
+    }
+
+    console.log("提交");
+    showPay.value = true;
+  }, 2000);
+};
+//确认支付支付后状态为已支付。
+const submitPay = () => {
+  Toast.loading({
+    message: "加载中...",
+    forbidClick: true,
+  });
+  setTimeout(async () => {
+    //修改订单里面的状态
+    for (let i in orders.value) {
+      const res = await http.put(`/orders/${orders.value[i]}`, {
+        state: "已支付",
+      });
     }
     //删除购物车信息
     Toast.success("支付成功");
     showPay.value = false;
-    router.go(-1);
+    // router.go(-1);
   }, 2000);
 };
 //编辑备注

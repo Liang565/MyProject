@@ -68,7 +68,7 @@ export const routes2 = [
   {
     path: "/settlement/:model",
     meta: { title: "结算页", key: "settlement" },
-    component: () => import("../views/cart/settlement.vue"),
+    component: () => import("../views/settlement/settlement.vue"),
     props: true,
   },
 ];

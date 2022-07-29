@@ -333,6 +333,7 @@ const edit = (temp) => {
   newModel.value.title = temp.title._id; //分类
   newModel.value.parameter = temp.parameter; //参数
   newModel.value.commodityNum = temp.commodityNum; //数量
+  newModel.value.shop = temp.shop;
   // newModel.value.shop: "", //所属店铺
   editId.value = temp._id;
   viss.value.edit = true;
