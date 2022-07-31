@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="h-full">
-      <!-- <van-tabs v-model:active="active" :swipeable="true" @change="change">
+      <van-tabs v-model:active="active" :swipeable="true" @change="change">
         <van-tab
           v-for="index in routerMap"
           :title="index.title"
@@ -9,18 +9,6 @@
         >
           <div>
             <router-view></router-view>
-          </div>
-        </van-tab>
-      </van-tabs> -->
-      <!-- //这里用组件 -->
-      <van-tabs v-model:active="active" swipeable>
-        <van-tab
-          v-for="index in routerMap"
-          :title="index.title"
-          :name="index.path"
-        >
-          <div>
-            <component :is="pushComponents(index.key)" />
           </div>
         </van-tab>
       </van-tabs>
@@ -51,6 +39,8 @@ const routerMap = router
 
 /**添加组件 */
 const pushComponents = (components: any) => {
-  return defineAsyncComponent(() => import(`./${components}.vue`));
+  return defineAsyncComponent(
+    () => import(`../../components/components/${components}.vue`)
+  );
 };
 </script>
