@@ -2,7 +2,7 @@
 <template>
   <div>
     <VanDialog
-      v-model:show="showDialog"
+      v-model:show="props.showDialog"
       title="提示"
       theme="round-button"
       :show-cancel-button="true"
