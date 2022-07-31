@@ -11,6 +11,7 @@
       cancelButtonColor="rgb(248, 113, 113)"
       cancelButtonText="稍后登录"
       @confirm="DiaConfirm"
+      @close="closeDialog"
     >
       <div class="text-center">当前为游客</div>
       <div class="text-center">请登录</div>
@@ -31,4 +32,9 @@ const props = defineProps({
     default: false,
   },
 });
+
+const emit = defineEmits(["getShow"]);
+const closeDialog = () => {
+  emit("getShow", false);
+};
 </script>

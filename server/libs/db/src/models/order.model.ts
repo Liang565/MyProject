@@ -38,6 +38,9 @@ export class Order {
   @ApiProperty({ description: '发货地址' })
   @prop()
   goodsAddress: string;
+  @ApiProperty({ description: '快递' })
+  @prop()
+  express: string;
   @ApiProperty({ description: '备注' })
   @prop()
   remarks: string;
@@ -47,6 +50,9 @@ export class Order {
   @ApiProperty({ description: '商铺' })
   @prop({ ref: 'Shop' })
   shop: Ref<Shop>;
+  @ApiProperty({ description: '操作备注' })
+  @prop()
+  settingRemarks: string;
   /**
    *模型方法。
    * @param uid 用户id

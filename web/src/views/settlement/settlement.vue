@@ -107,7 +107,11 @@
     </div>
     <!-- 支付弹窗 -->
     <div>
-      <van-action-sheet v-model:show="showPay" title="支付">
+      <van-action-sheet
+        v-model:show="showPay"
+        title="支付"
+        @close="closeSubPlay"
+      >
         <div class="h-70vh bg-gray-50 py-5">
           没有接支付宝沙盒，生成的订单状态都是未支付的。 直接点击确定。
           <div class="flex justify-center pb-20 pt-40">
@@ -153,6 +157,7 @@ let myinfo = <any>ref(); //地址信息
 let showPay = ref(false); //支付弹窗
 let isCart = ref(false); //判断是不是购物车结算。
 let orders = <any>ref([]); //存生成的订单id
+let isPlay = false; //标记是否支付。
 const goBack = () => {
   router.go(-1);
 };
@@ -225,12 +230,15 @@ const placeOrder = () => {
         commodityNum: data.value[i].kucun - data.value[i].num,
       });
     }
+    Toast.success("创建订单成功~");
 
     console.log("提交");
+    isPlay = false; //标记是否支付。
     showPay.value = true;
   }, 2000);
 };
 //确认支付支付后状态为已支付。
+
 const submitPay = () => {
   Toast.loading({
     message: "加载中...",
@@ -240,14 +248,29 @@ const submitPay = () => {
     //修改订单里面的状态
     for (let i in orders.value) {
       const res = await http.put(`/orders/${orders.value[i]}`, {
-        state: "已支付",
+        state: "待发货",
       });
     }
-    //删除购物车信息
-    Toast.success("支付成功");
+    Toast.success("支付成功~");
+    isPlay = true; //标记是否支付
     showPay.value = false;
-    // router.go(-1);
   }, 2000);
+};
+//关闭支付弹窗
+const closeSubPlay = () => {
+  if (isPlay) {
+    //支付成功。
+    Toast.success("支付成功~");
+
+    // router.push("/my/sending");
+    router.go(-1);
+  } else {
+    //未支付
+    Toast.fail("未支付~");
+    router.push("/my/pending");
+
+    // router.go(-1);
+  }
 };
 //编辑备注
 let show = ref(false);

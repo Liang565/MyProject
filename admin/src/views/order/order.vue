@@ -2,9 +2,6 @@
   <div>
     <div class="mb-2 flex justify-start">
       <div>
-        <a-button @click="addShop" type="primary"> 新增商品 </a-button>
-      </div>
-      <div class="ml-5">
         <a-form layout="inline">
           <a-form-item label="切换店铺" class="w-44">
             <a-select
@@ -18,13 +15,10 @@
       </div>
       <div>
         <a-form layout="inline">
-          <a-form-item label="商品名：" class="w-52">
-            <a-input v-model:value="where.commodityName"></a-input>
-          </a-form-item>
-          <a-form-item label="所属分类" class="w-44">
+          <a-form-item label="状态" class="w-44">
             <a-select
-              :options="optionsClass"
-              v-model:value="where.title"
+              :options="optionsState"
+              v-model:value="where.state"
               :allowClear="true"
               :showSearch="true"
               :filter-Option="filterOption"
@@ -40,90 +34,118 @@
     <div class="mt-5 h-70vh overflow-y-auto">
       <a-table
         :dataSource="data"
-        rowKey="title"
+        rowKey="_id"
         :pagination="pagination"
         @change="pageChange"
       >
         <!-- <a-table-column title="id" dataIndex="_id" key="_id" class="w-40" /> -->
         <a-table-column
-          title="商品名"
-          dataIndex="commodityName"
-          key="commodityName"
+          title="订单号"
+          dataIndex="_id"
+          key="_id"
           align="center"
         />
         <a-table-column
-          title="商品介绍"
-          dataIndex="commodityIntroduce"
-          key="commodityIntroduce"
+          title="商品"
+          dataIndex="commodity"
+          key="commodity"
           align="center"
         >
           <template #="{ record }">
-            <a-button
-              type="link"
-              @click="look(record.commodityIntroduce, '商品介绍')"
-              >查看</a-button
-            >
-          </template>
-        </a-table-column>
-        <a-table-column
-          title="参数"
-          dataIndex="parameter"
-          key="parameter"
-          align="center"
-        >
-          <template #="{ record }">
-            <a-button type="link" @click="look(record.parameter, '参数')"
-              >查看</a-button
-            >
+            <a-button type="link" @click="lookGood(record.commodity, '商品')">
+              <div class="w-20 overflow-hidden text-ellipsis whitespace-nowrap">
+                {{ record.commodity.commodityName }}
+              </div>
+            </a-button>
+            <!-- {{ record.commodity.commodityName }} -->
           </template>
         </a-table-column>
         <a-table-column
           align="center"
           title="数量"
-          dataIndex="commodityNum"
-          key="commodityNum"
+          dataIndex="goodsNum"
+          key="goodsNum"
         />
         <a-table-column
-          title="价格"
-          dataIndex="price"
-          key="price"
           align="center"
-        />
-        <a-table-column
-          title="分类"
-          dataIndex="title"
-          key="title"
-          align="center"
+          title="订单备注"
+          dataIndex="remarks"
+          key="remarks"
         >
           <template #="{ record }">
-            <span>{{ record.title?.title }}</span>
+            <a-button type="link" @click="look(record.remarks, '订单备注')">
+              <div
+                class="w-20 overflow-hidden text-ellipsis whitespace-nowrap"
+                v-if="record.remarks"
+              >
+                {{ record.remarks }}
+              </div>
+              <div v-else>无备注</div>
+            </a-button>
           </template>
         </a-table-column>
         <a-table-column
-          title="所属商铺"
-          dataIndex="shop"
-          key="shop"
           align="center"
-        >
-          <template #="{ record }">
-            <span>{{ record.shop?.title }}</span>
-          </template>
-        </a-table-column>
-
+          title="金额"
+          dataIndex="money"
+          key="money"
+        />
         <a-table-column
-          title="图片"
-          dataIndex="image"
-          key="image"
           align="center"
+          title="订单状态"
+          dataIndex="state"
+          key="state"
+        />
+        <a-table-column
+          align="center"
+          title="订单创建时间"
+          dataIndex="createdAt"
+          key="createdAt"
+        />
+        <a-table-column
+          align="center"
+          title="收货人信息"
+          dataIndex="userInfo"
+          key="userInfo"
         >
           <template #="{ record }">
-            <div v-if="record.image.length == 0">空</div>
-            <div v-else>
-              <myimg :URL="record.image" />
+            <div>
+              {{ record.userInfo.name }}
             </div>
           </template>
         </a-table-column>
-
+        <a-table-column
+          align="center"
+          title="快递"
+          dataIndex="express"
+          key="express"
+        >
+          <template #="{ record }">
+            <div v-if="record.express">{{ record.express }}</div>
+            <div v-else>无</div>
+          </template>
+        </a-table-column>
+        <a-table-column
+          align="center"
+          title="操作备注"
+          dataIndex="settingRemarks"
+          key="settingRemarks"
+        >
+          <template #="{ record }">
+            <a-button
+              type="link"
+              @click="look(record.settingRemarks, '操作备注')"
+            >
+              <div
+                class="w-20 overflow-hidden text-ellipsis whitespace-nowrap"
+                v-if="record.settingRemarks"
+              >
+                {{ record.settingRemarks }}
+              </div>
+              <div v-else>无备注</div>
+            </a-button>
+          </template>
+        </a-table-column>
         <a-table-column
           title="操作"
           dataIndex="operation"
@@ -143,105 +165,87 @@
         </a-table-column>
       </a-table>
     </div>
-    <!-- 新增商品 -->
-    <div>
-      <a-modal
-        v-model:visible="viss.add"
-        title="新增商品"
-        @ok="addOk(newModel)"
-        :afterClose="cancelModel"
-        :centered="true"
-      >
-        <!-- 选框里面的  :filter-Option="filterOption"用于搜索选项 -->
-
-        <a-form :model="newModel">
-          <a-form-item label="商品名">
-            <a-input v-model:value="newModel.commodityName"></a-input>
-          </a-form-item>
-          <a-form-item label="分类">
-            <a-select
-              :allowClear="true"
-              :showSearch="true"
-              :options="optionsClass"
-              v-model:value="newModel.title"
-              :filter-Option="filterOption"
-            >
-            </a-select>
-          </a-form-item>
-          <a-form-item label="商品简介">
-            <a-input v-model:value="newModel.commodityIntroduce"></a-input>
-          </a-form-item>
-          <a-form-item label="商品图片">
-            <!-- 这里要搞一个图片列表 -->
-            <list-upload
-              @on-success="
-                (aa) => {
-                  newModel.image = aa;
-                }
-              "
-              :resetList="resetList"
-            />
-          </a-form-item>
-          <a-form-item label="参数">
-            <a-input v-model:value="newModel.parameter"></a-input>
-          </a-form-item>
-          <a-form-item label="数量">
-            <a-input v-model:value="newModel.commodityNum"></a-input>
-          </a-form-item>
-          <a-form-item label="价格">
-            <a-input v-model:value="newModel.price"></a-input>
-          </a-form-item>
-        </a-form>
-      </a-modal>
-    </div>
-    <!-- 修改商品 -->
+    <!-- 编辑弹窗 -->
     <div>
       <a-modal
         v-model:visible="viss.edit"
-        title="修改商品信息"
-        @ok="editOk(editId, newModel)"
+        title="修改"
+        @ok="editOk(editModel)"
         :afterClose="cancelModel"
         :centered="true"
+        :destroyOnClose="true"
       >
         <!-- 选框里面的  :filter-Option="filterOption"用于搜索选项 -->
 
-        <a-form :model="newModel">
-          <a-form-item label="商品名">
-            <a-input v-model:value="newModel.commodityName"></a-input>
+        <a-form :model="editModel">
+          <a-form-item label="订单号">
+            {{ editModel._id }}
           </a-form-item>
-          <a-form-item label="分类">
-            <a-select
-              :allowClear="true"
-              :showSearch="true"
-              :options="optionsClass"
-              v-model:value="newModel.title"
-              :filter-Option="filterOption"
-            >
-            </a-select>
-          </a-form-item>
-          <a-form-item label="商品简介">
-            <a-input v-model:value="newModel.commodityIntroduce"></a-input>
-          </a-form-item>
-          <a-form-item label="商品图片">
-            <!-- 这里要搞一个图片列表 -->
-            <list-upload
-              :imgList="newModel.image"
-              :resetList="resetList"
-              @on-success="
-                (aa) => {
-                  newModel.image = aa;
-                }
-              "
-            />
-          </a-form-item>
-          <a-form-item label="参数">
-            <a-input v-model:value="newModel.parameter"></a-input>
+          <a-form-item label="商品">
+            <a-form>
+              <a-form-item label="商品名称">
+                {{ editModel.commodity.commodityName }}
+              </a-form-item>
+              <a-form-item label="商品id">
+                {{ editModel.commodity._id }}
+              </a-form-item>
+              <a-form-item label="商品价格">
+                {{ editModel.commodity.price }}
+              </a-form-item>
+            </a-form>
           </a-form-item>
           <a-form-item label="数量">
-            <a-input v-model:value="newModel.commodityNum"></a-input>
+            {{ editModel.goodsNum }}
           </a-form-item>
-          <a-form-item label="价格">
-            <a-input v-model:value="newModel.price"></a-input>
+          <a-form-item label="订单备注">
+            <div v-if="editModel.remarks && editModel.remark != ''">
+              {{ editModel.remarks }}
+            </div>
+            <div v-else>无</div>
+          </a-form-item>
+          <a-form-item label="订单金额">
+            {{ editModel.money }}
+          </a-form-item>
+          <a-form-item label="订单状态">
+            <a-select
+              :options="optionsState"
+              v-model:value="orderTemp.state"
+              :allowClear="true"
+              :showSearch="true"
+              :filter-Option="filterOption"
+            ></a-select>
+          </a-form-item>
+          <a-form-item label="收货人信息">
+            <a-form>
+              <a-form-item label="姓名">
+                {{ editModel.userInfo.name }}
+              </a-form-item>
+              <a-form-item label="姓名">
+                {{ editModel.userInfo.name }}
+              </a-form-item>
+              <a-form-item label="地址">
+                {{ editModel.userInfo.province }}\
+                {{ editModel.userInfo.city }}\ {{ editModel.userInfo.county }}\
+                {{ editModel.userInfo.address }}\
+              </a-form-item>
+              <a-form-item label="联系电话">
+                {{ editModel.userInfo.tel }}
+              </a-form-item>
+              <a-form-item label="邮政编号">
+                {{ editModel.userInfo.postalCode }}
+              </a-form-item>
+            </a-form>
+          </a-form-item>
+          <a-form-item label="快递号">
+            <a-input v-model:value="orderTemp.express" />
+          </a-form-item>
+          <a-form-item label="操作备注">
+            <a-textarea
+              :row="4"
+              v-model:value="orderTemp.settingRemarks"
+              maxlength="200"
+              :showCount="true"
+            />
           </a-form-item>
         </a-form>
       </a-modal>
@@ -264,7 +268,7 @@ import myimg from "../../components/myImg/myimglist.vue";
 const {
   remove,
   viss,
-  editOk,
+
   addOk,
   fetch,
   data,
@@ -311,65 +315,46 @@ const selectChange = () => {
 //新增接口路径
 let addUrl = ref("addShop");
 
-//搜索
-where.value = {
-  commodityName: "", //商品名
-  title: "", //分类名
-  //所属店铺，设一个默认值
-  shop: "",
-};
-
-let newModel = ref({
-  commodityName: "", // "商品名",
-  commodityIntroduce: "", // "商品介绍",
-  image: [], //图片
-  title: "", //分类
-  parameter: [], //参数
-  commodityNum: 0, //数量
-  price: 0, //价格
-  shop: "", //所属店铺
-});
+let newModel = <any>ref({});
+let editModel = <any>ref({});
 const resetModel = () => {
-  newModel.value = {
-    commodityName: "", // "商品名",
-    commodityIntroduce: "", // "商品介绍",
-    // image: newModel.value.image, //图片
-    image: [],
-    title: "", //分类
-    parameter: [], //参数
-    commodityNum: 0, //数量
-    price: 0, //价格
-
-    shop: newModel.value.shop,
+  newModel.value = {};
+  editModel.value = <any>{};
+  orderTemp.value = {
+    express: "",
+    settingRemarks: "",
+    state: "",
   };
 };
 
-const addShop = () => {
-  if (optionsShop.value.length === 0) {
-    if (Role === "admin") {
-      message.info("当前为管理员用户");
-    } else message.error("该用户下无店铺,不能新增商品");
-  } else {
-    viss.value.add = true;
-    //组件Listupload 的属性，要求有变化就行
-    resetList.value = !resetList.value;
-  }
-};
-
 //分类选框
-let optionsClass = ref<any>([]);
-const findClassOptions = async () => {
-  const res: any = await http.get("commodity-class", {
-    params: {
-      //展示条件
-      query: { limit: 999 },
-    },
-  });
-  optionsClass.value = res.data.map((v) => ({
-    label: v.title,
-    value: v._id,
-  }));
-};
+let optionsState = ref<any>([
+  {
+    label: "未支付",
+    value: "未支付",
+  },
+  {
+    label: "待发货",
+    value: "待发货",
+  },
+  {
+    label: "待收货",
+    value: "待收货",
+  },
+  {
+    label: "待评价",
+    value: "待评价",
+  },
+  {
+    label: "退货申请",
+    value: "退货申请",
+  },
+  {
+    label: "已退货",
+    value: "已退货",
+  },
+]);
+
 //分类选框搜索选项
 const filterOption = (input: string, optionsClass: any) => {
   //可以用这个进行模糊搜索
@@ -377,25 +362,28 @@ const filterOption = (input: string, optionsClass: any) => {
 };
 const cancelModel = () => {
   resetModel();
-
   console.log("cancel");
 };
 
 //修改
 let editId = ref("");
+let orderTemp = ref({
+  express: "",
+  settingRemarks: "",
+  state: "",
+});
 const edit = (temp) => {
-  newModel.value.image = temp.image;
-  newModel.value.commodityName = temp.commodityName;
-  newModel.value.price = temp.price;
-  newModel.value.commodityIntroduce = temp.commodityIntroduce; // "商品介绍",
-  newModel.value.title = temp.title._id; //分类
-  newModel.value.parameter = temp.parameter; //参数
-  newModel.value.commodityNum = temp.commodityNum; //数量
-  // newModel.value.shop: "", //所属店铺
-  editId.value = temp._id;
+  editModel.value = temp;
   viss.value.edit = true;
-  //组件Listupload 的属性，要求有变化就行
-  resetList.value = !resetList.value;
+  orderTemp.value.express = temp.express;
+  orderTemp.value.settingRemarks = temp.settingRemarks;
+  orderTemp.value.state = temp.state;
+};
+const editOk = async (temp: any) => {
+  console.log("editOk");
+  const res = await http.put(`orders/${temp._id}`, orderTemp.value);
+  viss.value.edit = false;
+  fetch();
 };
 watch(resetList, (newValue, oldValue) => {
   console.log("aaa侦听器");
@@ -412,8 +400,22 @@ const look = (temp, text) => {
     },
   });
 };
+const lookGood = (temp: any, text) => {
+  console.log(temp);
+  //搞个商品插件
+  Modal.info({
+    title: `${text}`,
+    content: h("text", {}, [
+      h("p", `商品id:  ${temp._id}`),
+      h("p", `商品名称:${temp.commodityName}`),
+      h("p", `商品价格:${temp.price}`),
+    ]),
+    onOk() {
+      console.log("ok");
+    },
+  });
+};
 onMounted(() => {
-  findClassOptions();
   setOptionsShop();
   if (Role == "admin") {
     fetch();

@@ -186,7 +186,14 @@
     </div>
     <!-- 登录提示框 -->
     <div>
-      <login-dialog v-model:showDialog="showDialog" />
+      <login-dialog
+        v-model:showDialog="showDialog"
+        @getShow="
+          (a) => {
+            showDialog = a;
+          }
+        "
+      />
     </div>
   </div>
 </template>

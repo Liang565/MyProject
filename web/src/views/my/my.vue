@@ -124,7 +124,14 @@
   </div>
   <!-- 信息确认框 -->
   <div>
-    <login-dialog v-model:showDialog="showDialog" />
+    <login-dialog
+      v-model:showDialog="showDialog"
+      @getShow="
+        (a) => {
+          showDialog = a;
+        }
+      "
+    />
   </div>
 </template>
 <script lang="ts" setup>
@@ -135,7 +142,7 @@ import { Toast, Popup, Button, Dialog } from "vant";
 import { useRouter } from "vue-router";
 import loginDialog from "../../components/loginDialog.vue";
 let showDialog = ref(false);
-
+let aa = ref("");
 const router = useRouter();
 //页面跳转
 const goOrder = () => {

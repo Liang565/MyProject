@@ -436,9 +436,10 @@ const collect = async () => {
 
 onMounted(() => {
   findOne();
-
-  getCollect(<string>props.id).then((t) => {
-    collected.value = t;
-  });
+  if (token) {
+    getCollect(<string>props.id).then((t) => {
+      collected.value = t;
+    });
+  }
 });
 </script>

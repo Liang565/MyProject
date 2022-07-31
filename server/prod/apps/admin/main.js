@@ -1154,13 +1154,39 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.OrdersController = void 0;
 const common_1 = __webpack_require__(/*! @nestjs/common */ "@nestjs/common");
+const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
+const typegoose_1 = __webpack_require__(/*! @typegoose/typegoose */ "@typegoose/typegoose");
+const order_model_1 = __webpack_require__(/*! libs/db/models/order.model */ "./libs/db/src/models/order.model.ts");
+const nestjs_mongoose_crud_1 = __webpack_require__(/*! nestjs-mongoose-crud */ "nestjs-mongoose-crud");
+const nestjs_typegoose_next_1 = __webpack_require__(/*! nestjs-typegoose-next */ "nestjs-typegoose-next");
 let OrdersController = class OrdersController {
+    constructor(model) {
+        this.model = model;
+    }
 };
 OrdersController = __decorate([
-    (0, common_1.Controller)('orders')
+    (0, nestjs_mongoose_crud_1.Crud)({
+        model: order_model_1.Order,
+        routes: {
+            find: {
+                populate: ['user', 'commodity', 'userInfo'],
+            },
+        },
+    }),
+    (0, common_1.Controller)('orders'),
+    (0, swagger_1.ApiTags)('订单管理'),
+    __param(0, (0, nestjs_typegoose_next_1.InjectModel)(order_model_1.Order)),
+    __metadata("design:paramtypes", [typeof (_a = typeof typegoose_1.ReturnModelType !== "undefined" && typegoose_1.ReturnModelType) === "function" ? _a : Object])
 ], OrdersController);
 exports.OrdersController = OrdersController;
 
@@ -2144,7 +2170,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var Order_1, _a, _b;
+var Order_1, _a, _b, _c, _d;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Order = void 0;
 const swagger_1 = __webpack_require__(/*! @nestjs/swagger */ "@nestjs/swagger");
@@ -2167,35 +2193,50 @@ __decorate([
     __metadata("design:type", typeof (_b = typeof typegoose_1.Ref !== "undefined" && typegoose_1.Ref) === "function" ? _b : Object)
 ], Order.prototype, "commodity", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ description: '收货人信息' }),
+    (0, typegoose_1.prop)({ ref: 'UserInfo' }),
+    __metadata("design:type", typeof (_c = typeof typegoose_1.Ref !== "undefined" && typegoose_1.Ref) === "function" ? _c : Object)
+], Order.prototype, "userInfo", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)({ description: '订单数量' }),
     (0, typegoose_1.prop)(),
     __metadata("design:type", Number)
 ], Order.prototype, "goodsNum", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: '金额' }),
+    (0, typegoose_1.prop)(),
+    __metadata("design:type", String)
+], Order.prototype, "money", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: '发货地址' }),
     (0, typegoose_1.prop)(),
     __metadata("design:type", String)
 ], Order.prototype, "goodsAddress", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: '收货地址' }),
+    (0, swagger_1.ApiProperty)({ description: '快递' }),
     (0, typegoose_1.prop)(),
     __metadata("design:type", String)
-], Order.prototype, "consigneeAddress", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: '收货人姓名' }),
-    (0, typegoose_1.prop)(),
-    __metadata("design:type", String)
-], Order.prototype, "consigneeName", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: '收货人联系电话' }),
-    (0, typegoose_1.prop)(),
-    __metadata("design:type", String)
-], Order.prototype, "consigneeTel", void 0);
+], Order.prototype, "express", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: '备注' }),
     (0, typegoose_1.prop)(),
     __metadata("design:type", String)
 ], Order.prototype, "remarks", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: '状态' }),
+    (0, typegoose_1.prop)(),
+    __metadata("design:type", String)
+], Order.prototype, "state", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: '商铺' }),
+    (0, typegoose_1.prop)({ ref: 'Shop' }),
+    __metadata("design:type", typeof (_d = typeof typegoose_1.Ref !== "undefined" && typegoose_1.Ref) === "function" ? _d : Object)
+], Order.prototype, "shop", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: '操作备注' }),
+    (0, typegoose_1.prop)(),
+    __metadata("design:type", String)
+], Order.prototype, "settingRemarks", void 0);
 Order = Order_1 = __decorate([
     (0, typegoose_1.modelOptions)({
         schemaOptions: {

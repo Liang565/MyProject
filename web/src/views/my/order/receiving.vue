@@ -1,3 +1,22 @@
 <template>
-  <div>待收货</div>
+  <div>
+    待收货
+
+    <div>
+      {{ data }}
+    </div>
+  </div>
 </template>
+<script setup lang="ts">
+import { http } from "@/util/http";
+import { ref } from "vue";
+let data = ref();
+
+const fetch = () => {
+  const res = http.post("orders/findOrder", { state: "待收货" });
+  res.then((v) => {
+    data.value = v;
+  });
+};
+fetch();
+</script>

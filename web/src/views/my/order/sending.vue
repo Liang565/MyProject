@@ -13,7 +13,7 @@ import { ref } from "vue";
 let data = ref();
 
 const fetch = () => {
-  const res = http.post("orders/findOrder", { state: "已支付" });
+  const res = http.post("orders/findOrder", { state: "待发货" });
   res.then((v) => {
     data.value = v;
   });

@@ -112,7 +112,7 @@ export const CrudTest = (
     viss.value.edit = false;
   };
   //搜索
-  let where = ref({});
+  let where = <any>ref({});
   const search = () => {
     for (let i in where.value) {
       if (where.value[i] == "") delete where.value[i];
