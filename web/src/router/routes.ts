@@ -65,6 +65,15 @@ export const routes = [
     component: () => import("../views/my/order/order-index.vue"),
     children: [
       {
+        path: "/my/allOrder",
+        meta: {
+          title: "全部",
+          key: "allOrder",
+          navOrder: true,
+        },
+        component: () => import("../views/my/order/allOrder.vue"),
+      },
+      {
         path: "/my/pending",
         meta: {
           title: "待付款",
@@ -91,15 +100,7 @@ export const routes = [
         },
         component: () => import("../views/my/order/receiving.vue"),
       },
-      {
-        path: "/my/evaluate.vue",
-        meta: {
-          title: "待评价",
-          key: "evaluate",
-          navOrder: true,
-        },
-        component: () => import("../views/my/order/evaluate.vue"),
-      },
+
       {
         path: "/my/after-sale",
         meta: {

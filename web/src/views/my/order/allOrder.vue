@@ -39,11 +39,12 @@ import { useRouter } from "vue-router";
 let data = ref();
 const router = useRouter();
 const fetch = () => {
-  const res = http.post("orders/findOrder", { state: "待收货" });
+  const res = http.post("orders/findOrder");
+  console.log("总数执行fetch");
+
   res.then((v) => {
     data.value = v;
   });
-  console.log("待付款请求");
 };
 const goOrder = (temp: any) => {
   router.push(

@@ -31,10 +31,12 @@ export class OrdersController {
   @ApiOperation({ summary: '查询' })
   @JwtAuth()
   async findOrder(@CurrentUserId() userid, @Body() body: orderDto) {
-    const res = await this.model.find({
-      user: userid,
-      ...body, //解构
-    });
+    let res = await this.model
+      .find({
+        user: userid,
+        ...body, //解构
+      })
+      .populate('commodity');
     return res;
   }
 }

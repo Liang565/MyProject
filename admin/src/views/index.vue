@@ -166,7 +166,7 @@ onMounted(() => {
   }
   getUser();
   //设置全局的用户名
-  SelectedKeys.value[0] = <never>router.currentRoute.value?.href; //获取当前页面路由
+  SelectedKeys.value[0] = <never>router.currentRoute.value.path; //获取当前页面路由
 
   //展开的导航栏根据不同用户而不同
   if (localStorage.getItem("role") == "user") {

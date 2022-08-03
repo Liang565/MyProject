@@ -47,8 +47,10 @@ const setActive = () => {
     v.path == route.path ? (active.value = route.path) : null
   );
 };
+active.value = router.currentRoute.value.path;
+
 onMounted(() => {
-  setActive();
+  // setActive();
 });
 </script>
 <style scoped></style>

@@ -43,4 +43,6 @@ const pushComponents = (components: any) => {
     () => import(`../../components/components/${components}.vue`)
   );
 };
+
+active.value = router.currentRoute.value.path;
 </script>

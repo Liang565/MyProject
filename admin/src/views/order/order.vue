@@ -346,12 +346,20 @@ let optionsState = ref<any>([
     value: "待评价",
   },
   {
+    label: "已收货",
+    value: "已收货",
+  },
+  {
     label: "退货申请",
     value: "退货申请",
   },
   {
     label: "已退货",
     value: "已退货",
+  },
+  {
+    label: "取消订单",
+    value: "取消订单",
   },
 ]);
 

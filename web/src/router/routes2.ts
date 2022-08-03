@@ -71,4 +71,10 @@ export const routes2 = [
     component: () => import("../views/settlement/settlement.vue"),
     props: true,
   },
+  {
+    path: "/orderDetails/:model",
+    meta: { title: "订单详情", key: "orderDetails" },
+    component: () => import("../views/my/order/order-details.vue"),
+    props: true,
+  },
 ];
