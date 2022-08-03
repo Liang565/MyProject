@@ -56,60 +56,61 @@ export const routes = [
     component: () => import("../views/login/login.vue"),
   },
   {
-    path: "/my/order-index",
+    path: "/my/order-index/:model",
     meta: {
       title: "订单导航页",
       key: "order-index",
       navOrder: false,
     },
     component: () => import("../views/my/order/order-index.vue"),
-    children: [
-      {
-        path: "/my/allOrder",
-        meta: {
-          title: "全部",
-          key: "allOrder",
-          navOrder: true,
-        },
-        component: () => import("../views/my/order/allOrder.vue"),
-      },
-      {
-        path: "/my/pending",
-        meta: {
-          title: "待付款",
-          key: "pending",
-          navOrder: true,
-        },
-        component: () => import("../views/my/order/pending.vue"),
-      },
-      {
-        path: "/my/sending",
-        meta: {
-          title: "待发货",
-          key: "sending",
-          navOrder: true,
-        },
-        component: () => import("../views/my/order/sending.vue"),
-      },
-      {
-        path: "/my/receiving",
-        meta: {
-          title: "待收货",
-          key: "receiving",
-          navOrder: true,
-        },
-        component: () => import("../views/my/order/receiving.vue"),
-      },
+    props: true,
+    // children: [
+    //   {
+    //     path: "/my/allOrder",
+    //     meta: {
+    //       title: "全部",
+    //       key: "allOrder",
+    //       navOrder: true,
+    //     },
+    //     component: () => import("../views/my/order/allOrder.vue"),
+    //   },
+    //   {
+    //     path: "/my/pending",
+    //     meta: {
+    //       title: "待付款",
+    //       key: "pending",
+    //       navOrder: true,
+    //     },
+    //     component: () => import("../views/my/order/pending.vue"),
+    //   },
+    //   {
+    //     path: "/my/sending",
+    //     meta: {
+    //       title: "待发货",
+    //       key: "sending",
+    //       navOrder: true,
+    //     },
+    //     component: () => import("../views/my/order/sending.vue"),
+    //   },
+    //   {
+    //     path: "/my/receiving",
+    //     meta: {
+    //       title: "待收货",
+    //       key: "receiving",
+    //       navOrder: true,
+    //     },
+    //     component: () => import("../views/my/order/receiving.vue"),
+    //   },
 
-      {
-        path: "/my/after-sale",
-        meta: {
-          title: "售后/退款",
-          key: "after-sale",
-          navOrder: true,
-        },
-        component: () => import("../views/my/order/after-sale.vue"),
-      },
-    ],
+    //   {
+    //     path: "/my/after-sale",
+    //     meta: {
+    //       title: "售后/退款",
+    //       key: "after-sale",
+    //       navOrder: true,
+    //     },
+    //     component: () => import("../views/my/order/after-sale.vue"),
+    //   },
+    // ],
   },
 ];

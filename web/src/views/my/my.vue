@@ -147,7 +147,7 @@ const router = useRouter();
 //页面跳转
 const goOrder = () => {
   if (token) {
-    router.push("/my/order-index");
+    router.push(`/my/order-index/${JSON.stringify({ state: "全部" })}`);
   } else {
     Toast.fail("当前身份为游客，请登录！");
   }

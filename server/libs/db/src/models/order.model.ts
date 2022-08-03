@@ -11,6 +11,10 @@ import { Shop } from './shop.model';
 import { User } from './user.model';
 import { UserInfo } from './userInfo.model';
 
+// export enum orderState {
+
+// }
+
 @modelOptions({
   schemaOptions: {
     timestamps: true,

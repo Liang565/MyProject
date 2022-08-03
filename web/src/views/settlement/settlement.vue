@@ -267,7 +267,7 @@ const closeSubPlay = () => {
   } else {
     //未支付
     Toast.fail("未支付~");
-    router.push("/my/pending");
+    router.push(`/my/order-index/${JSON.stringify({ state: "未支付" })}`);
 
     // router.go(-1);
   }

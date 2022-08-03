@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { Order } from 'libs/db/models/order.model';
@@ -39,4 +39,21 @@ export class OrdersController {
       .populate('commodity');
     return res;
   }
+  // async findOrder(
+  //   @CurrentUserId() userid,
+  //   @Body() body: orderDto,
+  //   @Query() Findquery,
+  // ) {
+  //   let { query } = Findquery;
+  //   query = JSON.parse(query);
+  //   // console.log(query);
+  //   let res = await this.model
+  //     .find({
+  //       user: userid,
+  //       ...body, //解构
+  //     })
+  //     .where(query.where)
+  //     .populate('commodity');
+  //   return res;
+  // }
 }
