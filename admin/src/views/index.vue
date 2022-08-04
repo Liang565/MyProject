@@ -143,7 +143,6 @@ let OpenKeys = ref();
 // 记录是不是管理员一键登录
 let isAdminLogin = ref(false);
 const AdminLogOut = () => {
-  console.log("执行adminLogOut");
   localStorage.setItem("userid", <string>localStorage.getItem("adminId"));
   localStorage.setItem("username", <string>localStorage.getItem("adminname"));
   localStorage.setItem("role", <string>localStorage.getItem("adminrole"));

@@ -42,7 +42,6 @@ const mOut = () => {
 let visible = ref(false);
 //点击预览
 const look = () => {
-  console.log("looooook");
   // tuku.value = true;
   visible.value = true;
 };

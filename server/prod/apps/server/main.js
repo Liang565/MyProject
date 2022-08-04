@@ -1460,7 +1460,9 @@ let OrdersController = class OrdersController {
         this.model = model;
     }
     async findOrder(userid, body) {
-        const res = await this.model.find(Object.assign({ user: userid }, body));
+        let res = await this.model
+            .find(Object.assign({ user: userid }, body))
+            .populate('commodity');
         return res;
     }
 };

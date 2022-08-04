@@ -84,7 +84,6 @@ const fetchComponents = async () => {
 const fetch = async () => {
   const res = await http.post("build-home/findone", { name: "商品推荐" });
   home.value = res;
-  console.log(home.value);
 };
 /**
  * 添加组件
@@ -122,7 +121,6 @@ const fetchGoods = async () => {
       query: { limit: 999 },
     },
   });
-  console.log(res.data);
 
   goods.value = res.data;
 };

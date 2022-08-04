@@ -230,7 +230,6 @@ const searchClass = () => {
 const findId = (nameTemp) => {
   for (let i in classData.value) {
     if (classData.value[i].title == nameTemp) {
-      // console.log(classData.value[i]._id);
       return classData.value[i]._id;
     }
   }
@@ -259,7 +258,6 @@ const addSon = (temp) => {
   newModel.value.parent = temp._id;
 };
 const addSonOk = async () => {
-  // console.log(newModel.value);
   await http.post("commodity-class/addClass", newModel.value);
   message.success("添加成功");
   fetch1();
@@ -289,7 +287,6 @@ const resetModel = () => {
 };
 const cancelModel = () => {
   resetModel();
-  console.log("cancel");
 };
 
 /**
@@ -313,7 +310,6 @@ const remove = (temp, tempfetch1?) => {
       fetch1();
     },
     onCancel() {
-      console.log("Cancel");
       fetch1();
     },
   });

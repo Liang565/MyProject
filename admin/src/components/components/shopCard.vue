@@ -151,7 +151,6 @@ const filterOption = (input: string, optionsClass: any) => {
 };
 
 const selectShops = (item) => {
-  console.log(item);
   for (let a in optionsShops.value) {
     if (optionsShops.value[a].value === item.id) {
       item.title = optionsShops.value[a].label;

@@ -63,7 +63,6 @@ export const Curd = (url: string, initModel?: Object) => {
   });
   //清空curdModel里面的值
   const resetModel = () => {
-    console.log("reset");
     AorE.value = true;
     // for (let i in model) {
     //   editModel[i] = model[i];
@@ -87,7 +86,6 @@ export const Curd = (url: string, initModel?: Object) => {
     } else {
       selectM.value = "false";
     }
-    // console.log(findOneId.value);
 
     //执行findOne 就会改变editModel的值
   };
@@ -126,13 +124,11 @@ export const Curd = (url: string, initModel?: Object) => {
   let AorE = ref(true); //默认add
   const addEdit = async (record?: { _id: any }) => {
     if (AorE.value) {
-      console.log("add");
       await http.post(`${url}/add`, addModel.value);
       resetModel();
       modalVisible.value.add = false;
       message.success("注册成功");
     } else {
-      console.log("edit");
       AorE.value = true;
       await http.put(`${url}/${findOneId.value}`, editModel.value);
       resetModel();
@@ -164,10 +160,7 @@ export const Curd = (url: string, initModel?: Object) => {
   const pageChange = (page: any) => {
     query.value.page = page.current;
     pagination.value.current = page.current;
-    // console.log("执行pageChange" + pagination.value.current);
-    // console.log("执行pageChange" + query.value.page);
-    // console.log("执行pageChange" + page.current);
-    // console.log(query.value.page);
+
     fetch();
   };
   let curdData = ref(); //数据
@@ -181,10 +174,6 @@ export const Curd = (url: string, initModel?: Object) => {
     });
     curdData.value = res.data;
     pagination.value.total = res.total;
-    // console.log("fetch");
-    // console.log(res.data);
-    // console.log(pagination.value.total);
-    // console.log(query);
   };
 
   let disabled = ref(true); //注册确认键是否失效
@@ -207,11 +196,6 @@ export const Curd = (url: string, initModel?: Object) => {
         // return Promise.reject(new Error("请输入密码"));
         return Promise.reject("请输入密码");
       } else if (value !== editModel.value.password) {
-        // return Promise.reject(new Error("两次输入密码不一致!"));
-        // console.log(editModel.password);
-        // console.log(editModel.pass);
-        // console.log(value);
-
         return Promise.reject("两次输入密码不一致!");
       } else {
         disabled.value = false;
@@ -230,14 +214,11 @@ export const Curd = (url: string, initModel?: Object) => {
       okType: "danger",
       cancelText: "No",
       async onOk() {
-        console.log("OK");
         await http.delete(`${url}/${id}`);
         message.success("已删除");
         fetch();
       },
-      onCancel() {
-        console.log("Cancel");
-      },
+      onCancel() {},
     });
   };
   //搜索

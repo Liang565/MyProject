@@ -7,60 +7,57 @@
       @click-left="goMy"
     />
     <div>
-      <van-tabs v-model:active="active" @change="tabChange">
-        <van-tab title="全部" name="全部"></van-tab>
-        <van-tab title="未支付" name="未支付"></van-tab>
-        <van-tab title="待发货" name="待发货"></van-tab>
-        <van-tab title="待收货" name="待收货"></van-tab>
-        <van-tab title="退货申请" name="退货申请"></van-tab>
+      <van-tabs v-model:active="active" @change="tabChange" :swipeable="true">
+        <van-tab v-for="i in tabName" :title="i" :name="i">
+          <div class="h-100vh">
+            <div v-for="i in data" class="flex justify-center">
+              <div class="w-90vw mb-3 bg-gray-100 rounded-lg">
+                <van-card
+                  :num="i.goodsNum"
+                  :thumb="i.commodity.image[0].url"
+                  :tag="i.state"
+                  :price="i.commodity.price"
+                  class="rounded-t-lg"
+                  @click="goOrder(i)"
+                >
+                  <template #title>
+                    <div
+                      class="text-xl w-40 overflow-hidden text-ellipsis whitespace-nowrap"
+                    >
+                      {{ i.commodity.commodityName }}
+                    </div>
+                  </template>
+                  <template #desc>
+                    <div
+                      class="w-44 overflow-hidden text-ellipsis whitespace-nowrap"
+                    >
+                      {{ i.commodity.commodityIntroduce }}
+                    </div>
+                  </template>
+                  <template #footer>
+                    <div>合计￥{{ i.money }}</div>
+                  </template>
+                </van-card>
+              </div>
+            </div>
+          </div>
+        </van-tab>
       </van-tabs>
-      <div v-for="i in data" class="flex justify-center">
-        <div class="w-90vw mb-3 bg-gray-100 rounded-lg">
-          <van-card
-            :num="i.goodsNum"
-            :thumb="i.commodity.image[0].url"
-            :tag="i.state"
-            :price="i.commodity.price"
-            class="rounded-t-lg"
-            @click="goOrder(i)"
-          >
-            <template #title>
-              <div
-                class="text-xl w-40 overflow-hidden text-ellipsis whitespace-nowrap"
-              >
-                {{ i.commodity.commodityName }}
-              </div>
-            </template>
-            <template #desc>
-              <div class="w-44 overflow-hidden text-ellipsis whitespace-nowrap">
-                {{ i.commodity.commodityIntroduce }}
-              </div>
-            </template>
-            <template #footer>
-              <div>合计￥{{ i.money }}</div>
-            </template>
-          </van-card>
-        </div>
-      </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import { http } from "@/util/http";
+import { useRect } from "@vant/use";
 import { Toast, Tab, Tabs } from "vant";
 import { onMounted, ref, watch } from "vue";
-import { useRouter } from "vue-router";
-const props = defineProps({
-  model: {
-    type: String,
-    default: "全部123",
-  },
-});
-let model = JSON.parse(props.model);
-let active = ref(model.state);
-
+import { useRoute, useRouter } from "vue-router";
+let model = useRoute().query;
+let active = ref();
+active.value = model.state;
 let data = ref();
 let stateModel = ref();
+let tabName = ["全部", "未支付", "待发货", "待收货", "退货/售后"];
 // let query = ref({
 //   where: {} as any,
 // });
@@ -81,14 +78,21 @@ const fetch = async () => {
   data.value = res;
 };
 const goOrder = (temp: any) => {
-  router.push(
-    `/orderDetails/${JSON.stringify({
-      state: temp.state,
+  // router.push(
+  //   `/orderDetails/${JSON.stringify({
+  //     userInfo: temp.userInfo,
+  //     id: temp._id,
+  //     good: temp.commodity._id,
+  //   })}`
+  // );
+  router.push({
+    path: "/orderDetails",
+    query: {
       userInfo: temp.userInfo,
       id: temp._id,
       good: temp.commodity._id,
-    })}`
-  );
+    },
+  });
 };
 const goMy = () => {
   router.push("/my");
@@ -99,9 +103,17 @@ watch(
     if (newValue == "全部") {
       stateModel = ref();
       await fetch();
+    } else if (newValue == "退货/售后") {
+      let temp = ref();
+      const res = await http.post("orders/findOrder", { state: "已收货" });
+      temp.value = res;
+      const res1 = await http.post("orders/findOrder", { state: "退货申请" });
+      temp.value.push(...res1);
+      const res2 = await http.post("orders/findOrder", { state: "已退货" });
+      temp.value.push(...res2);
+      data.value = temp.value;
     } else {
       stateModel.value = newValue;
-
       await fetch();
     }
   },
@@ -113,8 +125,7 @@ watch(
 const tabChange = async (name: string) => {
   active.value = name;
 };
-// onMounted(() => {
-//   fetch();
-
-// });
+onMounted(() => {
+  // fetch();
+});
 </script>

@@ -288,7 +288,6 @@ const setOptionsShop = async () => {
   const res: Array<any> = await http.post(
     `/commoditys/Goods/${localStorage.userid}`
   );
-  console.log(res.length);
   //如果没有商铺会提示无商铺
   if (!res || res.length == 0) {
     if (Role === "admin") {
@@ -370,7 +369,6 @@ const filterOption = (input: string, optionsClass: any) => {
 };
 const cancelModel = () => {
   resetModel();
-  console.log("cancel");
 };
 
 //修改
@@ -388,28 +386,19 @@ const edit = (temp) => {
   orderTemp.value.state = temp.state;
 };
 const editOk = async (temp: any) => {
-  console.log("editOk");
   const res = await http.put(`orders/${temp._id}`, orderTemp.value);
   viss.value.edit = false;
   fetch();
 };
-watch(resetList, (newValue, oldValue) => {
-  console.log("aaa侦听器");
-  console.log(newValue);
-  console.log(oldValue);
-});
+
 const look = (temp, text) => {
-  console.log(temp);
   Modal.info({
     title: `${text}`,
     content: h("div", {}, `${temp}`),
-    onOk() {
-      console.log("ok");
-    },
+    onOk() {},
   });
 };
 const lookGood = (temp: any, text) => {
-  console.log(temp);
   //搞个商品插件
   Modal.info({
     title: `${text}`,
@@ -418,9 +407,7 @@ const lookGood = (temp: any, text) => {
       h("p", `商品名称:${temp.commodityName}`),
       h("p", `商品价格:${temp.price}`),
     ]),
-    onOk() {
-      console.log("ok");
-    },
+    onOk() {},
   });
 };
 onMounted(() => {

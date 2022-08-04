@@ -44,7 +44,6 @@ const handleChange = (info: UploadChangeParam) => {
         url: v.response.url,
       })))
     );
-    // console.log(fileList1);
   }
 };
 

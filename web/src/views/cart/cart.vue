@@ -325,13 +325,21 @@ const settlement = () => {
   }
 
   //userid,model,
-  router.push(
-    `settlement/${JSON.stringify({
-      model: orderModel.value,
+  // router.push(
+  //   `settlement/${JSON.stringify({
+  //     model: orderModel.value,
+  //     total: TotalAmount.value,
+  //     key: "cart",
+  //   })}`
+  // );
+  router.push({
+    path: "/settlement",
+    query: {
+      model: JSON.stringify(orderModel.value),
       total: TotalAmount.value,
       key: "cart",
-    })}`
-  );
+    },
+  });
 };
 onMounted(() => {
   if (token) {

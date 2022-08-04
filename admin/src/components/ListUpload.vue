@@ -70,7 +70,6 @@ const uploadChange = (file, fileList, e) => {
     // message.error("上传失败");
   }
   if (file.file.status === "done") {
-    // console.log("改变");
     getOther.value = file.fileList.map((v: any) => ({
       url: v.response.url,
     }));
@@ -85,9 +84,7 @@ const uploadChange = (file, fileList, e) => {
 };
 const emit = defineEmits(["on-success"]);
 //删除文件时
-const uploadRemove = () => {
-  // console.log("删除图片");
-};
+const uploadRemove = () => {};
 const props = defineProps({
   imgList: {
     type: Object,
@@ -113,7 +110,6 @@ const abc = () => {
 watch(
   () => props.resetList,
   (newValue, oldValue) => {
-    // console.log("组件里面的");
     fileList.value = [];
     abc();
   }
@@ -121,9 +117,6 @@ watch(
 
 // let user = computed(() => userStore.state.user)
 
-const aaa = computed(() => {
-  // console.log(props);
-});
 onMounted(() => {
   abc();
 });

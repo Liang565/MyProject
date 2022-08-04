@@ -17,10 +17,7 @@ export const CrudTest = (
   const pageChange = (page: any) => {
     query.value.page = page.current;
     pagination.value.current = page.current;
-    // console.log("执行pageChange" + pagination.value.current);
-    // console.log("执行pageChange" + query.value.page);
-    // console.log("执行pageChange" + page.current);
-    // console.log(query.value.page);
+
     fetch();
   };
   //查询条件
@@ -34,7 +31,6 @@ export const CrudTest = (
   let data = ref();
 
   const fetch = async () => {
-    console.log("fetch");
     let res = await http.get(`${url}`, {
       params: {
         query: query.value,
@@ -65,7 +61,6 @@ export const CrudTest = (
       data.value.length == query.value.limit &&
       (pagination.value.total + 1) % query.value.limit != 0
     ) {
-      console.log("空白得地方新增了一个数据");
       query.value.page =
         Math.floor(pagination.value.total / query.value.limit) + 1;
       pagination.value.current = query.value.page;
@@ -94,7 +89,6 @@ export const CrudTest = (
         fetch();
       },
       onCancel() {
-        console.log("Cancel");
         fetch();
       },
     });

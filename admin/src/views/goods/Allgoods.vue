@@ -319,8 +319,6 @@ const filterOption = (input: string, optionsClass: any) => {
 };
 const cancelModel = () => {
   resetModel();
-
-  console.log("cancel");
 };
 
 //修改
@@ -340,18 +338,13 @@ const edit = (temp) => {
   //组件Listupload 的属性，要求有变化就行
   resetList.value = !resetList.value;
 };
-watch(resetList, (newValue, oldValue) => {
-  console.log("aaa侦听器");
-});
+watch(resetList, (newValue, oldValue) => {});
 
 const look = (temp, text) => {
-  console.log(temp);
   Modal.info({
     title: `${text}`,
     content: h("div", {}, `${temp}`),
-    onOk() {
-      console.log("ok");
-    },
+    onOk() {},
   });
 };
 onMounted(() => {

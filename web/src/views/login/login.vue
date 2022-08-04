@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-100vh bg-gray-200">
+  <div id="building">
     <div class="text-center pt-48 pb-10 text-4xl">登录</div>
     <div>
       <van-form @submit="onSubmit">
@@ -65,3 +65,13 @@ const getUser = async () => {
   console.log(data);
 };
 </script>
+<style>
+#building {
+  background: url("../../assets/bgg.jpg");
+
+  height: 100vh;
+
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+  background-size: cover;
+}
+</style>

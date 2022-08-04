@@ -9,8 +9,8 @@ import { Observable } from 'rxjs';
 export class LoginInterceptor implements NestInterceptor {
   async intercept(context: ExecutionContext, next: CallHandler): Promise<any> {
     const req = context.switchToHttp().getRequest();
-    console.log('登录拦截器');
-    console.log(req.body);
+    // console.log('登录拦截器');
+    // console.log(req.body);
 
     //拦截道admin的身份信息，就执行免密码登录。
     // const { user } = req.user;

@@ -304,7 +304,6 @@ const resetModel = () => {
 
 const cancelModel = () => {
   resetModel();
-  console.log("cancel");
 };
 
 //单选框改变时回调函数
@@ -347,7 +346,6 @@ const test = async () => {
 
 const addUser = () => {
   viss.value.add = true;
-  console.log("newUser");
   selectM.value = "true";
 };
 
@@ -385,7 +383,6 @@ const fetchPromiss = async () => {
 
 //admin一键登录
 const adminLogin = async (temp) => {
-  console.log("一键登录");
   let uId = localStorage.getItem("userid");
   let uName = localStorage.getItem("username");
   let rO = localStorage.getItem("role");

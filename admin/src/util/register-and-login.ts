@@ -12,7 +12,6 @@ export const RAndLogin = () => {
   let regModel = ref({ username: "", password: "", pass: "" });
   //注册
   const RegisterUser = () => {
-    console.log("执行register");
     //弹个表单出来：
     registerVisibel.value = true;
   };
@@ -33,7 +32,6 @@ export const RAndLogin = () => {
 
   //这个是导出让vue使用的
   const RegisterSub = () => {
-    console.log("RegisterOk");
     if (regModel.value.password == "" || regModel.value.username == "") {
       message.error("账号或者密码为空");
     } else {
@@ -43,8 +41,6 @@ export const RAndLogin = () => {
   //登录
   let logModel = ref({ username: "", password: "" });
   const LoginUser = async () => {
-    console.log("执行loginUser");
-
     const data = await http.post("auth/login", logModel.value);
     if (data === "") {
       message.warning("登陆失败");
@@ -61,8 +57,6 @@ export const RAndLogin = () => {
 
   //退出登录 删除token？
   const LogOut = () => {
-    console.log("执行logOut");
-
     message.success("退出");
     localStorage.removeItem("token");
     localStorage.removeItem("userid");
@@ -86,7 +80,6 @@ export const RAndLogin = () => {
       localStorage.setItem("role", data.role);
       localStorage.setItem("username", data.username);
     } else {
-      console.log("一键登录");
       const data = {
         userid: localStorage.getItem("userid"),
         role: localStorage.getItem("role"),

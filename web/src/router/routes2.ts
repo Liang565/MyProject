@@ -66,15 +66,13 @@ export const routes2 = [
     component: () => import("../views/my/manage/myInfo.vue"),
   },
   {
-    path: "/settlement/:model",
+    path: "/settlement",
     meta: { title: "结算页", key: "settlement" },
     component: () => import("../views/settlement/settlement.vue"),
-    props: true,
   },
   {
-    path: "/orderDetails/:model",
+    path: "/orderDetails",
     meta: { title: "订单详情", key: "orderDetails" },
     component: () => import("../views/my/order/order-details.vue"),
-    props: true,
   },
 ];

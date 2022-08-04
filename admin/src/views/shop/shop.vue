@@ -268,7 +268,6 @@ const findUserOptions = async () => {
 
 const cancelModel = () => {
   resetModel();
-  console.log("cancel");
 };
 
 //修改

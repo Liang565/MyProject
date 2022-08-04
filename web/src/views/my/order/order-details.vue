@@ -93,7 +93,7 @@
           type="danger"
           round
           text="取消订单"
-          @click="delOrder"
+          @click="action('取消订单')"
         />
 
         <van-action-bar-button
@@ -114,7 +114,7 @@
           type="warning"
           round
           text="申请退货"
-          @click="cancelOrder"
+          @click="action('申请退货')"
         />
       </van-action-bar>
       <van-action-bar v-if="model.state === '待收货'">
@@ -124,7 +124,27 @@
           type="warning"
           round
           text="确认收货"
-          @click="okOrder"
+          @click="action('确认收货')"
+        />
+      </van-action-bar>
+      <van-action-bar v-if="model.state === '已收货'">
+        <van-action-bar-button type="danger" round text="联系卖家" />
+
+        <van-action-bar-button
+          type="warning"
+          round
+          text="申请退货"
+          @click="action('申请退货')"
+        />
+      </van-action-bar>
+      <van-action-bar v-if="model.state === '退货申请'">
+        <van-action-bar-button type="danger" round text="联系卖家" />
+
+        <van-action-bar-button
+          type="warning"
+          round
+          text="取消申请"
+          @click="action('取消申请')"
         />
       </van-action-bar>
     </div>
@@ -179,7 +199,7 @@
         @close="closeSubPlay"
       >
         <div class="h-70vh bg-gray-50 py-5">
-          没有接支付宝沙盒，生成的订单状态都是未支付的。 直接点击确定。
+          请直接点击确定。
           <div class="flex justify-center pb-20 pt-40">
             <div class="w-80vw">
               <van-button plain type="primary" size="large" @click="submitPay"
@@ -209,17 +229,18 @@ import {
   ActionBarButton,
   Dialog,
 } from "vant";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { string } from "vue-types";
 import iconPark from "../../../components/iconPark.vue";
 import info from "../../settlement/info.vue";
 import orderIndexVue from "./order-index.vue";
-let model = ref({
-  state: "",
-  userInfo: "",
-  id: "",
-  good: "",
-});
+let model = ref();
+//   {
+//   state: "",
+//   userInfo: "",
+//   id: "",
+//   good: "",
+// }
 let myinfo = ref();
 let data = <any>ref({
   commodity: "",
@@ -271,20 +292,16 @@ const closeSubPlay = () => {
   }
 };
 const router = useRouter();
-const props = defineProps({
-  model: {
-    type: String,
-    default: "1",
-  },
-});
+model.value = useRoute().query;
+console.log(model.value);
 
-model.value = JSON.parse(props.model);
 const goBack = () => {
   router.go(-1);
 };
 const fetch = async () => {
   const res = await http.get(`orders/${model.value.id}`);
   data.value = res;
+  model.value.state = res.state;
   const res1 = await http.get(`commoditys/${model.value.good}`);
   good.value = res1;
   if (model.value.state !== "未支付") {
@@ -327,59 +344,31 @@ const submitPay = () => {
     showPay.value = false;
   }, 2000);
 };
-//取消订单
-const delOrder = () => {
-  Dialog.confirm({
-    title: "",
-    message: "是否确认取消订单？",
-  })
-    .then(async () => {
-      const res = await http.put(`orders/${model.value.id}`, {
-        state: "取消订单",
-      });
-      if (res) {
-        Toast.loading("取消成功~");
-        router.push(`/my/order-index/${JSON.stringify({ state: "全部" })}`);
-      } else Toast.success("取消失败~");
-    })
-    .catch(() => {
-      // on cancel
-    });
-};
 
 const goGoods = (temp: { _id: any }) => {
   router.push(`/goods/${temp._id}`);
 };
-const okOrder = () => {
+
+const action = (temp: string) => {
+  let tempState = ref("已收货");
+
+  if (temp === "取消订单") tempState.value = "取消订单";
+  else if (temp === "取消申请") tempState.value = "已收货";
+  else if (temp === "申请退货") tempState.value = "退货申请";
+  else if (temp === "确认收货") tempState.value = "已收货";
+
   Dialog.confirm({
     title: "",
-    message: "是否确认收货？",
+    message: `是否确认${temp}？`,
   })
     .then(async () => {
       const res = await http.put(`orders/${model.value.id}`, {
-        state: "已收货",
+        state: tempState.value,
       });
       if (res) {
         Toast.loading("已确认~");
-        router.push(`/my/order-index/${JSON.stringify({ state: "待收货" })}`);
-      } else Toast.success("取消失败~");
-    })
-    .catch(() => {
-      // on cancel
-    });
-};
-const cancelOrder = () => {
-  Dialog.confirm({
-    title: "",
-    message: "是否确认退货？",
-  })
-    .then(async () => {
-      const res = await http.put(`orders/${model.value.id}`, {
-        state: "退货申请",
-      });
-      if (res) {
-        Toast.loading("已确认~");
-        router.push(`/my/order-index/${JSON.stringify({ state: "退货申请" })}`);
+        // router.push(`/my/order-index/${JSON.stringify({ state: "已收货" })}`);
+        router.go(0);
       } else Toast.success("取消失败~");
     })
     .catch(() => {

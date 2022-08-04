@@ -113,7 +113,7 @@
         @close="closeSubPlay"
       >
         <div class="h-70vh bg-gray-50 py-5">
-          没有接支付宝沙盒，生成的订单状态都是未支付的。 直接点击确定。
+          请直接点击确定。
           <div class="flex justify-center pb-20 pt-40">
             <div class="w-80vw">
               <van-button plain type="primary" size="large" @click="submitPay"
@@ -129,7 +129,7 @@
 <script lang="ts" setup>
 import { http } from "@/util/http";
 import { onMounted, ref, watch } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import iconPark from "../../components/iconPark.vue";
 import info from "./info.vue";
 import {
@@ -142,14 +142,11 @@ import {
   Toast,
 } from "vant";
 const props = defineProps({
-  // 传进来的是一个字符串化的对象。{数组，商品总数}
-  //商品页进来就只传入一个商品对象和商品总数为1。
-  //{model: orderModel.value, total: TotalAmount.value,}
   model: { type: String, default: "1" },
 });
 
 const router = useRouter();
-let model = ref();
+let model = <any>ref();
 let data = <any>ref([]); //存商品信息的
 let total = ref(0);
 let goodSum = ref(0); //商品数量
@@ -161,7 +158,11 @@ let isPlay = false; //标记是否支付。
 const goBack = () => {
   router.go(-1);
 };
-model.value = JSON.parse(props.model);
+// model.value = JSON.parse(props.model);
+model.value = useRoute().query;
+model.value.model = JSON.parse(model.value.model);
+console.log("结算", model.value);
+
 total.value = model.value.total;
 isCart.value = model.value.key === "cart" ? true : false;
 const fetch = async (temp: any) => {
@@ -267,7 +268,7 @@ const closeSubPlay = () => {
   } else {
     //未支付
     Toast.fail("未支付~");
-    router.push(`/my/order-index/${JSON.stringify({ state: "未支付" })}`);
+    router.push({ path: "/my/order-index", query: { state: "未支付" } });
 
     // router.go(-1);
   }

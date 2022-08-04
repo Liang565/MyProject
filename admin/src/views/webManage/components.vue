@@ -172,7 +172,6 @@ const resetModel = () => {
 };
 const cancelModel = () => {
   resetModel();
-  console.log("cancel");
 };
 onMounted(() => {
   fetch();

@@ -285,7 +285,6 @@ const setOptionsShop = async () => {
   const res: Array<any> = await http.post(
     `/commoditys/Goods/${localStorage.userid}`
   );
-  console.log(res);
   // const res =await http.get("shops",
   // {
   //     params: {
@@ -389,8 +388,6 @@ const filterOption = (input: string, optionsClass: any) => {
 };
 const cancelModel = () => {
   resetModel();
-
-  console.log("cancel");
 };
 
 //修改
@@ -409,19 +406,12 @@ const edit = (temp) => {
   //组件Listupload 的属性，要求有变化就行
   resetList.value = !resetList.value;
 };
-watch(resetList, (newValue, oldValue) => {
-  console.log("aaa侦听器");
-  console.log(newValue);
-  console.log(oldValue);
-});
+watch(resetList, (newValue, oldValue) => {});
 const look = (temp, text) => {
-  console.log(temp);
   Modal.info({
     title: `${text}`,
     content: h("div", {}, `${temp}`),
-    onOk() {
-      console.log("ok");
-    },
+    onOk() {},
   });
 };
 onMounted(() => {

@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-400 h-100vh">
+  <div class="bg-gray-200 h-100vh">
     <!-- 用户的信息 -->
     <div class="flex mx-5 justify-start items-center pt-5">
       <div class="border-2 w-24 h-24">
@@ -147,7 +147,8 @@ const router = useRouter();
 //页面跳转
 const goOrder = () => {
   if (token) {
-    router.push(`/my/order-index/${JSON.stringify({ state: "全部" })}`);
+    // router.push({ path: "/my/order-index", query: { state: "全部" } });
+    router.push({ path: "/my/order-index", query: { state: "全部" } });
   } else {
     Toast.fail("当前身份为游客，请登录！");
   }

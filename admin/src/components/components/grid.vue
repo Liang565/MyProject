@@ -157,7 +157,6 @@ let showAddImg = ref(true);
 let optionsGoods = ref();
 
 const addGoods = () => {
-  console.log(prop.goods);
   showAddImg.value = false;
   if (!prop.content.type || prop.content.type === "")
     prop.content.type = "goods"; //类型
@@ -210,7 +209,6 @@ if (prop.goods !== []) {
   }));
 }
 const selectGoods = (item) => {
-  console.log(item);
   for (let a in optionsGoods.value) {
     if (optionsGoods.value[a].value === item.id) {
       item.title = optionsGoods.value[a].label;

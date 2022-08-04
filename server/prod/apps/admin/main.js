@@ -610,7 +610,6 @@ let LocalStrategy = class LocalStrategy extends (0, passport_1.PassportStrategy)
         this.userModel = userModel;
     }
     async validate(username, password) {
-        console.log('执行守卫');
         const user = await this.userModel
             .findOne({ username: username })
             .select('+password');

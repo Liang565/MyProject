@@ -403,13 +403,21 @@ const playOk = () => {
       goodsNum: cartModel.value.goodsNum,
       commodity: data.value._id,
     });
-    router.push(
-      `/settlement/${JSON.stringify({
-        model: orderModel.value,
+    // router.push(
+    //   `/settlement/${JSON.stringify({
+    //     model: orderModel.value,
+    //     total: cartModel.value.goodsNum * data.value.price,
+    //     key: "goods",
+    //   })}`
+    // );
+    router.push({
+      path: "/settlement",
+      query: {
+        model: JSON.stringify(orderModel.value),
         total: cartModel.value.goodsNum * data.value.price,
         key: "goods",
-      })}`
-    );
+      },
+    });
   }
 };
 //收藏

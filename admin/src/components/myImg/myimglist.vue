@@ -121,19 +121,14 @@ const mOut = () => {
 let visible = ref(false);
 //点击预览
 const look = () => {
-  console.log("looooook");
   // tuku.value = true;
   visible.value = true;
 };
 
 //放大
-const bigLook = () => {
-  console.log("biggggg");
-};
+const bigLook = () => {};
 //缩小
-const smLook = () => {
-  console.log("smmmmm");
-};
+const smLook = () => {};
 let num = ref(0);
 let letSetDis = true;
 //上一张
