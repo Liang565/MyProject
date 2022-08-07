@@ -2,75 +2,129 @@
   <div id="building">
     <!-- form里面的:model绑定的对象要和编辑的对象一样，并且name时model里面的参数 -->
     <div class="w-1/3">
-      <!-- <div>
-        <icon
-          type="angry-face"
-          theme="outline"
-          size="48"
-          :spin="false"
-          fill="#000000"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          :strokeWidth="4"
-        />
-        <icon
-          type="grinning-face-with-squinting-eyes"
-          theme="outline"
-          size="48"
-          :spin="false"
-          fill="#000000"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          :strokeWidth="4"
-        />
-        <icon
-          type="smiling-face-with-squinting-eyes"
-          theme="outline"
-          size="48"
-          :spin="false"
-          fill="#000000"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          :strokeWidth="4"
-        />
-        <icon
-          type="grinning-face-with-tightly-closed-eyes"
-          theme="outline"
-          size="48"
-          :spin="false"
-          fill="#000000"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          :strokeWidth="4"
-        />
-        <icon
-          type="winking-face"
-          theme="outline"
-          size="48"
-          :spin="false"
-          fill="#000000"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          :strokeWidth="4"
-        />
-        <icon
-          type="sly-face-whit-smile"
-          theme="outline"
-          size="48"
-          :spin="false"
-          fill="#000000"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          :strokeWidth="4"
-        />
-      </div> -->
+      <div class="pb-10">
+        <div :class="iconDiv">
+          <iconpark
+            type="grinning-face"
+            theme="outline"
+            size="43"
+            :spin="false"
+            fill="#000000"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            :strokeWidth="2"
+            :class="iconM"
+          />
+        </div>
+        <div :class="iconDiv">
+          <iconpark
+            type="grinning-face-with-squinting-eyes"
+            theme="outline"
+            size="44"
+            :spin="false"
+            fill="#000000"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            :strokeWidth="2"
+            :class="iconM"
+          />
+          <iconpark
+            type="smiling-face-with-squinting-eyes"
+            theme="outline"
+            size="44"
+            :spin="false"
+            fill="#000000"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            :strokeWidth="2"
+            :class="iconM"
+          />
+        </div>
+        <div :class="iconDiv">
+          <iconpark
+            type="grinning-face-with-tightly-closed-eyes"
+            theme="outline"
+            size="46"
+            :spin="false"
+            fill="#000000"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            :strokeWidth="2"
+            :class="iconM"
+          />
+          <iconpark
+            type="winking-face"
+            theme="outline"
+            size="46"
+            :spin="false"
+            fill="#000000"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            :strokeWidth="2"
+            :class="iconM"
+          />
+          <iconpark
+            type="sly-face-whit-smile"
+            theme="outline"
+            size="46"
+            :spin="false"
+            fill="#000000"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            :strokeWidth="2"
+            :class="iconM"
+          />
+        </div>
+        <div :class="iconDiv">
+          <iconpark
+            type="grinning-face-with-tightly-closed-eyes-open-mouth"
+            theme="outline"
+            size="48"
+            :spin="false"
+            fill="#000000"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            :strokeWidth="2"
+            :class="iconM"
+          />
+          <iconpark
+            type="relieved-face"
+            theme="outline"
+            size="48"
+            :spin="false"
+            fill="#000000"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            :strokeWidth="2"
+            :class="iconM"
+          />
+          <iconpark
+            type="winking-face-with-open-eyes"
+            theme="outline"
+            size="48"
+            :spin="false"
+            fill="#000000"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            :strokeWidth="2"
+            :class="iconM"
+          />
+          <iconpark
+            type="astonished-face"
+            theme="outline"
+            size="48"
+            :spin="false"
+            fill="#000000"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            :strokeWidth="2"
+            :class="iconM"
+          />
+        </div>
+      </div>
+
       <div>
-        <a-form
-          :model="logModel"
-          :label-col="{ span: 8 }"
-          :wrapper-col="{ span: 16 }"
-          autocomplete="off"
-        >
+        <a-form :model="logModel" autocomplete="off">
           <a-form-item
             name="username"
             :rules="[
@@ -110,6 +164,26 @@
             </a-button>
           </a-form-item>
         </a-form>
+      </div>
+      <div>
+        <a-alert
+          message="管理员账号：admin 密码：admin;用户账户：test 密码：test"
+          type="info"
+          show-icon
+        >
+          <template #icon>
+            <iconpark
+              type="relieved-face"
+              theme="outline"
+              size="24"
+              :spin="false"
+              fill="#000000"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              :strokeWidth="3"
+            />
+          </template>
+        </a-alert>
       </div>
     </div>
     <!-- 注册，对话框 -->
@@ -189,7 +263,7 @@ import { RAndLogin } from "../../util/register-and-login";
 import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
 import { computed, ref } from "vue";
-import icon from "../../components/icon.vue";
+import iconpark from "../../components/icon.vue";
 const {
   RegisterUser,
   regModel,
@@ -215,6 +289,8 @@ var passAgain = (rule, value, callback) => {
     return Promise.resolve();
   }
 };
+const iconDiv = "flex justify-center";
+let iconM = "mx-3 my-1";
 </script>
 <style>
 #building {

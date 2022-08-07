@@ -441,7 +441,7 @@ let AuthController = class AuthController {
             const user = await this.userModel.create({
                 username,
                 password,
-                role: '2',
+                role: 'user',
                 state: true,
             });
             return user;

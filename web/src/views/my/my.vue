@@ -48,13 +48,17 @@
         </div>
       </div>
       <div class="ml-3">
-        <div>
-          <span class="text-sm"> 用户名:</span>
-          {{ Username }}
+        <div class="flex items-center">
+          <div class="text-sm">用户名:</div>
+          <div class="w-40 overflow-hidden text-ellipsis whitespace-nowrap">
+            {{ Username }}
+          </div>
         </div>
-        <div>
-          <span class="text-sm">账号id: </span>
-          {{ userid }}
+        <div class="flex items-center">
+          <div class="text-sm">账号id:</div>
+          <div class="w-40 overflow-hidden text-ellipsis whitespace-nowrap">
+            {{ userid }}
+          </div>
         </div>
       </div>
     </div>
